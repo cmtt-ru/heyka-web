@@ -141,6 +141,7 @@
 import UiButton from '@components/UiButton';
 import { UiForm, UiInput } from '@components/Form';
 import { authFileStore } from '@/store/localStore';
+import { WEB_URL } from '@sdk/Constants';
 
 export default {
   components: {
@@ -198,8 +199,7 @@ export default {
     },
 
     async socialHandler(socialName) {
-      const baseUrl = IS_DEV ? process.env.VUE_APP_DEV_URL : process.env.VUE_APP_PROD_URL;
-      const link = `${baseUrl}/auth/social/${socialName}/login`;
+      const link = `${WEB_URL}/auth/social/${socialName}/login`;
 
       window.open(link); // TODO: can replace with window.open (see main index.js)
     },
