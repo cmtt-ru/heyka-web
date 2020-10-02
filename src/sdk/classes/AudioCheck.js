@@ -1,7 +1,9 @@
 import { EventEmitter } from 'events';
 import store from '@/store';
 import hark from 'hark';
-import i18n from '@/i18n';
+import router from '@/router';
+import i18n from '@sdk/translations/i18n';
+import broadcastEvents from '@sdk/classes/broadcastEvents';
 
 const texts = i18n.t('notifications');
 
@@ -14,12 +16,18 @@ const audioTest = new Audio(require('@assets/audio/test-sound.mp3'));
 /**
  * Class for detecting AudioTrouble
  */
-class AudioCheck extends EventEmitter {
+export default class AudioCheck extends EventEmitter {
   /**
  * Init checker
+ *
+ * @param {function} sendSync - ipcRenderer.sendSync
+ * @param {function} shutdown - electron-shutdown-command
  */
-  constructor() {
+  constructor(sendSync = () => null, shutdown = () => null) {
     super();
+    this.sendSync = sendSync;
+    this.shutdown = shutdown;
+
     this.__mediaStream = null;
     this.__harkInstance = null;
     this.__needMediaStream = false;
@@ -29,6 +37,10 @@ class AudioCheck extends EventEmitter {
       if (this.__needMediaStream) {
         this.startMediaStream();
       }
+    });
+
+    broadcastEvents.on('audio-check-skip-muted-talk', () => {
+      this.__skipMutedTalk = true;
     });
   }
 
@@ -187,7 +199,7 @@ class AudioCheck extends EventEmitter {
               text: texts.othermic.button1,
               type: 1,
               action: () => {
-                // router.push({ name: 'settings-devices' });
+                router.push({ name: 'settings-devices' });
               },
             },
             {
@@ -209,7 +221,7 @@ class AudioCheck extends EventEmitter {
               type: 12,
               action: () => {
                 //! asks password on mac!
-                // shutdown.reboot({ sudo: true });
+                this.shutdown.reboot({ sudo: true });
               },
             },
             {
@@ -234,8 +246,7 @@ class AudioCheck extends EventEmitter {
       return false;
     }
 
-    // const micState = ipcRenderer.sendSync('remote-systemPreferences-microphone');
-    const micState = true;
+    const micState = this.sendSync('remote-systemPreferences-microphone');
 
     if (micState === 'restricted' || micState === 'denied') {
       const notification = {
@@ -301,5 +312,3 @@ class AudioCheck extends EventEmitter {
     await store.dispatch('app/addPush', push);
   }
 }
-
-export default new AudioCheck();
