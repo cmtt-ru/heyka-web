@@ -1,0 +1,31 @@
+name: Build and deploy to dev
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  buildAndDeploy2Dev:
+    name: "Build and Deploy to dev"
+    runs-on: self-hosted
+    env:
+      ENV: "dev"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: werf converge
+        uses: werf/actions/converge@master
+        with:
+          group: 1.1
+          channel: alpha
+          env: ${{ env.ENV }}
+        env:
+          WERF_STAGES_STORAGE: ":local"

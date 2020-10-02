@@ -1,0 +1,28 @@
+name: Build and deploy to stage
+
+on:
+  push:
+    branches:
+    - stage
+
+jobs:
+  buildAndDeploy2Stage:
+    name: "Build and Deploy to stage"
+    runs-on: self-hosted
+    env:
+      ENV: "stage"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: werf converge
+        uses: werf/actions/converge@master
+        with:
+          group: 1.1
+          channel: alpha
+          env: ${{ env.ENV }}
+        env:
+          WERF_STAGES_STORAGE: ":local"

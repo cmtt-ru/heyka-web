@@ -1,0 +1,21 @@
+app:
+  domain_main: 
+    _default: heyka.app
+  domain_base: dev.k8s.heyka.io
+  replicas:
+    _default: 1
+  requests:
+    cpu:
+      _default: "250m"
+      stage: "500m"
+      production: "1"
+    memory:
+      _default: "256Mi"
+      stage: "512Mi"
+      production: "2Gi"
+  limits:
+    memory:
+      _default: "256Mi"
+      stage: "512Mi"
+      production: "2Gi"
+
