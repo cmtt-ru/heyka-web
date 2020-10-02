@@ -67,7 +67,7 @@ ansible:
       PUPPETEER_EXECUTABLE_PATH: /usr/bin/chromium-browser 
 
 ---
-image: static
+image: web
 from: nginx:stable
 
 import:
