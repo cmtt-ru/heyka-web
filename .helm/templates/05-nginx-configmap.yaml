@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: static-configmap
+  name: web-configmap
 data:
   nginx.conf: |
     user www-data;
