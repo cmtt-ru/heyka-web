@@ -1,1 +1,0 @@
-# heyka-sdk
