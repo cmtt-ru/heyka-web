@@ -4,7 +4,7 @@ app:
   domain_base: dev.k8s.heyka.io
   url: {}
   replicas:
-    _default: 1
+    _default: 2
   requests:
     cpu:
       _default: "250m"
