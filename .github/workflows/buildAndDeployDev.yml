@@ -14,6 +14,7 @@ jobs:
     runs-on: self-hosted
     env:
       ENV: "dev"
+      REPO_NAME: ${GITHUB_REPOSITORY##*/}
 
     steps:
       - name: Checkout code
@@ -33,4 +34,4 @@ jobs:
           channel: alpha
           env: ${{ env.ENV }}
         env:
-          WERF_STAGES_STORAGE: "docker.pkg.github.com/cmtt-ru/stages-${{ github.repository##*/ }}"
+          WERF_STAGES_STORAGE: "docker.pkg.github.com/cmtt-ru/stages-${{ env.REPO_NAME }}"
