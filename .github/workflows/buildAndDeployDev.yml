@@ -32,3 +32,5 @@ jobs:
           group: 1.1
           channel: alpha
           env: ${{ env.ENV }}
+        env:
+          WERF_STAGES_STORAGE: "docker.pkg.github.com/cmtt-ru/stages-${GITHUB_REPOSITORY##*/}"
