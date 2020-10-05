@@ -40,6 +40,7 @@
             type="password"
             class="login__input"
             placeholder="******"
+            enter-submit
           />
           <ui-button
             :type="6"
@@ -56,7 +57,7 @@
             {{ texts.oldMember }}
           </div>
           <router-link
-            :to="{ name: 'signIn'}"
+            :to="{ name: 'auth'}"
             class="info__link"
           >
             {{ texts.login }}
@@ -78,9 +79,10 @@
 <script>
 import UiButton from '@components/UiButton';
 import { UiForm, UiInput } from '@components/Form';
-import { determineLocale } from '@/i18n';
+import { determineLocale } from '@sdk/translations/i18n';
 import { authFileStore } from '@/store/localStore';
 import { errorMessages } from '@api/errors/types';
+import { WEB_URL } from '@sdk/Constants';
 
 export default {
   components: {
@@ -126,8 +128,7 @@ export default {
   methods: {
 
     async socialHandler(socialName) {
-      const baseUrl = IS_DEV ? process.env.VUE_APP_DEV_URL : process.env.VUE_APP_PROD_URL;
-      const link = `${baseUrl}/auth/social/${socialName}/login`;
+      const link = `${WEB_URL}/auth/social/${socialName}/login`;
 
       window.open(link);
     },
