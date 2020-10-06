@@ -1,0 +1,100 @@
+configVersion: 1
+project: heyka-web
+deploy:
+  helmRelease: "[[ project ]]-[[ env ]]"
+  namespace: "heyka-[[ env ]]"
+
+{{- define "Set timezone" }}
+- name: "Set timezone"
+  timezone:
+   name: Europe/Moscow
+{{- end }}
+
+---
+artifact: build
+from: node:alpine
+
+git:
+- add: /
+  to: /app
+  excludePaths:
+  - .helm
+  - werf.yaml
+  - .github
+  stageDependencies:
+    install:
+    - "package.json"
+    - "**/package.json"
+    - "yarn.lock"
+    setup:
+    - "*/**"
+ansible:
+  beforeInstall:
+  - name: "Install dependencies"
+    apk:
+      name:
+        chromium,
+        nss,
+        freetype,
+        freetype-dev,
+        harfbuzz,
+        ca-certificates,
+        ttf-freefont,
+        nodejs,
+        yarn
+  - name: "Install puppeteer"
+    yarn:
+      name: puppeteer
+      version: '1.19.0'
+      global: yes
+    environment:
+      PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
+      PUPPETEER_EXECUTABLE_PATH: /usr/bin/chromium-browser 
+  install:
+  - name: "npm install"
+    shell: |
+      npm ci
+    args:
+      chdir: /app
+  setup:
+  - name: "npm run"
+    shell: |
+      npm run build
+    args:
+      chdir: /app
+    environment:
+      PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
+      PUPPETEER_EXECUTABLE_PATH: /usr/bin/chromium-browser 
+
+---
+image: web
+from: nginx:stable
+
+import:
+- artifact: build
+  add: /app
+  to: /app
+  before: install
+  owner: www-data
+  group: www-data
+  excludePaths:
+    - ./node_modules
+
+ansible:
+  beforeInstall:
+  - name: "Create non-root main application user"
+    user:
+      name: www-data
+      comment: "Non-root main application user"
+      uid: 7000
+      shell: /bin/bash
+      home: /app
+  - name: "Install build dependencies"
+    apt:
+      name: [
+        locales,
+        tzdata,
+        wget,
+      ]
+      update_cache: yes
+{{- include "Set timezone" . | indent 2 }}
