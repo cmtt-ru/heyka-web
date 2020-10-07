@@ -48,12 +48,10 @@
         {{ texts.openApp }}
       </ui-button>
 
-      <div class="link-wrapper l-ml-8">
+      <div class="link-wrapper l-ml-8" :class="{'link-wrapper--copied': linkCopied}">
         <ui-button
-          v-show="!linkCopied"
           :type="1"
-          class="link"
-          wide
+          class="link-copy"
           @click="copyLinkHandler"
         >
           {{ texts.copy }}
@@ -62,8 +60,7 @@
         <ui-button
           v-show="linkCopied"
           :type="5"
-          class="link"
-          wide
+          class="link-copied"
           @click="copyLinkHandler"
         >
           {{ texts.copied }}
@@ -147,7 +144,20 @@ export default {
       if (!this.name || !this.avatar) {
         const notification = {
           data: {
-            text: 'Some fields are empty',
+            text: this.texts.emptyFields,
+          },
+        };
+
+        await this.$store.dispatch('app/addNotification', notification);
+
+        return;
+      }
+
+      // eslint-disable-next-line no-magic-numbers
+      if (this.name.length > 100) {
+        const notification = {
+          data: {
+            text: this.texts.largeName,
           },
         };
 
@@ -217,5 +227,15 @@ export default {
 
       .link-wrapper
         display inline-block
-        width 122px
+        position relative
+
+        &--copied
+          .link-copy
+            visibility hidden
+
+          .link-copied
+            position absolute
+            left 0
+            width 100%
+
 </style>
