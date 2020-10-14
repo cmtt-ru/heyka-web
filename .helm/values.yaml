@@ -7,8 +7,8 @@ app:
     _default: 2
   requests:
     cpu:
-      _default: "250m"
-      stage: "500m"
+      _default: "100m"
+      stage: "100m"
       production: "1"
     memory:
       _default: "256Mi"
