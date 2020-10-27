@@ -117,7 +117,7 @@ export default {
     min-height 100vh
 
     &__wrapper
-      max-width 700px
+      //max-width 700px
       box-sizing border-box
       display flex
       padding-right 12px
