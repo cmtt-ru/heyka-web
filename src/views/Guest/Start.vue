@@ -20,22 +20,23 @@
         </div>
       </div>
 
-      <p class="l-mt-24 l-mb-8">
-        Enter your name
-      </p>
-      <ui-input
-        v-model="userName"
-        class="user-name"
-        @keypress.enter.native="joinHandler"
-      />
+      <ui-form @submit="joinHandler">
+        <ui-input
+          v-model="userName"
+          placeholder="Enter your name"
+          class="user-name"
+          required
+          enter-submit
+        />
 
-      <ui-button
-        :type="1"
-        class="l-mt-24"
-        @click="joinHandler"
-      >
-        Join channel
-      </ui-button>
+        <ui-button
+          :type="1"
+          class="l-mt-24"
+          submit
+        >
+          Join channel
+        </ui-button>
+      </ui-form>
     </div>
   </transition>
 </template>
@@ -43,31 +44,28 @@
 <script>
 import mediaCapturer from '@classes/mediaCapturer';
 import { mapState, mapGetters } from 'vuex';
-import { UiInput } from '@components/Form';
+import { UiForm, UiInput } from '@components/Form';
 import UiButton from '@components/UiButton';
 
 let cameraStream = null;
 
 export default {
   components: {
+    UiForm,
     UiInput,
     UiButton,
   },
 
   data() {
-    let userName;
+    let userName = '';
 
     try {
-      userName = localStorage.getItem('heyka-guest-name');
+      userName = localStorage.getItem('heyka-guest-name') || '';
     } catch (e) {
       console.error(e);
     }
 
-    if (!userName) {
-      userName = 'Guest';
-    }
-
-    console.log('NAME', userName);
+    console.log('userName', userName);
 
     return {
       userName,
@@ -101,7 +99,7 @@ export default {
     try {
       const immediate = await mediaCapturer.requestMediaPermissions();
 
-      if (immediate && this.userName !== 'Guest') {
+      if (immediate && this.userName) {
         await this.joinHandler();
       } else {
         await this.startCameraPreview();
@@ -186,7 +184,7 @@ export default {
 
     .user-name
       width 50%
-      margin 0 auto
+      margin 24px auto 0 auto
 
       /deep/ input
         color var(--color-5) !important
