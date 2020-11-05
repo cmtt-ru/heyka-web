@@ -4,6 +4,7 @@
 
 <script>
 import Cookies from 'js-cookie';
+import { API_URL } from '@sdk/Constants';
 
 export default {
   computed: {
@@ -45,7 +46,7 @@ export default {
     }
 
     /** Redirect to social login page */
-    document.location.href = `/signin/${this.socialName}`;
+    document.location.href = `${API_URL}/signin/${this.socialName}`;
   },
 };
 </script>

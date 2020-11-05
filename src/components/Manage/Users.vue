@@ -16,6 +16,13 @@
         {{ user.name }}
       </div>
 
+      <div
+        class="user__email"
+        :class="{'disabled': !user.isEmailVerified}"
+      >
+        {{ user.email }}
+      </div>
+
       <div class="user__date">
         {{ dateFormat(user.latestActivityAt) }}
       </div>
@@ -25,6 +32,14 @@
         @click="revokeHandler(user)"
       >
         Revoke
+      </div>
+
+      <div
+        class="user__reset-password"
+        @click="resetHandler(user)"
+        :class="{'disabled': !user.isEmailVerified}"
+      >
+        Reset password
       </div>
     </div>
   </div>
@@ -102,6 +117,25 @@ export default {
     },
 
     /**
+     * Send reset password mail to user's email
+     * @param {object} user – user
+     * @returns {Promise<void>}
+     */
+    async resetHandler(user) {
+      const state = confirm(`Are you sure want to send reset password mail to "${user.name}"?`);
+
+      if (state) {
+        try {
+          await this.$API.auth.discardPass({ email: user.email });
+          alert('Reset password mail sent');
+        } catch (e) {
+          console.log('ERROR');
+          console.log(e);
+        }
+      }
+    },
+
+    /**
      * Format date
      * @param {string} date – date
      * @returns {string}
@@ -138,13 +172,28 @@ export default {
         font-size 18px
         line-height 1
 
-      &__date
+      &__email
         margin-left auto
-        margin-right 12px
+        margin-right 16px
+
+        &.disabled
+          opacity 0.5
+
+      &__date
+        margin-right 16px
 
       &__delete
         color lightcoral
         cursor pointer
+        margin-right 16px
+
+      &__reset-password
+        color lightcoral
+        cursor pointer
+
+        &.disabled
+          pointer-events none
+          opacity 0.5
 
       &:hover
         background #eee
