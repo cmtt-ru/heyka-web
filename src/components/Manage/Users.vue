@@ -11,13 +11,7 @@
         :image="avatarUrl(user, 32)"
         :size="32"
       />
-      <!-- <img
-        class="user__avatar"
-        loading="lazy"
-        :src="avatarUrl(user, 32)"
-        width="32"
-        height="32"
-      >-->
+
       <div class="user__name">
         {{ user.name }}
       </div>
