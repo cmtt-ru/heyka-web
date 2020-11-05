@@ -16,7 +16,10 @@
         {{ user.name }}
       </div>
 
-      <div class="user__email">
+      <div
+        class="user__email"
+        :class="{'disabled': !user.isEmailVerified}"
+      >
         {{ user.email }}
       </div>
 
@@ -34,6 +37,7 @@
       <div
         class="user__reset-password"
         @click="resetHandler(user)"
+        :class="{'disabled': !user.isEmailVerified}"
       >
         Reset password
       </div>
@@ -172,6 +176,9 @@ export default {
         margin-left auto
         margin-right 16px
 
+        &.disabled
+          opacity 0.5
+
       &__date
         margin-right 16px
 
@@ -183,6 +190,10 @@ export default {
       &__reset-password
         color lightcoral
         cursor pointer
+
+        &.disabled
+          pointer-events none
+          opacity 0.5
 
       &:hover
         background #eee
