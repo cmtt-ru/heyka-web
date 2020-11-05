@@ -5,13 +5,19 @@
       :key="user.id"
       class="user"
     >
-      <img
+      <avatar
+        class="user__avatar"
+        :user-id="user.id"
+        :image="avatarUrl(user, 32)"
+        :size="32"
+      />
+      <!-- <img
         class="user__avatar"
         loading="lazy"
         :src="avatarUrl(user, 32)"
         width="32"
         height="32"
-      >
+      >-->
       <div class="user__name">
         {{ user.name }}
       </div>
@@ -36,8 +42,8 @@
 
       <div
         class="user__reset-password"
-        @click="resetHandler(user)"
         :class="{'disabled': !user.isEmailVerified}"
+        @click="resetHandler(user)"
       >
         Reset password
       </div>
@@ -49,8 +55,13 @@
 import cloneDeep from 'clone-deep';
 import dateFormat from 'dateformat';
 import { getUserAvatarUrl } from '@libs/image';
+import Avatar from '@components/Avatar';
 
 export default {
+  comments: {
+    Avatar,
+  },
+  components: { Avatar },
   props: {
     /**
      * Array of workspace
