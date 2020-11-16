@@ -186,8 +186,19 @@ export default {
       width 50%
       margin 24px auto 0 auto
 
+      /deep/ .input-wrapper
+        background rgba(0,0,0,0.85)
+
+        &:hover
+          background rgba(0,0,0,1)
+
+        &:focus-within
+          background rgba(0,0,0,1)
+          border-color rgba(255,255,255,0.5)
+
       /deep/ input
-        color var(--color-5) !important
+        color #fff
+        outline none
         text-align center
 
   .fade-enter-active, .fade-leave-active {
