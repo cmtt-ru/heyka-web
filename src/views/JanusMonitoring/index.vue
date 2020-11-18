@@ -138,13 +138,7 @@ export default {
 
     sessionsList() {
       if (this.selectedUser.janusStats) {
-        return this.selectedUser.janusStats.map((stats, i) => {
-          return {
-            id: stats[Object.keys(stats)[0]].session_id,
-            name: stats[Object.keys(stats)[0]].session_type || `Session ${i + 1}`,
-            handles: stats,
-          };
-        });
+        return this.selectedUser.janusStats;
       }
 
       return [];
@@ -167,9 +161,13 @@ export default {
 
   methods: {
     async updateState(timestamp) {
-      const { workspaceState } = await this.$API.admin.getWorkpsaceStateWithJanusStats(WORKSPACE_ID);
+      const stats = await this.$API.admin.getWorkpsaceStateWithJanusStats(WORKSPACE_ID);
 
-      console.log(workspaceState);
+      const body = stats[0].body;
+
+      const { workspaceState } = JSON.parse(body);
+
+      console.log('workspaceState', workspaceState);
 
       if (workspaceState) {
         this.state.channels = workspaceState.channels;
@@ -256,7 +254,13 @@ export default {
 
       if (deep < 2) {
         if (this.sessionsList.length) {
-          this.selectedSession = this.sessionsList[0];
+          const session = this.sessionsList.find(s => s.name === 'Main window');
+
+          if (session) {
+            this.selectedSession = session;
+          } else {
+            this.selectedSession = this.sessionsList[0];
+          }
         } else {
           this.selectedSession = {};
         }
