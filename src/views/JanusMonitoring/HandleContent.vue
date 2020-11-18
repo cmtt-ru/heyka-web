@@ -132,8 +132,6 @@ export default {
           out_stats: component.out_stats,
         };
 
-        console.log(data);
-
         return data;
       }
 

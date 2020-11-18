@@ -161,15 +161,9 @@ const routes = [
    * Janus monitoring
    */
   {
-    path: '/janus-monitoring',
+    path: '/janus-monitoring*',
     name: 'janus-monitoring',
     component: JanusMonitoring,
-    children: [
-      {
-        path: ':code',
-        component: JanusMonitoring,
-      },
-    ],
   },
 
 ];
