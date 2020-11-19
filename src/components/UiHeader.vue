@@ -10,6 +10,8 @@
     <span class="title l-ml-12">
       Heyka
     </span>
+
+    <slot />
   </header>
 </template>
 

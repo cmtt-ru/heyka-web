@@ -1,6 +1,36 @@
 <template>
   <div class="layout">
-    <ui-header />
+    <ui-header>
+      <div class="layout__controls l-ml-auto l-mr-24">
+        <input
+          v-model="inputDate"
+          class="layout__controls__date l-mh-24"
+          type="datetime-local"
+          :max="historyRange.maxDate"
+          :min="historyRange.minDate"
+        >
+        <ui-button
+          :type="1"
+          size="small"
+          class="l-mr-4"
+          @click="dateNavigateHandler(-1)"
+        >
+          ←
+        </ui-button>
+        <ui-button
+          :type="1"
+          size="small"
+          @click="dateNavigateHandler(1)"
+        >
+          →
+        </ui-button>
+        <ui-switch
+          v-model="autoRefreshState"
+          class="layout__controls__switch"
+          text="Auto refresh"
+        />
+      </div>
+    </ui-header>
 
     <div class="layout__wrapper">
       <!--
@@ -77,8 +107,10 @@
 </template>
 
 <script>
-/* eslint-disable no-magic-numbers */
+/* eslint-disable no-magic-numbers, camelcase */
 import UiHeader from '@/components/UiHeader';
+import { UiSwitch } from '@components/Form';
+import UiButton from '@components/UiButton';
 import ChannelItem from './ChannelItem';
 import UserItem from './UserItem';
 import SessionItem from './SessionItem';
@@ -88,6 +120,41 @@ import { sortAny } from '@libs/arrays';
 
 const WORKSPACE_ID = 'd2b3f98c-3749-4242-b319-1416a408b6ed';
 
+// eslint-disable-next-line no-extend-native
+Date.prototype.toDatetimeLocal = function toDatetimeLocal() {
+  var
+      date = this,
+      ten = function (i) {
+        return (i < 10 ? '0' : '') + i;
+      },
+      YYYY = date.getFullYear(),
+      MM = ten(date.getMonth() + 1),
+      DD = ten(date.getDate()),
+      HH = ten(date.getHours()),
+      II = ten(date.getMinutes()),
+      SS = ten(date.getSeconds())
+    ;
+
+  return YYYY + '-' + MM + '-' + DD + 'T' +
+      HH + ':' + II + ':' + SS;
+};
+
+// eslint-disable-next-line no-extend-native
+Date.prototype.fromDatetimeLocal = (function (BST) {
+  // BST should not be present as UTC time
+  return new Date(BST).toISOString()
+    .slice(0, 16) === BST
+    // if it is, it needs to be removed
+    ? function () {
+      return new Date(
+        this.getTime() +
+        (this.getTimezoneOffset() * 60000)
+      ).toISOString();
+    }
+    // otherwise can just be equivalent of toISOString
+    : Date.prototype.toISOString;
+}('2006-06-06T06:06'));
+
 export default {
   components: {
     UiHeader,
@@ -96,6 +163,8 @@ export default {
     SessionItem,
     HandleItem,
     HandleContent,
+    UiSwitch,
+    UiButton,
   },
 
   data() {
@@ -103,6 +172,7 @@ export default {
       state: {
         channels: [],
         users: [],
+        created_at: null,
       },
 
       selectedChannel: {},
@@ -114,6 +184,14 @@ export default {
       selectedUserId: null,
       selectedSessionId: null,
       selectedHandleId: null,
+
+      requestTime: 0,
+
+      currentTime: new Date(),
+      selectedTime: new Date(),
+
+      autoRefreshState: true,
+      controlsLock: false,
     };
   },
 
@@ -216,6 +294,33 @@ export default {
 
       return url;
     },
+
+    historyRange() {
+      /* 30 minute history */
+      const historyLengthMs = 1000 * 60 * 30;
+      const time = this.currentTime.getTime();
+
+      return {
+        minDate: new Date(time - historyLengthMs).toDatetimeLocal(),
+        maxDate: new Date(time).toDatetimeLocal(),
+        value: new Date(this.selectedTime).toDatetimeLocal(),
+        min: time - historyLengthMs,
+        max: time,
+      };
+    },
+
+    inputDate: {
+      get() {
+        return new Date(this.selectedTime).toDatetimeLocal();
+      },
+      set(value) {
+        const nextDate = new Date(value).getTime();
+
+        if (nextDate <= this.historyRange.max && nextDate >= this.historyRange.min) {
+          this.selectedTime = new Date(value);
+        }
+      },
+    },
   },
 
   watch: {
@@ -228,7 +333,6 @@ export default {
         this.autoSelectPath(breakDepth);
         this.selectPath();
         this.replaceRoute();
-        console.log('breakDepth', breakDepth);
       }
     },
   },
@@ -240,29 +344,43 @@ export default {
 
     this.selectPath();
 
-    // setInterval(async () => {
-    //   await this.updateState();
-    //   this.selectPath();
-    // }, 1000);
+    setInterval(async () => {
+      if (this.autoRefreshState) {
+        await this.updateState();
+        this.selectPath();
+      }
+
+      this.currentTime = new Date();
+
+      if (this.autoRefreshState) {
+        this.selectedTime = this.currentTime;
+      }
+    }, 1000);
 
     window.updateState = this.updateState;
     window.selectPath = this.selectPath;
   },
 
   methods: {
-    async updateState(timestamp) {
-      const stats = await this.$API.admin.getWorkpsaceStateWithJanusStats(WORKSPACE_ID);
+    async updateState(timestamp = this.selectedTime) {
+      this.controlsLock = true;
+      const now = Date.now();
+      const stats = await this.$API.admin.getWorkpsaceStateWithJanusStats(WORKSPACE_ID, this.selectedTime);
 
       const body = stats[0].body;
 
       const { workspaceState } = JSON.parse(body);
 
-      console.log('workspaceState', workspaceState);
+      // console.log('workspaceState', workspaceState);
 
       if (workspaceState) {
         this.state.channels = workspaceState.channels;
         this.state.users = workspaceState.users;
+        this.state.created_at = workspaceState.created_at;
       }
+
+      this.requestTime = Date.now() - now;
+      this.controlsLock = false;
     },
 
     parseUrl() {
@@ -278,8 +396,6 @@ export default {
       this.selectedUserId = pathData.u;
       this.selectedSessionId = pathData.s;
       this.selectedHandleId = pathData.h;
-
-      console.log(pathData);
     },
 
     getUserById(userId) {
@@ -399,8 +515,6 @@ export default {
         }
       }
 
-      console.log('channel not found');
-
       return 0;
     },
 
@@ -459,6 +573,23 @@ export default {
 
     replaceRoute() {
       this.$router.replace(this.currentRoute).catch(() => {});
+    },
+
+    async dateNavigateHandler(n) {
+      const nextDate = new Date(this.selectedTime).getTime() + 1000 * n;
+
+      if (!this.controlsLock) {
+        if (nextDate <= this.historyRange.max && nextDate >= this.historyRange.min) {
+          this.selectedTime = nextDate;
+
+          await this.updateState();
+          this.selectPath();
+
+          console.log(new Date(this.selectedTime));
+        }
+      }
+
+      this.autoRefreshState = false;
     },
 
     /**
@@ -537,4 +668,23 @@ export default {
       &--content
         flex 1 1 auto
         min-width 500px
+
+    &__controls
+      display flex
+      align-items center
+
+      &__range
+        width 360px
+        margin-left 24px
+
+      &__switch
+        width 120px
+        margin-left 24px
+
+      &__date
+        border-radius 6px
+        border 1px solid rgba(0,0,0,0.35)
+        padding 3px 8px
+        width 220px
+        margin 0 8px
 </style>
