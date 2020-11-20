@@ -118,7 +118,7 @@ import HandleItem from './HandleItem';
 import HandleContent from './HandleContent';
 import { sortAny } from '@libs/arrays';
 
-const WORKSPACE_ID = 'd2b3f98c-3749-4242-b319-1416a408b6ed';
+const WORKSPACE_ID = 'auto';
 
 // eslint-disable-next-line no-extend-native
 Date.prototype.toDatetimeLocal = function toDatetimeLocal() {
