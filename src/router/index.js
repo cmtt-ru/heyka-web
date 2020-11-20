@@ -22,6 +22,8 @@ const GuestFinish = () => import(/* webpackChunkName: "main" */ '../views/Guest/
 const Manage = () => import(/* webpackChunkName: "main" */ '../views/Manage');
 const WorkspaceEdit = () => import(/* webpackChunkName: "main" */ '../views/WorkspaceEdit');
 
+const JanusMonitoring = () => import(/* webpackChunkName: "janus" */ '../views/JanusMonitoring');
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -153,6 +155,15 @@ const routes = [
         component: GuestFinish,
       },
     ],
+  },
+
+  /**
+   * Janus monitoring
+   */
+  {
+    path: '/janus-monitoring*',
+    name: 'janus-monitoring',
+    component: JanusMonitoring,
   },
 
 ];

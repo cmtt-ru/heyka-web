@@ -155,8 +155,8 @@ export default {
       coverSrc: null,
       passReset: false,
       login: {
-        email: '',
-        password: '',
+        email: 'michael.nalbandyan@gmail.com',
+        password: 'heyka-password',
       },
     };
   },
