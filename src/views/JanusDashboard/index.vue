@@ -32,7 +32,7 @@
 
         <div class="widget__chart">
           <zingchart
-            :data="getChartData([user.generatedStats.rtt], 'Round Trip Time', 'RTT (ms)')"
+            :data="getChartData([user.generatedStats.rtt], 'Round Trip Time', ['RTT (ms)'])"
             height="100"
             width="100%"
             force-render
