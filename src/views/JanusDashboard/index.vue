@@ -12,19 +12,41 @@
           {{ user.name }}
         </p>
 
-        <zingchart
-          :data="getChartData([user.generatedStats.lost, user.generatedStats.lostByRemote], 'Lost local / remote', ['lost', 'lost by remote'])"
-          height="100"
-          width="100%"
-          force-render
-        />
+        <div class="widget__chart">
+          <zingchart
+            :data="getChartData([user.generatedStats.lostLocal, user.generatedStats.lostRemote], 'Lost Local / Remote', ['Local', 'Remote'])"
+            height="100"
+            width="100%"
+            force-render
+          />
+        </div>
 
-        <zingchart
-          :data="getChartData([user.generatedStats.bitrateIn, user.generatedStats.bitrateOut], 'Bitrate In / Out', ['In', 'Out'])"
-          height="100"
-          width="100%"
-          force-render
-        />
+        <div class="widget__chart">
+          <zingchart
+            :data="getChartData([user.generatedStats.jitterLocal, user.generatedStats.jitterRemote], 'Jitter Local / Remote', ['In', 'Out'])"
+            height="100"
+            width="100%"
+            force-render
+          />
+        </div>
+
+        <div class="widget__chart">
+          <zingchart
+            :data="getChartData([user.generatedStats.rtt], 'Round Trip Time', 'RTT (ms)')"
+            height="100"
+            width="100%"
+            force-render
+          />
+        </div>
+
+        <div class="widget__chart">
+          <zingchart
+            :data="getChartData([user.generatedStats.bitrateIn, user.generatedStats.bitrateOut], 'Bitrate In / Out', ['In', 'Out'])"
+            height="100"
+            width="100%"
+            force-render
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -106,17 +128,26 @@ export default {
         });
 
         const data = {
-          lost: [],
-          lostByRemote: [],
+          lostLocal: [],
+          lostRemote: [],
           bitrateIn: [],
           bitrateOut: [],
+          jitterLocal: [],
+          jitterRemote: [],
+          rtt: [],
         };
 
         audioBridgeHandles.reverse().forEach(h => {
-          data.lost.push(h.streams[0].rtcp_stats.audio.lost);
-          data.lostByRemote.push(h.streams[0].rtcp_stats.audio['lost-by-remote']);
+          data.lostLocal.push(h.streams[0].rtcp_stats.audio.lost);
+          data.lostRemote.push(h.streams[0].rtcp_stats.audio['lost-by-remote']);
+
           data.bitrateIn.push(h.streams[0].components[0].in_stats.audio_bytes_lastsec);
           data.bitrateOut.push(h.streams[0].components[0].out_stats.audio_bytes_lastsec);
+
+          data.jitterLocal.push(h.streams[0].rtcp_stats.audio['jitter-local']);
+          data.jitterRemote.push(h.streams[0].rtcp_stats.audio['jitter-remote']);
+
+          data.rtt.push(h.streams[0].rtcp_stats.audio.rtt);
         });
 
         u.generatedStats = data;
@@ -146,43 +177,6 @@ export default {
           body: JSON.parse(state.body),
         };
       });
-    },
-
-    getUserStats(userId) {
-      const audioBridgeHandles = this.users
-        .find(u => u.id === userId)
-        .janusStats.map(sessions => {
-          const session = sessions.find(s => s.name === 'Main window');
-          const audioBridgeHandle = session.handles.find(handle => handle.plugin === 'janus.plugin.audiobridge');
-
-          if (audioBridgeHandle) {
-            return audioBridgeHandle;
-          }
-
-          return null;
-        });
-
-      const data = {
-        lost: [],
-        lostByRemote: [],
-        bitrateIn: [],
-        bitrateOut: [],
-      };
-
-      audioBridgeHandles.reverse().forEach(h => {
-        data.lost.push(h.streams[0].rtcp_stats.audio.lost);
-        data.lostByRemote.push(h.streams[0].rtcp_stats.audio['lost-by-remote']);
-        data.bitrateIn.push(h.streams[0].components[0].in_stats.audio_bytes_lastsec);
-        data.bitrateOut.push(h.streams[0].components[0].out_stats.audio_bytes_lastsec);
-      });
-
-      console.log('audioBridgeHandles', data);
-
-      return {
-        lost: this.getChartData([data.lost, data.lostByRemote]),
-        bitrateIn: this.getChartData(data.bitrateIn),
-        bitrateOut: this.getChartData(data.bitrateOut),
-      };
     },
 
     getChartData(values, title, labels = []) {
@@ -249,6 +243,6 @@ export default {
           color #949494
           font-weight 400
 
-      &__label
-        padding 6px 12px 0 12px
+      &__chart
+        margin-bottom 12px
 </style>
