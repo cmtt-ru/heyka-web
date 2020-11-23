@@ -58,8 +58,6 @@ import UiHeader from '@/components/UiHeader';
 import 'zingchart/es6';
 import zingchartVue from 'zingchart-vue';
 
-// import { sortAny } from '@libs/arrays';
-
 const WORKSPACE_ID = 'auto';
 
 export default {
@@ -109,7 +107,7 @@ export default {
               return user.janusStats;
             }
 
-            return {};
+            return null;
           }),
         };
       });
@@ -117,11 +115,13 @@ export default {
       /** Generate some stats */
       usersWithAllStats.forEach(u => {
         const audioBridgeHandles = u.janusStats.map(sessions => {
-          const session = sessions.find(s => s.name === 'Main window');
-          const audioBridgeHandle = session.handles.find(handle => handle.plugin === 'janus.plugin.audiobridge');
+          if (sessions) {
+            const session = sessions.find(s => s.name === 'Main window');
+            const audioBridgeHandle = session.handles.find(handle => handle.plugin === 'janus.plugin.audiobridge');
 
-          if (audioBridgeHandle) {
-            return audioBridgeHandle;
+            if (audioBridgeHandle) {
+              return audioBridgeHandle;
+            }
           }
 
           return null;
@@ -138,16 +138,16 @@ export default {
         };
 
         audioBridgeHandles.reverse().forEach(h => {
-          data.lostLocal.push(h.streams[0].rtcp_stats.audio.lost);
-          data.lostRemote.push(h.streams[0].rtcp_stats.audio['lost-by-remote']);
+          data.lostLocal.push(h?.streams[0].rtcp_stats.audio.lost);
+          data.lostRemote.push(h?.streams[0].rtcp_stats.audio['lost-by-remote']);
 
-          data.bitrateIn.push(h.streams[0].components[0].in_stats.audio_bytes_lastsec);
-          data.bitrateOut.push(h.streams[0].components[0].out_stats.audio_bytes_lastsec);
+          data.bitrateIn.push(h?.streams[0].components[0].in_stats.audio_bytes_lastsec);
+          data.bitrateOut.push(h?.streams[0].components[0].out_stats.audio_bytes_lastsec);
 
-          data.jitterLocal.push(h.streams[0].rtcp_stats.audio['jitter-local']);
-          data.jitterRemote.push(h.streams[0].rtcp_stats.audio['jitter-remote']);
+          data.jitterLocal.push(h?.streams[0].rtcp_stats.audio['jitter-local']);
+          data.jitterRemote.push(h?.streams[0].rtcp_stats.audio['jitter-remote']);
 
-          data.rtt.push(h.streams[0].rtcp_stats.audio.rtt);
+          data.rtt.push(h?.streams[0].rtcp_stats.audio.rtt);
         });
 
         u.generatedStats = data;
@@ -161,7 +161,7 @@ export default {
     await this.updateState();
 
     setInterval(async () => {
-      // await this.updateState();
+      await this.updateState();
     }, 1000);
   },
 
