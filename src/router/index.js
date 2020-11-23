@@ -23,6 +23,7 @@ const Manage = () => import(/* webpackChunkName: "main" */ '../views/Manage');
 const WorkspaceEdit = () => import(/* webpackChunkName: "main" */ '../views/WorkspaceEdit');
 
 const JanusMonitoring = () => import(/* webpackChunkName: "janus" */ '../views/JanusMonitoring');
+const JanusDashboard = () => import(/* webpackChunkName: "janus" */ '../views/JanusDashboard');
 
 Vue.use(VueRouter);
 
@@ -164,6 +165,15 @@ const routes = [
     path: '/janus-monitoring*',
     name: 'janus-monitoring',
     component: JanusMonitoring,
+  },
+
+  /**
+   * Janus dashboard
+   */
+  {
+    path: '/janus-dashboard*',
+    name: 'janus-dashboard',
+    component: JanusDashboard,
   },
 
 ];
