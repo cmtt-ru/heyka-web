@@ -18,7 +18,7 @@ spec:
         backend:
           serviceName: {{ .Chart.Name }}
           servicePort: static
-      - path: /(auth|guest|manage|ws)
+      - path: /(auth|guest|manage|ws|janus-monitoring|janus-dashboard)
         backend:
           serviceName: {{ .Chart.Name }}
           servicePort: static
@@ -34,7 +34,7 @@ spec:
         backend:
           serviceName: {{ .Chart.Name }}
           servicePort: static
-      - path: /(auth|guest|manage|ws)
+      - path: /(auth|guest|manage|ws|janus-monitoring|janus-dashboard)
         backend:
           serviceName: {{ .Chart.Name }}
           servicePort: static
@@ -46,7 +46,7 @@ spec:
   tls:
   - hosts:
       - {{ pluck .Values.global.env .Values.app.url | first | default (printf "web-%s.%s" .Values.global.env .Values.app.domain_base) }}
-{{- if (eq $.Values.global.env "stage") }}     
+{{- if (eq $.Values.global.env "stage") }}
       - {{ pluck .Values.global.env .Values.app.domain_main | first | default .Values.app.domain_main._default }}
 {{- end }}
     secretName: {{ printf "tls-%s" .Chart.Name | quote }}
