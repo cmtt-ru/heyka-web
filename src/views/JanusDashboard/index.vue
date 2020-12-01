@@ -197,7 +197,7 @@ export default {
         const audioBridgeHandles = u.janusStats.map(sessions => {
           if (sessions) {
             const session = sessions.find(s => s.name === 'Main window');
-            const audioBridgeHandle = session.handles.find(handle => handle.plugin === 'janus.plugin.audiobridge');
+            const audioBridgeHandle = session?.handles?.find(handle => handle.plugin === 'janus.plugin.audiobridge');
 
             if (audioBridgeHandle) {
               return audioBridgeHandle;
