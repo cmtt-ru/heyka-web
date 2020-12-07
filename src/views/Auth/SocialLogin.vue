@@ -34,24 +34,31 @@ export default {
   },
   async mounted() {
     /** Set action cookie */
-    Cookies.set('heyka-auth-action', this.action, {domain: API_URL.split('.').splice(-2).join('.')});
+    Cookies.set('heyka-auth-action', this.action, {
+      domain: API_URL.split('.').splice(-2)
+        .join('.'),
+    });
 
     /** User goes to link social network to his account */
     if (this.action === 'link') {
       const res = await this.$API.auth.signinByLink(this.authCode);
 
       if (res.data && res.data.accessToken) {
-        Cookies.set('heyka-access-token', res.data.accessToken, {domain: API_URL.split('.').splice(-2).join('.')});
-        console.log(API_URL.split('.').splice(-2).join('.'), Cookies.get('heyka-access-token'))
+        Cookies.set('heyka-access-token', res.data.accessToken, {
+          domain: API_URL.split('.').splice(-2)
+            .join('.'),
+        });
+        console.log(API_URL.split('.').splice(-2)
+          .join('.'), Cookies.get('heyka-access-token'));
       }
     }
 
     /** Redirect to social login page */
     const time = 10000;
+
     setTimeout(() => {
       document.location.href = `${API_URL}/signin/${this.socialName}`;
     }, time);
-    
   },
 };
 </script>
