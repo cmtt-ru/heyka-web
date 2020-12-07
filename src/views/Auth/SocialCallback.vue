@@ -4,6 +4,7 @@
 
 <script>
 import Cookies from 'js-cookie';
+import { COOKIE_URL } from '@sdk/Constants';
 
 export default {
   computed: {
@@ -58,7 +59,7 @@ export default {
         deepLink += `/${encodeURIComponent(this.error)}`;
       }
 
-      Cookies.remove('heyka-access-token');
+      Cookies.remove('heyka-access-token', { domain: COOKIE_URL });
 
       this.launchDeepLink(deepLink);
     }
