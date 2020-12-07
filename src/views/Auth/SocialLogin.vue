@@ -52,11 +52,7 @@ export default {
     }
 
     /** Redirect to social login page */
-    const time = 10000;
-
-    setTimeout(() => {
-      document.location.href = `${API_URL}/signin/${this.socialName}`;
-    }, time);
+    document.location.href = `${API_URL}/signin/${this.socialName}`;
   },
 };
 </script>
