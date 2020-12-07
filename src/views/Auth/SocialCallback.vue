@@ -49,7 +49,11 @@ export default {
     console.log(this.$route);
 
     if (this.action === 'login') {
-      this.launchDeepLink(`login/${this.authCode}`);
+      if (this.authCode) {
+        this.launchDeepLink(`login/${this.authCode}`);
+      } else {
+        this.launchDeepLink(`social-link/false/${this.error}`);
+      }
     }
 
     if (this.action === 'link') {
