@@ -92,11 +92,15 @@ const routes = [
    */
   {
     path: '/manage',
-    name: 'manage',
     component: Manage,
     children: [
       {
-        path: ':code',
+        path: ':workspaceId',
+        name: 'manage',
+        component: Manage,
+      },
+      {
+        path: ':workspaceId/:code',
         component: Manage,
       },
     ],
