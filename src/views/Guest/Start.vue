@@ -104,11 +104,16 @@ export default {
     try {
       const immediate = await mediaCapturer.requestMediaPermissions();
 
-      if (immediate && this.userName) {
-        await this.joinHandler();
-      } else {
-        await this.startCameraPreview();
+      // if (immediate && this.userName) {
+      //   await this.joinHandler();
+      // } else {
+      //   await this.startCameraPreview();
+      // }
+
+      if (immediate) {
+
       }
+      await this.startCameraPreview();
     } catch (e) {
       console.error('requestMediaPermissions', e);
     }
