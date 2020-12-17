@@ -2,7 +2,17 @@ import { heykaStore } from '@/store/localStore';
 
 /**
  * @typedef {object} AppState
+ * @property {string} appName – app name
+ * @property {string} appVersion – app version
  * @property {string} language – language
+ * @property {string} runAppFrom – run from tray or dock
+ * @property {boolean} autorun – autorun
+ * @property {boolean} collectAnalytics – whether to collect analytics
+ * @property {array} privacyLogs – privacy logs
+ *
+ * @property {object} theme – color theme
+ * @property {string} theme.name – theme name
+ * @property {boolean} theme.auto – theme auto choose
  *
  * @property {object} devices – list of user devices
  * @property {boolean} devices.speakers – speakers
@@ -25,6 +35,7 @@ import { heykaStore } from '@/store/localStore';
  *
  * @property {number} microphoneVolume – current microphone volume in decibels
  * @property {array} notifications – in-app notifications
+ * @property {string} search – workspace search
  */
 
 /**
@@ -36,6 +47,8 @@ const state = () => {
    * @namespace AppState
    */
   return {
+    appName: 'Heyka Desktop',
+    appVersion: '',
     language: heykaStore.get('language', 'en'),
     devices: {
       speakers: [],
@@ -54,10 +67,6 @@ const state = () => {
     },
     microphoneVolume: -100,
     notifications: [],
-    socket: {
-      id: '',
-      connectedAt: 0,
-    },
   };
 };
 
