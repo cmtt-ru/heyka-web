@@ -10,7 +10,7 @@ git checkout develop
 git pull origin develop
 
 # Merge current branch to develop
-git merge $current_branch
+git merge $current_branch -m "Merge from sh script"
 git push origin develop
 
 # Checkout current branch back
