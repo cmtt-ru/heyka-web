@@ -11,7 +11,13 @@
       </p>
 
       <div class="webcam l-mt-24">
-        <video ref="video" />
+        <video
+          ref="video"
+          autoplay
+          playsinline
+          controls
+          muted
+        />
         <div class="webcam__loader">
           <svg-icon
             name="video"
@@ -118,10 +124,6 @@ export default {
       cameraStream = await mediaCapturer.getCameraStream();
 
       this.$refs.video.srcObject = cameraStream;
-
-      this.$refs.video.onloadedmetadata = () => {
-        this.$refs.video.play();
-      };
     },
 
     async joinHandler() {
