@@ -15,7 +15,6 @@
           ref="video"
           autoplay
           playsinline
-          controls
           muted
         />
         <div class="webcam__loader">
