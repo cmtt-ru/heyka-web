@@ -1,4 +1,5 @@
 export default {
+
   /**
    * Sets user id
    *
@@ -64,4 +65,16 @@ export default {
   SET_ALLOW_DRAW(state, value) {
     state.allowDraw = value;
   },
+
+  /**
+   * Update data
+   *
+   * @param {MeState} state – module me state
+   * @param {object} data – data
+   * @constructor
+   */
+  UPDATE(state, data) {
+    state = Object.assign(state, data);
+  },
+
 };
