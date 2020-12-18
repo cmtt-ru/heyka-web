@@ -157,6 +157,9 @@ export default {
     border-radius 12px
     box-sizing border-box
 
+    h1
+      letter-spacing -1.8px
+
     .webcam
       position relative
       height 0
