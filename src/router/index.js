@@ -3,6 +3,8 @@ import VueRouter from 'vue-router';
 
 const Landing = () => import(/* webpackChunkName: "main" */ '../views/Landing.vue');
 
+const NewAuth = () => import(/* webpackChunkName: "main" */ '../views/NewAuth');
+
 const Auth = () => import(/* webpackChunkName: "main" */ '../views/Auth/Auth.vue');
 const SignIn = () => import(/* webpackChunkName: "main" */ '../views/Auth/SignIn.vue');
 const Reset = () => import(/* webpackChunkName: "main" */ '../views/Auth/Reset.vue');
@@ -35,6 +37,14 @@ const routes = [
     path: '/',
     name: 'landing',
     component: Landing,
+  },
+
+  /**
+   * Authorization routes
+   */
+  {
+    path: '/new-auth',
+    component: NewAuth,
   },
 
   /**
@@ -115,7 +125,6 @@ const routes = [
     children: [
       {
         path: 'create',
-        name: 'workspace-create',
         component: WorkspaceEdit,
       },
       {
