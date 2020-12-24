@@ -8,17 +8,24 @@
       <div class="auth__body">
         <div class="auth__body__wrapper">
           <div class="auth__header">
-            <ui-button
-              :type="9"
-              size="small"
+            <router-link
+              v-if="$route.meta.depth > 1"
+              :to="{name: 'new-auth'}"
             >
-              <svg-icon name="arrow-down" />
-              Назад
-            </ui-button>
+              <ui-button
+                :type="9"
+                size="small"
+              >
+                <svg-icon name="arrow-down" />
+                Назад
+              </ui-button>
+            </router-link>
           </div>
 
           <div class="auth__form">
-            <h1>Вход в Heyka</h1>
+            <transition :name="transitionName">
+              <router-view />
+            </transition>
           </div>
 
           <div class="auth__footer">
@@ -39,6 +46,18 @@ import UiButton from '@components/UiButton';
 export default {
   components: {
     UiButton,
+  },
+
+  data() {
+    return {
+      transitionName: '',
+    };
+  },
+
+  watch: {
+    $route(to, from) {
+      this.transitionName = to.meta.depth > from.meta.depth ? 'next' : 'prev';
+    },
   },
 };
 </script>
@@ -88,9 +107,11 @@ export default {
       justify-content center
 
       &__wrapper
+        position relative
         display flex
         width 268px
         flex-direction column
+        overflow hidden
 
     &__header
       height 100px
@@ -109,11 +130,66 @@ export default {
       color var(--new-UI-04)
 
     &__form
+      position relative
       flex 1
 
       h1
         font-size 26px
         font-weight 700
         line-height 1.6
+
+  /* Transitions */
+  $animation-duration = 350ms
+  .next-leave-to
+    animation leaveToLeft $animation-duration both cubic-bezier(0.165, 0.84, 0.44, 1)
+    z-index 1
+
+  .next-enter-to
+    animation enterFromRight $animation-duration both cubic-bezier(0.165, 0.84, 0.44, 1)
+    z-index 2
+
+  .prev-leave-to
+    animation leaveToRight $animation-duration both cubic-bezier(0.165, 0.84, 0.44, 1)
+    z-index 2
+
+  .prev-enter-to
+    animation enterFromLeft $animation-duration both cubic-bezier(0.165, 0.84, 0.44, 1)
+    z-index 1
+
+  @keyframes leaveToLeft {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-100%);
+    }
+  }
+
+  @keyframes enterFromLeft {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes leaveToRight {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(100%);
+    }
+  }
+
+  @keyframes enterFromRight {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
 
 </style>
