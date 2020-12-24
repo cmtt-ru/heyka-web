@@ -44,20 +44,13 @@
         </ui-button>
       </router-link>
     </div>
-
-    <!--    <router-link :to="{name: 'new-auth-signup'}">-->
-    <!--      Signup-->
-    <!--    </router-link>-->
-
-    <!--    <router-link :to="{name: 'new-auth-email-reset'}">-->
-    <!--      Reset-->
-    <!--    </router-link>-->
   </div>
 </template>
 
 <script>
 
 import UiButton from '@components/UiButton';
+import { WEB_URL } from '@sdk/Constants';
 
 export default {
   components: {
@@ -65,17 +58,20 @@ export default {
   },
 
   methods: {
-    socialHandler(social) {
-      console.log('Social loing -->', social);
+    /**
+     * Social button handler
+     * @param {string} socialName – social name
+     * @returns {void}
+     */
+    socialHandler(socialName) {
+      const link = `${WEB_URL}/auth/social/${socialName}/login`;
+
+      window.open(link);
     },
   },
 };
 </script>
 
 <style lang="stylus" scoped>
-  h1
-    font-size 26px
-    font-weight 700
-    line-height 1.6
 
 </style>

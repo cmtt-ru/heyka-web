@@ -138,7 +138,18 @@ export default {
         font-weight 700
         line-height 1.6
 
-  /* Transitions */
+  /* Used in child components */
+  .auth-page
+    position absolute
+    z-index 0
+    width 100%
+
+    h1
+      font-size 26px
+      font-weight 700
+      line-height 1.6
+
+  /* Page transitions */
   $animation-duration = 350ms
   .next-leave-to
     animation leaveToLeft $animation-duration both cubic-bezier(0.165, 0.84, 0.44, 1)
