@@ -22,17 +22,15 @@
       >
         {{ texts.reset }}
       </ui-button>
-      <router-link
-        :to="{name: 'new-auth-email-signin'}"
+
+      <ui-button
+        :type="10"
+        wide
+        size="large"
+        @click="$emit('go-back')"
       >
-        <ui-button
-          :type="10"
-          wide
-          size="large"
-        >
-          {{ texts.cancel }}
-        </ui-button>
-      </router-link>
+        {{ texts.cancel }}
+      </ui-button>
     </ui-form>
   </div>
 </template>

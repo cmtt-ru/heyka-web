@@ -21,7 +21,7 @@
 
           <div class="auth__form">
             <transition :name="transitionName">
-              <router-view />
+              <router-view @go-back="backHandler" />
             </transition>
           </div>
 
