@@ -8,18 +8,15 @@
       <div class="auth__body">
         <div class="auth__body__wrapper">
           <div class="auth__header">
-            <router-link
+            <ui-button
               v-if="$route.meta.depth > 1"
-              :to="{name: 'new-auth'}"
+              :type="9"
+              size="small"
+              @click="backHandler"
             >
-              <ui-button
-                :type="9"
-                size="small"
-              >
-                <svg-icon name="arrow-down" />
-                Назад
-              </ui-button>
-            </router-link>
+              <svg-icon name="arrow-down" />
+              {{ texts.header.back }}
+            </ui-button>
           </div>
 
           <div class="auth__form">
@@ -30,8 +27,7 @@
 
           <div class="auth__footer">
             <p>
-              Вы даете согласие на обработку
-              персональных данных
+              {{ texts.footer.privacy }}
             </p>
           </div>
         </div>
@@ -54,9 +50,29 @@ export default {
     };
   },
 
+  computed: {
+    /**
+     * Get needed texts from I18n-locale file
+     * @returns {object}
+     */
+    texts() {
+      return this.$t('newAuth');
+    },
+  },
+
   watch: {
     $route(to, from) {
       this.transitionName = to.meta.depth > from.meta.depth ? 'next' : 'prev';
+    },
+  },
+
+  methods: {
+    backHandler() {
+      if (window.history.length > 2) {
+        this.$router.go(-1);
+      } else {
+        this.$router.push({ name: 'new-auth' });
+      }
     },
   },
 };
@@ -141,31 +157,39 @@ export default {
   /* Used in child components */
   .auth-page
     position absolute
-    z-index 0
     width 100%
+    will-change transform
 
     h1
       font-size 26px
       font-weight 700
       line-height 1.6
+      margin-bottom 16px
+
+  .ui-button--9
+    font-weight normal
+    font-size 12px
 
   /* Page transitions */
   $animation-duration = 350ms
   .next-leave-to
     animation leaveToLeft $animation-duration both cubic-bezier(0.165, 0.84, 0.44, 1)
-    z-index 1
+
+  .next-enter-active
+    transform translateX(100%)
 
   .next-enter-to
     animation enterFromRight $animation-duration both cubic-bezier(0.165, 0.84, 0.44, 1)
-    z-index 2
+    transform translateX(100%)
 
   .prev-leave-to
     animation leaveToRight $animation-duration both cubic-bezier(0.165, 0.84, 0.44, 1)
-    z-index 2
+
+  .prev-enter-active
+    transform translateX(-100%)
 
   .prev-enter-to
     animation enterFromLeft $animation-duration both cubic-bezier(0.165, 0.84, 0.44, 1)
-    z-index 1
 
   @keyframes leaveToLeft {
     from {

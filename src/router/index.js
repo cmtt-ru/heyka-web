@@ -5,9 +5,9 @@ const Landing = () => import(/* webpackChunkName: "main" */ '../views/Landing.vu
 
 const NewAuth = () => import(/* webpackChunkName: "main" */ '../views/NewAuth');
 const NewAuthMain = () => import(/* webpackChunkName: "main" */ '../views/NewAuth/Main');
-const NewAuthEmail = () => import(/* webpackChunkName: "main" */ '../views/NewAuth/Email');
-const NewAuthSignup = () => import(/* webpackChunkName: "main" */ '../views/NewAuth/Signup');
-const NewAuthReset = () => import(/* webpackChunkName: "main" */ '../views/NewAuth/Reset');
+const NewAuthEmailSignin = () => import(/* webpackChunkName: "main" */ '../views/NewAuth/EmailSignin');
+const NewAuthEmailReset = () => import(/* webpackChunkName: "main" */ '../views/NewAuth/EmailReset');
+const NewAuthEmailSignup = () => import(/* webpackChunkName: "main" */ '../views/NewAuth/EmailSignup');
 
 const Auth = () => import(/* webpackChunkName: "main" */ '../views/Auth/Auth.vue');
 const SignIn = () => import(/* webpackChunkName: "main" */ '../views/Auth/SignIn.vue');
@@ -58,18 +58,11 @@ const routes = [
           depth: 1,
         },
       },
+
       {
-        path: 'email',
-        name: 'new-auth-email',
-        component: NewAuthEmail,
-        meta: {
-          depth: 2,
-        },
-      },
-      {
-        path: 'signup',
-        name: 'new-auth-signup',
-        component: NewAuthSignup,
+        path: 'email-signin',
+        name: 'new-auth-email-signin',
+        component: NewAuthEmailSignin,
         meta: {
           depth: 2,
         },
@@ -77,11 +70,21 @@ const routes = [
       {
         path: 'email-reset',
         name: 'new-auth-email-reset',
-        component: NewAuthReset,
+        component: NewAuthEmailReset,
         meta: {
-          depth: 2,
+          depth: 3,
         },
       },
+
+      {
+        path: 'email-signup',
+        name: 'new-auth-email-signup',
+        component: NewAuthEmailSignup,
+        meta: {
+          depth: 3,
+        },
+      },
+
     ],
   },
 

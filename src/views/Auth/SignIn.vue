@@ -89,6 +89,8 @@
             </div>
           </div>
         </ui-form>
+
+        <!-- PASSWORD RESET -->
         <ui-form
           v-show="passReset"
           class="reset-form"

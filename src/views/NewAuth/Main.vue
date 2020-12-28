@@ -1,8 +1,8 @@
 <template>
   <div class="auth-page">
-    <h1>Вход в Heyka</h1>
+    <h1>{{ texts.title }}</h1>
 
-    <div class="l-mt-18">
+    <div>
       <ui-button
         :type="3"
         wide
@@ -33,7 +33,7 @@
         Facebook
       </ui-button>
 
-      <router-link :to="{name: 'new-auth-email'}">
+      <router-link :to="{name: 'new-auth-email-signin'}">
         <ui-button
           :type="3"
           wide
@@ -55,6 +55,16 @@ import { WEB_URL } from '@sdk/Constants';
 export default {
   components: {
     UiButton,
+  },
+
+  computed: {
+    /**
+     * Get needed texts from I18n-locale file
+     * @returns {object}
+     */
+    texts() {
+      return this.$t('newAuth.main');
+    },
   },
 
   methods: {
