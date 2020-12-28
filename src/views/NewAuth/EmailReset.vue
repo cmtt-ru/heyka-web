@@ -9,7 +9,6 @@
       <ui-input
         v-model="login.email"
         class="l-mb-12"
-        icon="mail"
         placeholder="example@mail.com"
         email
         required
@@ -18,6 +17,7 @@
         :type="12"
         wide
         class="l-mb-8"
+        size="large"
         submit
       >
         {{ texts.reset }}
@@ -28,6 +28,7 @@
         <ui-button
           :type="10"
           wide
+          size="large"
         >
           {{ texts.cancel }}
         </ui-button>
@@ -87,9 +88,5 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-  h1
-    font-size 26px
-    font-weight 700
-    line-height 1.6
 
 </style>

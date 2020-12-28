@@ -4,30 +4,33 @@
 
     <div>
       <ui-button
-        :type="3"
+        :type="17"
         wide
         class="l-mb-12"
         icon="slack"
+        size="large"
         @click="socialHandler('slack')"
       >
         Slack
       </ui-button>
 
       <ui-button
-        :type="3"
+        :type="17"
         wide
         class="l-mb-12"
         icon="google"
+        size="large"
         @click="socialHandler('google')"
       >
         Google
       </ui-button>
 
       <ui-button
-        :type="3"
+        :type="17"
         wide
         class="l-mb-12"
         icon="facebook"
+        size="large"
         @click="socialHandler('facebook')"
       >
         Facebook
@@ -35,10 +38,11 @@
 
       <router-link :to="{name: 'new-auth-email-signin'}">
         <ui-button
-          :type="3"
+          :type="17"
           wide
           class="l-mb-12"
           icon="mail"
+          size="large"
         >
           Email
         </ui-button>

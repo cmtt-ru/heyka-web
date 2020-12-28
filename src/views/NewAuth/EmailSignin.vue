@@ -15,7 +15,6 @@
 
       <ui-input
         v-model="login.email"
-        icon="mail"
         class="l-mb-12"
         placeholder="example@mail.com"
         email
@@ -25,7 +24,6 @@
       <ui-input
         v-model="login.password"
         class="l-mb-6"
-        icon="lock"
         required
         type="password"
         placeholder="******"
@@ -47,6 +45,7 @@
       <ui-button
         :type="1"
         :loading="loginInProgress"
+        size="large"
         wide
         submit
       >
