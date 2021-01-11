@@ -3,6 +3,12 @@ import VueRouter from 'vue-router';
 
 const Landing = () => import(/* webpackChunkName: "main" */ '../views/Landing.vue');
 
+const NewAuth = () => import(/* webpackChunkName: "main" */ '../views/NewAuth');
+const NewAuthMain = () => import(/* webpackChunkName: "main" */ '../views/NewAuth/Main');
+const NewAuthEmailSignin = () => import(/* webpackChunkName: "main" */ '../views/NewAuth/EmailSignin');
+const NewAuthEmailReset = () => import(/* webpackChunkName: "main" */ '../views/NewAuth/EmailReset');
+const NewAuthEmailSignup = () => import(/* webpackChunkName: "main" */ '../views/NewAuth/EmailSignup');
+
 const Auth = () => import(/* webpackChunkName: "main" */ '../views/Auth/Auth.vue');
 const SignIn = () => import(/* webpackChunkName: "main" */ '../views/Auth/SignIn.vue');
 const Reset = () => import(/* webpackChunkName: "main" */ '../views/Auth/Reset.vue');
@@ -35,6 +41,51 @@ const routes = [
     path: '/',
     name: 'landing',
     component: Landing,
+  },
+
+  /**
+   * Authorization routes
+   */
+  {
+    path: '/new-auth',
+    component: NewAuth,
+    children: [
+      {
+        path: '',
+        name: 'new-auth',
+        component: NewAuthMain,
+        meta: {
+          depth: 1,
+        },
+      },
+
+      {
+        path: 'email-signin',
+        name: 'new-auth-email-signin',
+        component: NewAuthEmailSignin,
+        meta: {
+          depth: 2,
+        },
+      },
+      {
+        path: 'email-reset',
+        name: 'new-auth-email-reset',
+        component: NewAuthEmailReset,
+        meta: {
+          depth: 3,
+        },
+      },
+
+      {
+        path: 'email-signup',
+        name: 'new-auth-email-signup',
+        component: NewAuthEmailSignup,
+        meta: {
+          depth: 3,
+        },
+      },
+
+    ],
   },
 
   /**
@@ -115,7 +166,6 @@ const routes = [
     children: [
       {
         path: 'create',
-        name: 'workspace-create',
         component: WorkspaceEdit,
       },
       {
