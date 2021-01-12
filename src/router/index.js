@@ -19,6 +19,8 @@ const VerifyEmail = () => import(/* webpackChunkName: "main" */ '../views/Auth/V
 const SocialLogin = () => import(/* webpackChunkName: "main" */ '../views/Auth/SocialLogin.vue');
 const SocialCallback = () => import(/* webpackChunkName: "main" */ '../views/Auth/SocialCallback.vue');
 
+const SlackInvite = () => import(/* webpackChunkName: "main" */ '../views/Auth/SlackInvite.vue');
+
 const Guest = () => import(/* webpackChunkName: "main" */ '../views/Guest');
 const GuestStart = () => import(/* webpackChunkName: "main" */ '../views/Guest/Start');
 const GuestGrid = () => import(/* webpackChunkName: "main" */ '@sdk/views/Call/Grid');
@@ -136,6 +138,15 @@ const routes = [
         component: Reset,
       },
     ],
+  },
+
+  /**
+   * Other callbacks routes
+   */
+  {
+    path: '/slack-redirect',
+    name: 'slack-redirect',
+    component: SlackInvite,
   },
 
   /**
