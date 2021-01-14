@@ -1,7 +1,12 @@
 import API from '@api';
 import { mapKeys } from '@libs/arrays';
 import * as sockets from '@api/socket';
+import initialProcess from '@api/initialProcess';
 import router from '@/router';
+import connectionCheck from '@sdk/classes/connectionCheck';
+import Logger from '@sdk/classes/logger';
+
+const cnsl = new Logger('Initial', '#db580e');
 
 export default {
 
@@ -11,33 +16,49 @@ export default {
    * @returns {void}
    */
   async initial({ commit, dispatch, getters }) {
-    /** Get authenticated user */
-    const authenticatedUser = await API.user.getAuthenticatedUser();
+    if (initialProcess.getState()) {
+      cnsl.log('ignore... initial in progress');
 
-    /** Authenticated user id */
-    const userId = authenticatedUser.id;
-
-    if (userId) {
-      const workspaces = await API.workspace.getWorkspaces();
-      const workspacesIdList = workspaces.map(w => w.id);
-
-      /** Selected workspace id */
-      let selectedWorkspaceId = getters['me/getSelectedWorkspaceId'];
-
-      if (!selectedWorkspaceId || !workspacesIdList.includes(selectedWorkspaceId)) {
-        selectedWorkspaceId = workspaces[0].id;
-        dispatch('me/setSelectedWorkspaceId', selectedWorkspaceId);
-      }
-
-      commit('me/SET_USER_ID', userId);
-      commit('workspaces/SET_COLLECTION', mapKeys(workspaces, 'id'));
-
-      /** Get specific workspace data */
-      await dispatch('updateCurrentWorkspaceState');
-
-      await sockets.init();
+      return;
     } else {
-      console.error('AUTH REQUIRED');
+      initialProcess.setState(true);
+    }
+
+    cnsl.log('start');
+
+    try {
+      /** Wait until internet goes online */
+      await connectionCheck.waitUntilOnline();
+
+      /** Get authenticated user */
+      cnsl.log('...wait for authenticated user');
+      const authenticatedUser = await API.user.getAuthenticatedUser();
+
+      /** Authenticated user id */
+      const userId = authenticatedUser.id;
+
+      if (userId) {
+        commit('me/SET_USER_ID', userId);
+        dispatch('me/update', authenticatedUser);
+
+        /** Update workspace list */
+        cnsl.log('...wait for workspace list');
+        await dispatch('workspaces/updateList');
+
+        /** Get specific workspace data */
+        cnsl.log('...wait for current workspace');
+        await dispatch('updateCurrentWorkspaceState');
+
+        cnsl.log('...wait for sockets init');
+        await sockets.init();
+      } else {
+        console.error('AUTH REQUIRED');
+      }
+    } catch (err) {
+      cnsl.log('error', err);
+    } finally {
+      initialProcess.setState(false);
+      cnsl.log('finish');
     }
   },
 
@@ -159,13 +180,16 @@ export default {
    * @param {string} id – channel id
    * @returns {object} unselected channel
    */
-  unselectChannelWithoutAPICall({ commit, dispatch, state }, id) {
+  unselectChannelWithoutAPICall({ commit, dispatch, state, getters }, id = state.me.selectedChannelId) {
     commit('channels/REMOVE_USER', {
       userId: state.me.id,
       channelId: id,
     });
 
-    commit('me/SET_CHANNEL_ID', null);
+    commit('channels/CLEAR_CONVERSATION_DATA', { channelId: id });
+    commit('channels/CLEAR_CONVERSATION_EVENTS', { channelId: id });
+
+    dispatch('me/setChannelId', null);
 
     dispatch('me/setDefaultMediaState');
   },
@@ -185,14 +209,24 @@ export default {
    * @returns {void}
    */
   async setSocketConnected({ state, commit, getters, dispatch }, authData) {
-    // Set socket disconnected
-    if (!authData || !authData.connected) {
-      commit('SET_SOCKET_CONNECTED', false);
-    } else {
-      // Handle socket connected
-      commit('SET_SOCKET_CONNECTED', true);
+    if (authData && authData.connected) {
+      if (!authData.reconnected) {
+        const selectedChannelId = getters['me/getSelectedChannelId'];
 
-      // update full workspace state
+        if (selectedChannelId) {
+          dispatch('unselectChannelWithoutAPICall', selectedChannelId);
+        }
+      }
+
+      if (authData.reconnected) {
+        // const selectedChannelId = getters['me/getSelectedChannelId'];
+        //
+        // dispatch('selectChannelWithoutAPICall', {
+        //   id: authData.channelId,
+        //   connectionOptions: authData,
+        // });
+      }
+
       await dispatch('updateCurrentWorkspaceState');
     }
   },
@@ -200,7 +234,7 @@ export default {
   /**
    * Log in using auth link
    *
-   * @param {object} context store context
+   * @param {object} vuex context
    * @param {string} authLink – code to log in with
    * @returns {void}
    */

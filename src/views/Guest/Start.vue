@@ -11,7 +11,12 @@
       </p>
 
       <div class="webcam l-mt-24">
-        <video ref="video" />
+        <video
+          ref="video"
+          autoplay
+          playsinline
+          muted
+        />
         <div class="webcam__loader">
           <svg-icon
             name="video"
@@ -99,11 +104,16 @@ export default {
     try {
       const immediate = await mediaCapturer.requestMediaPermissions();
 
-      if (immediate && this.userName) {
-        await this.joinHandler();
-      } else {
-        await this.startCameraPreview();
+      // if (immediate && this.userName) {
+      //   await this.joinHandler();
+      // } else {
+      //   await this.startCameraPreview();
+      // }
+
+      if (immediate) {
+
       }
+      await this.startCameraPreview();
     } catch (e) {
       console.error('requestMediaPermissions', e);
     }
@@ -118,10 +128,6 @@ export default {
       cameraStream = await mediaCapturer.getCameraStream();
 
       this.$refs.video.srcObject = cameraStream;
-
-      this.$refs.video.onloadedmetadata = () => {
-        this.$refs.video.play();
-      };
     },
 
     async joinHandler() {
@@ -150,6 +156,9 @@ export default {
     background var(--button-bg-5)
     border-radius 12px
     box-sizing border-box
+
+    h1
+      letter-spacing -1.8px
 
     .webcam
       position relative

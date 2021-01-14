@@ -54,9 +54,11 @@ export default {
       const usersWhoSharesCamera = selectedChannel.users.filter(user => user.camera);
 
       if (usersWhoSharesScreen.length > 0) {
-        lastUserWhoSharesMedia = usersWhoSharesScreen[0].userId;
+        const sortedSharings = usersWhoSharesScreen.sort((a, b) => Date.parse(b.startScreenTs || 0) - Date.parse(a.startScreenTs || 0));
 
-        return usersWhoSharesScreen[0].userId;
+        lastUserWhoSharesMedia = sortedSharings[0].userId;
+
+        return sortedSharings[0].userId;
       }
 
       const speakingUserWithCamera = usersWhoSharesCamera.filter(user => user.speaking);
@@ -110,6 +112,28 @@ export default {
   },
 
   /**
+   * Get user who share's screen
+   *
+   * @param {object} state – global state
+   * @param {object} getters – global getters
+   * @returns {null|string}
+   */
+  getUsersWhoShareScreen: (state, getters) => {
+    const selectedChannelId = getters['me/getSelectedChannelId'];
+    const selectedChannel = getters['channels/getChannelById'](selectedChannelId);
+
+    if (selectedChannel) {
+      const usersWhoSharesScreen = selectedChannel.users.filter(user => user.screen).map(user => user.userId);
+
+      return [
+        ...usersWhoSharesScreen,
+      ];
+    }
+
+    return [];
+  },
+
+  /**
    * Check's that I'am sharing screen or camera
    *
    * @param {object} state – global state
@@ -121,6 +145,25 @@ export default {
     const userWhoShares = getters['getUserWhoSharesMedia'];
 
     return myId === userWhoShares;
+  },
+
+  /**
+   * Check's that I'am sharing screen
+   *
+   * @param {object} state – global state
+   * @param {object} getters – global getters
+   * @returns {boolean}
+   */
+  amISharingScreen: (state, getters) => {
+    const myId = getters['me/getMyId'];
+    const selectedChannelId = getters['me/getSelectedChannelId'];
+    const selectedChannel = getters['channels/getChannelById'](selectedChannelId);
+
+    if (!selectedChannel) {
+      return false;
+    }
+
+    return selectedChannel.users.findIndex(user => user.screen && user.userId === myId) > -1;
   },
 
   /**

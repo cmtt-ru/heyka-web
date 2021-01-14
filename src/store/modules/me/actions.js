@@ -84,6 +84,11 @@ export default {
     commit('SET_MEDIA_STATE', mediaState);
 
     if (selectedChannelId) {
+      commit('channels/SET_USER_MEDIA_STATE', {
+        userId: state.id,
+        channelId: selectedChannelId,
+        userMediaState: mediaState,
+      }, { root: true });
       await API.user.setMediaState(mediaState);
     }
   },
@@ -133,7 +138,7 @@ export default {
    * @param {function} dispatch – vuex dispatch
    * @returns {void}
    */
-  microphoneState({ state, dispatch }, micState) {
+  microphoneState({ state, dispatch }, micState = !state.mediaState.microphone) {
     const newState = { ...state.mediaState };
 
     newState.microphone = micState;
@@ -148,5 +153,19 @@ export default {
    */
   async mutedByUser({ dispatch }, userId) {
     dispatch('microphoneState', false);
+  },
+
+  /**
+   * Update me data
+   * @param {function} commit – vuex commit
+   * @param {object} data – me data
+   * @returns {void}
+   */
+  async update({ commit }, data) {
+    const filteredData = {
+      socialAuth: data.socialAuth,
+    };
+
+    commit('UPDATE', filteredData);
   },
 };
