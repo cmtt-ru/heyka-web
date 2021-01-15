@@ -64,6 +64,7 @@ export default {
       }
 
       Cookies.remove('heyka-access-token', { domain: COOKIE_URL });
+      Cookies.remove('heyka-auth-action', { domain: COOKIE_URL });
 
       this.launchDeepLink(deepLink);
     }
