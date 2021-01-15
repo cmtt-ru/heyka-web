@@ -1,6 +1,7 @@
 import i18n from '@sdk/translations/i18n';
 import { v4 as uuidV4 } from 'uuid';
 import { heykaStore } from '@/store/localStore';
+import { conversationBroadcast } from '@api/socket/utils';
 
 /**
  * @typedef PrivacyLogData
@@ -148,5 +149,11 @@ export default {
     }
 
     commit('SET_MICROPHONE_VOLUME', volume);
+  },
+
+  raiseHandInChannel({ commit }, myId) {
+    conversationBroadcast('hand-up', myId, {
+      timestamp: Date.now(),
+    });
   },
 };
