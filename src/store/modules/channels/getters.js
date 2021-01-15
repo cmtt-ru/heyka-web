@@ -29,7 +29,7 @@ export default {
    * @returns {object}
    */
   getAudioQualityStatusByUserId: (state, getters) => userId => {
-    const aqiData = getters['getConversationData'](userId, 'audio-quality-indicator');
+    const aqiData = getters['getConversationData'](userId, 'audio-quality-indicator')?.status;
 
     return aqiData || 0;
   },
@@ -82,7 +82,7 @@ export default {
       return null;
     }
 
-    return channel.conversationData[userId]['audio-quality-indicator'].status;
+    return channel.conversationData[userId][action];
   },
 
   /**
@@ -92,7 +92,7 @@ export default {
    * @param {object} getters – vuex getters
    * @param {object} rootState – vuex root state
    * @param {object} rootGetters – vuex root getters
-   * @returns {object}
+   * @returns {array}
    */
   getConversationEvents: (state, getters, rootState, rootGetters) => {
     const channelId = rootGetters['me/getSelectedChannelId'];
@@ -104,7 +104,7 @@ export default {
     const channel = getters['getChannelById'](channelId);
 
     if (channel) {
-      return channel.conversationEvents;
+      return channel.conversationEvents || [];
     }
   },
 

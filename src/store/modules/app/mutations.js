@@ -1,3 +1,5 @@
+import Vue from 'vue';
+
 /**
  * Max length of privacy log array
  * @type {number}
@@ -94,8 +96,6 @@ export default {
       }
     }
 
-    console.log('set real devices', realDevices);
-
     state.selectedDevices = devices;
     state.realSelectedDevices = realDevices;
   },
@@ -109,5 +109,18 @@ export default {
    */
   SET_MICROPHONE_VOLUME(state, volume) {
     state.microphoneVolume = volume;
+  },
+
+  /**
+   * Set connection status
+   *
+   * @param {AppState} state – module app state
+   * @param {ConnectionStatus} statusObject – status object
+   * @constructor
+   */
+  SET_CONNECTION_STATUS(state, statusObject) {
+    Object.keys(statusObject).forEach(status => {
+      Vue.set(state.connectionStatus, status, statusObject[status]);
+    });
   },
 };
