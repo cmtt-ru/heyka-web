@@ -35,6 +35,32 @@ export default {
   },
 
   /**
+   * Get "raise hand" timestamp by user id
+   *
+   * @param {ChannelState} state – channels module state
+   * @param {object} getters – vuex getters
+   * @returns {object}
+   */
+  getHandUpStatusByUserId: (state, getters) => userId => {
+    const huiData = getters['getConversationData'](userId, 'hand-up')?.timestamp;
+
+    return huiData || 0;
+  },
+
+  /**
+   * Get audio quality status by user id
+   *
+   * @param {ChannelState} state – channels module state
+   * @param {object} getters – vuex getters
+   * @returns {object}
+   */
+  getReconnectingStatusByUserId: (state, getters) => userId => {
+    const rData = getters['getConversationData'](userId, 'socket-reconnecting');
+
+    return !!rData;
+  },
+
+  /**
    * Get conversation data
    *
    * @param {ChannelState} state – channels module state
