@@ -27,12 +27,16 @@ export default {
 
   async mounted() {
     this.stateText = this.texts.webWait;
-    const res = await this.$API.workspace.resumeConnectWithSlack(window.location.search);
+    try {
+      const res = await this.$API.workspace.resumeConnectWithSlack(window.location.search);
 
-    if (res === 'ok') {
-      document.location.href = `heyka://slack-connect/true`;
-      this.stateText = this.texts.webSuccess;
-    } else {
+      if (res === 'ok') {
+        document.location.href = `heyka://slack-connect/true`;
+        this.stateText = this.texts.webSuccess;
+      } else {
+        this.stateText = this.texts.webError;
+      }
+    } catch (err) {
       this.stateText = this.texts.webError;
     }
   },
