@@ -12,6 +12,7 @@ let lastSpeakingUser = null;
 let lastUserWhoSharesMedia = null;
 
 export default {
+
   /**
    * Get full users in Channel
    * @param {object} state – channels module state

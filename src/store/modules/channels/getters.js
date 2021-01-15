@@ -29,9 +29,35 @@ export default {
    * @returns {object}
    */
   getAudioQualityStatusByUserId: (state, getters) => userId => {
-    const aqiData = getters['getConversationData'](userId, 'audio-quality-indicator');
+    const aqiData = getters['getConversationData'](userId, 'audio-quality-indicator')?.status;
 
     return aqiData || 0;
+  },
+
+  /**
+   * Get "raise hand" timestamp by user id
+   *
+   * @param {ChannelState} state – channels module state
+   * @param {object} getters – vuex getters
+   * @returns {object}
+   */
+  getHandUpStatusByUserId: (state, getters) => userId => {
+    const huiData = getters['getConversationData'](userId, 'hand-up')?.timestamp;
+
+    return huiData || 0;
+  },
+
+  /**
+   * Get audio quality status by user id
+   *
+   * @param {ChannelState} state – channels module state
+   * @param {object} getters – vuex getters
+   * @returns {object}
+   */
+  getReconnectingStatusByUserId: (state, getters) => userId => {
+    const rData = getters['getConversationData'](userId, 'socket-reconnecting');
+
+    return !!rData;
   },
 
   /**
@@ -56,7 +82,7 @@ export default {
       return null;
     }
 
-    return channel.conversationData[userId]['audio-quality-indicator'].status;
+    return channel.conversationData[userId][action];
   },
 
   /**
@@ -66,7 +92,7 @@ export default {
    * @param {object} getters – vuex getters
    * @param {object} rootState – vuex root state
    * @param {object} rootGetters – vuex root getters
-   * @returns {object}
+   * @returns {array}
    */
   getConversationEvents: (state, getters, rootState, rootGetters) => {
     const channelId = rootGetters['me/getSelectedChannelId'];
@@ -78,7 +104,7 @@ export default {
     const channel = getters['getChannelById'](channelId);
 
     if (channel) {
-      return channel.conversationEvents;
+      return channel.conversationEvents || [];
     }
   },
 
