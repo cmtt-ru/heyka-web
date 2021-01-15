@@ -4,6 +4,7 @@
 
 <script>
 import Cookies from 'js-cookie';
+import { COOKIE_URL } from '@sdk/Constants';
 
 export default {
   computed: {
@@ -48,7 +49,11 @@ export default {
     console.log(this.$route);
 
     if (this.action === 'login') {
-      this.launchDeepLink(`login/${this.authCode}`);
+      if (this.status === 'true') {
+        this.launchDeepLink(`login/${this.authCode}`);
+      } else {
+        this.launchDeepLink(`login/false/${this.error}`);
+      }
     }
 
     if (this.action === 'link') {
@@ -58,7 +63,7 @@ export default {
         deepLink += `/${encodeURIComponent(this.error)}`;
       }
 
-      Cookies.remove('heyka-access-token');
+      Cookies.remove('heyka-access-token', { domain: COOKIE_URL });
 
       this.launchDeepLink(deepLink);
     }
