@@ -97,7 +97,7 @@ export default {
      * @returns {object}
      */
     texts() {
-      return this.$t('reset');
+      return this.$t('newAuth.newPassword');
     },
   },
 

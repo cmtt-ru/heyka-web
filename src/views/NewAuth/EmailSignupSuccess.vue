@@ -30,7 +30,7 @@ export default {
      * @returns {object}
      */
     texts() {
-      return this.$t('signupSuccess');
+      return this.$t('newAuth.signupSuccess');
     },
   },
 
