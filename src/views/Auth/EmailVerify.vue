@@ -79,7 +79,7 @@ export default {
      * @returns {object}
      */
     texts() {
-      return this.$t('newAuth.verify');
+      return this.$t('auth.verify');
     },
   },
 
