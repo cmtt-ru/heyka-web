@@ -56,12 +56,12 @@
         <div class="info__text">
           {{ texts.newMember }}
         </div>
-        <router-link
+        <div
           class="info__link"
-          :to="{ name: 'new-auth-email-signup'}"
+          @click="signupHandler"
         >
           {{ texts.signup }}
-        </router-link>
+        </div>
       </div>
     </ui-form>
   </div>
@@ -70,7 +70,9 @@
 <script>
 import UiButton from '@components/UiButton';
 import { UiForm, UiInput } from '@components/Form';
-import { authFileStore } from '@/store/localStore';
+import { authFileStore, heykaStore } from '@/store/localStore';
+import { WEB_URL } from '@sdk/Constants';
+import { errorMessages } from '@api/errors/types';
 
 export default {
   components: {
@@ -82,7 +84,7 @@ export default {
   data() {
     return {
       login: {
-        email: authFileStore.get('loginEmail', ''),
+        email: heykaStore.get('loginEmail', ''),
         password: IS_DEV ? 'heyka-password' : '',
       },
       loginInProgress: false,
@@ -115,19 +117,24 @@ export default {
       try {
         await this.$API.auth.signin({ credentials: this.login });
 
-        authFileStore.set('loginEmail', this.login.email);
+        if (IS_ELECTRON) {
+          heykaStore.set('loginEmail', this.login.email);
+          await this.$store.dispatch('initial');
+        } else {
+          heykaStore.set('loginEmail', this.login.email);
 
-        if (authFileStore.get('inviteCode')) {
-          this.$API.workspace.joinByCode(authFileStore.get('inviteCode'));
-          authFileStore.set('inviteCode', null);
+          if (authFileStore.get('inviteCode')) {
+            this.$API.workspace.joinByCode(authFileStore.get('inviteCode'));
+            authFileStore.set('inviteCode', null);
+          }
+
+          await this.$router.push({
+            name: 'landing',
+          });
         }
-
-        await this.$router.push({
-          name: 'landing',
-        });
       } catch (err) {
-        console.log('ERROR:', err);
-        if (err.response.data.message === 'Email or password are invalid') {
+        if (err.response.data.message === errorMessages.emailOrPasswordAreInvalid ||
+            err.response.data.message === errorMessages.invalidRequestPayloadInput) { // ? maybe not needed
           const notification = {
             data: {
               text: this.notifTexts.wrongPass,
@@ -138,6 +145,18 @@ export default {
         }
       } finally {
         this.loginInProgress = false;
+      }
+    },
+
+    /**
+     * Signup handler
+     * @returns {void}
+     */
+    async signupHandler() {
+      if (IS_ELECTRON) {
+        window.open(`${WEB_URL}/auth/register`);
+      } else {
+        this.$router.push({ name: 'new-auth-email-signup' });
       }
     },
   },

@@ -62,6 +62,14 @@ export default {
     texts() {
       return this.$t('newAuth.reset');
     },
+
+    /**
+     * Get notification texts from I18n-locale file
+     * @returns {object}
+     */
+    notifTexts() {
+      return this.$t('notifications.login');
+    },
   },
 
   methods: {
@@ -72,7 +80,6 @@ export default {
         console.log('ERROR:', err);
       }
 
-      this.toggleReset();
       const notification = {
         data: {
           text: this.notifTexts.passReset,
