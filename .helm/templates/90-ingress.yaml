@@ -18,7 +18,7 @@ spec:
         backend:
           serviceName: {{ .Chart.Name }}
           servicePort: static
-      - path: /(auth|guest|manage|ws|janus-monitoring|janus-dashboard|new-auth)
+      - path: /(auth|guest|manage|ws|janus-monitoring|janus-dashboard)
         backend:
           serviceName: {{ .Chart.Name }}
           servicePort: static
