@@ -13,18 +13,8 @@ const NewAuthEmailSignup = () => import(/* webpackChunkName: "main" */ '@compone
 const NewAuthEmailNewPassword = () => import(/* webpackChunkName: "main" */ '../views/NewAuth/EmailNewPassword.vue');
 const NewAuthEmailSignupSuccess = () => import(/* webpackChunkName: "main" */ '../views/NewAuth/EmailSignupSuccess.vue');
 const NewAuthEmailVerify = () => import(/* webpackChunkName: "main" */ '../views/NewAuth/EmailVerify.vue');
-const NewAuthSocialLogin = () => import(/* webpackChunkName: "main" */ '../views/Auth/SocialLogin.vue');
-const NewAuthSocialCallback = () => import(/* webpackChunkName: "main" */ '../views/Auth/SocialCallback.vue');
-
-// const Auth = () => import(/* webpackChunkName: "main" */ '../views/Auth/Auth.vue');
-// const SignIn = () => import(/* webpackChunkName: "main" */ '../views/Auth/SignIn.vue');
-// const Reset = () => import(/* webpackChunkName: "main" */ '../views/Auth/Reset.vue');
-// const Register = () => import(/* webpackChunkName: "main" */ '../views/Auth/Register.vue');
-// const RegSuccess = () => import(/* webpackChunkName: "main" */ '../views/Auth/RegSuccess.vue');
-// const VerifyEmail = () => import(/* webpackChunkName: "main" */ '../views/Auth/Verify.vue');
-//
-// const SocialLogin = () => import(/* webpackChunkName: "main" */ '../views/Auth/SocialLogin.vue');
-// const SocialCallback = () => import(/* webpackChunkName: "main" */ '../views/Auth/SocialCallback.vue');
+const NewAuthSocialLogin = () => import(/* webpackChunkName: "main" */ '../views/NewAuth/SocialLogin.vue');
+const NewAuthSocialCallback = () => import(/* webpackChunkName: "main" */ '../views/NewAuth/SocialCallback.vue');
 
 const Guest = () => import(/* webpackChunkName: "main" */ '../views/Guest');
 const GuestStart = () => import(/* webpackChunkName: "main" */ '../views/Guest/Start');
@@ -71,7 +61,7 @@ const routes = [
           },
 
           {
-            path: 'email-signin',
+            path: 'email/signin',
             name: 'new-auth-email-signin',
             component: NewAuthEmailSignin,
             meta: {
@@ -79,7 +69,7 @@ const routes = [
             },
           },
           {
-            path: 'email-reset',
+            path: 'email/reset',
             name: 'new-auth-email-reset',
             component: NewAuthEmailReset,
             meta: {
@@ -88,7 +78,7 @@ const routes = [
           },
 
           {
-            path: 'email-signup',
+            path: 'email/signup',
             name: 'new-auth-email-signup',
             component: NewAuthEmailSignup,
             meta: {
@@ -108,87 +98,37 @@ const routes = [
     component: NewAuthOtherLayout,
     children: [
       {
-        path: 'reg-success',
-        name: 'regSuccess',
+        path: 'email/signup/success',
+        name: 'new-auth-email-signup-success',
         component: NewAuthEmailSignupSuccess,
       },
       {
         path: 'email/verify',
-        name: 'verify',
+        name: 'new-auth-email-verify',
         component: NewAuthEmailVerify,
       },
       {
         path: 'password/reset',
-        name: 'reset',
+        name: 'new-auth-email-password-reset',
         component: NewAuthEmailNewPassword,
       },
       {
         path: 'social/callback',
-        name: 'auth-social-callback',
+        name: 'new-auth-social-callback',
         component: NewAuthSocialCallback,
       },
       {
         path: 'social/:socialName/:action/',
-        name: 'auth-social-login',
+        name: 'new-auth-social-login',
         component: NewAuthSocialLogin,
       },
       {
         path: 'social/:socialName/:action/:code',
-        name: 'auth-social-link',
+        name: 'new-auth-social-link',
         component: NewAuthSocialLogin,
       },
     ],
   },
-
-  /**
-   * Authorization routes
-   */
-  // {
-  //   path: '/auth',
-  //   component: Auth,
-  //   children: [
-  //     {
-  //       path: '',
-  //       name: 'auth',
-  //       component: SignIn,
-  //     },
-  //     {
-  //       path: 'register',
-  //       name: 'register',
-  //       component: Register,
-  //     },
-  //     {
-  //       path: 'reg-success',
-  //       name: 'regSuccess',
-  //       component: RegSuccess,
-  //     },
-  //     {
-  //       path: 'email/verify',
-  //       name: 'verify',
-  //       component: VerifyEmail,
-  //     },
-  //     {
-  //       path: 'social/callback',
-  //       name: 'auth-social-callback',
-  //       component: SocialCallback,
-  //     },
-  //     {
-  //       path: 'social/:socialName/:action/',
-  //       name: 'auth-social-login',
-  //       component: SocialLogin,
-  //     },
-  //     {
-  //       path: 'social/:socialName/:action/:code',
-  //       name: 'auth-social-link',
-  //       component: SocialLogin,
-  //     },
-  //     {
-  //       path: 'password/reset',
-  //       name: 'reset',
-  //       component: Reset,
-  //     },
-  //   ],
-  // },
 
   /**
    * Manage workspaces

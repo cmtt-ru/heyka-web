@@ -25,13 +25,12 @@ export default {
   },
 
   computed: {
-
     /**
      * Get needed texts from I18n-locale file
      * @returns {object}
      */
     texts() {
-      return this.$t('regSuccess');
+      return this.$t('signupSuccess');
     },
   },
 
