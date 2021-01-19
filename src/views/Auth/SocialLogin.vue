@@ -4,7 +4,7 @@
 
 <script>
 import Cookies from 'js-cookie';
-import { API_URL } from '@sdk/Constants';
+import { API_URL, COOKIE_URL } from '@sdk/Constants';
 
 export default {
   computed: {
@@ -34,14 +34,14 @@ export default {
   },
   async mounted() {
     /** Set action cookie */
-    Cookies.set('heyka-auth-action', this.action);
+    Cookies.set('heyka-auth-action', this.action, { domain: COOKIE_URL });
 
     /** User goes to link social network to his account */
     if (this.action === 'link') {
       const res = await this.$API.auth.signinByLink(this.authCode);
 
       if (res.data && res.data.accessToken) {
-        Cookies.set('heyka-access-token', res.data.accessToken);
+        Cookies.set('heyka-access-token', res.data.accessToken, { domain: COOKIE_URL });
       }
     }
 
