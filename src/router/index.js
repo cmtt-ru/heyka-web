@@ -3,21 +3,18 @@ import VueRouter from 'vue-router';
 
 const Landing = () => import(/* webpackChunkName: "main" */ '../views/Landing.vue');
 
-const NewAuth = () => import(/* webpackChunkName: "main" */ '../views/NewAuth');
-const NewAuthMain = () => import(/* webpackChunkName: "main" */ '../views/NewAuth/Main');
-const NewAuthEmailSignin = () => import(/* webpackChunkName: "main" */ '../views/NewAuth/EmailSignin');
-const NewAuthEmailReset = () => import(/* webpackChunkName: "main" */ '../views/NewAuth/EmailReset');
-const NewAuthEmailSignup = () => import(/* webpackChunkName: "main" */ '../views/NewAuth/EmailSignup');
-
-const Auth = () => import(/* webpackChunkName: "main" */ '../views/Auth/Auth.vue');
-const SignIn = () => import(/* webpackChunkName: "main" */ '../views/Auth/SignIn.vue');
-const Reset = () => import(/* webpackChunkName: "main" */ '../views/Auth/Reset.vue');
-const Register = () => import(/* webpackChunkName: "main" */ '../views/Auth/Register.vue');
-const RegSuccess = () => import(/* webpackChunkName: "main" */ '../views/Auth/RegSuccess.vue');
-const VerifyEmail = () => import(/* webpackChunkName: "main" */ '../views/Auth/Verify.vue');
-
-const SocialLogin = () => import(/* webpackChunkName: "main" */ '../views/Auth/SocialLogin.vue');
-const SocialCallback = () => import(/* webpackChunkName: "main" */ '../views/Auth/SocialCallback.vue');
+const AuthFormLayout = () => import(/* webpackChunkName: "main" */ '../views/Auth/FormLayout');
+const AuthOtherLayout = () => import(/* webpackChunkName: "main" */ '../views/Auth/OtherLayout');
+const AuthLayout = () => import(/* webpackChunkName: "main" */ '@components/Auth/Layout');
+const AuthMain = () => import(/* webpackChunkName: "main" */ '@components/Auth/Main');
+const AuthEmailSignin = () => import(/* webpackChunkName: "main" */ '@components/Auth/EmailSignin');
+const AuthEmailReset = () => import(/* webpackChunkName: "main" */ '@components/Auth/EmailReset');
+const AuthEmailSignup = () => import(/* webpackChunkName: "main" */ '@components/Auth/EmailSignup');
+const AuthEmailNewPassword = () => import(/* webpackChunkName: "main" */ '../views/Auth/EmailNewPassword.vue');
+const AuthEmailSignupSuccess = () => import(/* webpackChunkName: "main" */ '../views/Auth/EmailSignupSuccess.vue');
+const AuthEmailVerify = () => import(/* webpackChunkName: "main" */ '../views/Auth/EmailVerify.vue');
+const AuthSocialLogin = () => import(/* webpackChunkName: "main" */ '../views/Auth/SocialLogin.vue');
+const AuthSocialCallback = () => import(/* webpackChunkName: "main" */ '../views/Auth/SocialCallback.vue');
 
 const Guest = () => import(/* webpackChunkName: "main" */ '../views/Guest');
 const GuestStart = () => import(/* webpackChunkName: "main" */ '../views/Guest/Start');
@@ -44,96 +41,91 @@ const routes = [
   },
 
   /**
-   * Authorization routes
+   * Authorization form routes
    */
   {
-    path: '/new-auth',
-    component: NewAuth,
+    path: '/auth',
+    component: AuthFormLayout,
     children: [
       {
         path: '',
-        name: 'new-auth',
-        component: NewAuthMain,
-        meta: {
-          depth: 1,
-        },
-      },
+        component: AuthLayout,
+        children: [
+          {
+            path: '',
+            name: 'auth',
+            component: AuthMain,
+            meta: {
+              depth: 1,
+            },
+          },
 
-      {
-        path: 'email-signin',
-        name: 'new-auth-email-signin',
-        component: NewAuthEmailSignin,
-        meta: {
-          depth: 2,
-        },
-      },
-      {
-        path: 'email-reset',
-        name: 'new-auth-email-reset',
-        component: NewAuthEmailReset,
-        meta: {
-          depth: 3,
-        },
-      },
+          {
+            path: 'email/signin',
+            name: 'auth-email-signin',
+            component: AuthEmailSignin,
+            meta: {
+              depth: 2,
+            },
+          },
+          {
+            path: 'email/reset',
+            name: 'auth-email-reset',
+            component: AuthEmailReset,
+            meta: {
+              depth: 3,
+            },
+          },
 
-      {
-        path: 'email-signup',
-        name: 'new-auth-email-signup',
-        component: NewAuthEmailSignup,
-        meta: {
-          depth: 3,
-        },
+          {
+            path: 'email/signup',
+            name: 'auth-email-signup',
+            component: AuthEmailSignup,
+            meta: {
+              depth: 3,
+            },
+          },
+        ],
       },
-
     ],
   },
 
   /**
-   * Authorization routes
+   * Authorization other routes
    */
   {
     path: '/auth',
-    component: Auth,
+    component: AuthOtherLayout,
     children: [
       {
-        path: '',
-        name: 'auth',
-        component: SignIn,
-      },
-      {
-        path: 'register',
-        name: 'register',
-        component: Register,
-      },
-      {
-        path: 'reg-success',
-        name: 'regSuccess',
-        component: RegSuccess,
+        path: 'email/signup/success',
+        name: 'auth-email-signup-success',
+        component: AuthEmailSignupSuccess,
       },
       {
         path: 'email/verify',
-        name: 'verify',
-        component: VerifyEmail,
+        name: 'auth-email-verify',
+        component: AuthEmailVerify,
+      },
+      {
+        path: 'password/reset',
+        name: 'auth-email-password-reset',
+        component: AuthEmailNewPassword,
       },
       {
         path: 'social/callback',
         name: 'auth-social-callback',
-        component: SocialCallback,
+        component: AuthSocialCallback,
       },
       {
         path: 'social/:socialName/:action/',
         name: 'auth-social-login',
-        component: SocialLogin,
+        component: AuthSocialLogin,
       },
       {
         path: 'social/:socialName/:action/:code',
         name: 'auth-social-link',
-        component: SocialLogin,
-      },
-      {
-        path: 'password/reset',
-        name: 'reset',
-        component: Reset,
+        component: AuthSocialLogin,
       },
     ],
   },
