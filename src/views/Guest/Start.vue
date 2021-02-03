@@ -10,6 +10,11 @@
         You can still turn them back off at any time.
       </p>
 
+      <p class="safari-issue">
+        <span>Issues with Safari</span>
+        The current version of Safari has known audio issues. Try to use other browser.
+      </p>
+
       <div class="webcam l-mt-24">
         <video
           ref="video"
@@ -54,6 +59,8 @@ import UiButton from '@components/UiButton';
 
 let cameraStream = null;
 
+const IS_SAFARI = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
 export default {
   components: {
     UiForm,
@@ -92,6 +99,8 @@ export default {
     ...mapState({
       janusOptions: 'janus',
     }),
+
+    IS_SAFARI,
   },
 
   async mounted() {
@@ -209,6 +218,18 @@ export default {
         color #fff
         outline none
         text-align center
+
+  .safari-issue
+    background rgba(255,0,0,0.28)
+    border-radius 6px
+    padding 8px 36px
+    margin-top 20px
+    border 1px solid rgba(185, 0, 0, 0.21)
+
+    span
+      font-weight bold
+      display block
+      font-size 16px
 
   .fade-enter-active, .fade-leave-active {
     transition: opacity .25s;
