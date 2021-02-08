@@ -10,7 +10,10 @@
         You can still turn them back off at any time.
       </p>
 
-      <p class="safari-issue">
+      <p
+        v-if="isSafari"
+        class="safari-issue"
+      >
         <span>Issues with Safari</span>
         The current version of Safari has known audio issues. Try to use other browser.
       </p>
@@ -100,7 +103,9 @@ export default {
       janusOptions: 'janus',
     }),
 
-    IS_SAFARI,
+    isSafari() {
+      return IS_SAFARI;
+    },
   },
 
   async mounted() {
