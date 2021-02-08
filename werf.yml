@@ -41,8 +41,7 @@ ansible:
         ca-certificates,
         ttf-freefont,
         nodejs,
-        yarn,
-        git
+        yarn
   - name: "Install puppeteer"
     yarn:
       name: puppeteer
