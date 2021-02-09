@@ -64,6 +64,7 @@ ansible:
           StrictHostKeyChecking no
           UserKnownHostsFile=/dev/null
           User git
+          IdentityFile /root/.ssh/id_rsa
       dest: "/root/.ssh/config"
       mode: 0600
   - name: Update known hosts
