@@ -52,28 +52,6 @@ ansible:
     environment:
       PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
       PUPPETEER_EXECUTABLE_PATH: /usr/bin/chromium-browser
-  - name: Ensure .ssh directory exists.
-    file: 
-      dest: "/root/.ssh"
-      mode: 0700 
-      state: directory
-  - name: Update ssh config
-    copy: 
-      content: |-
-        host *
-          StrictHostKeyChecking no
-          UserKnownHostsFile=/dev/null
-          User git
-          IdentityFile /root/.ssh/id_rsa
-      dest: "/root/.ssh/config"
-      mode: 0600
-  - name: Update known hosts
-    shell: |-
-      touch /root/.ssh/known_hosts
-      ssh-keyscan -t rsa github.com >> /root/.ssh/known_hosts
-  - name: Generate ssh key
-    shell: |-
-      ssh-keygen -q -t rsa -N '' -f /root/.ssh/id_rsa
   install:
   - name: "npm install"
     shell: |
