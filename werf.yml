@@ -51,7 +51,20 @@ ansible:
       global: yes
     environment:
       PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
-      PUPPETEER_EXECUTABLE_PATH: /usr/bin/chromium-browser 
+      PUPPETEER_EXECUTABLE_PATH: /usr/bin/chromium-browser
+  - name: Update ssh config
+    copy: 
+      content: |-
+        host *
+          StrictHostKeyChecking no
+          UserKnownHostsFile=/dev/null
+          User git
+      dest: "/root/.ssh/config"
+      mode: 0600
+  - name: Update known hosts
+    shell: |-
+      touch /root/.ssh/known_hosts
+      ssh-keyscan -t rsa github.com >> /root/.ssh/known_hosts
   install:
   - name: "npm install"
     shell: |
