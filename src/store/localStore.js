@@ -32,6 +32,7 @@ function has(key) {
 }
 
 accessor.get = get;
+accessor.getSync = get;
 accessor.set = localStorage.set;
 accessor.has = has;
 

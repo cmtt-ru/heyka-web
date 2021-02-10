@@ -25,6 +25,7 @@ export default {
     }
 
     cnsl.log('start');
+    connectionCheck.resetConnectionStatus();
 
     try {
       /** Wait until internet goes online */
@@ -227,7 +228,11 @@ export default {
         // });
       }
 
+      connectionCheck.handleSocketState(true);
+
       await dispatch('updateCurrentWorkspaceState');
+    } else {
+      connectionCheck.handleSocketState(false);
     }
   },
 

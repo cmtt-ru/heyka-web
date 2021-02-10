@@ -49,7 +49,7 @@ const state = () => {
   return {
     appName: 'Heyka Desktop',
     appVersion: '',
-    language: heykaStore.get('language', 'en'),
+    language: heykaStore.getSync('language', 'en'),
     devices: {
       speakers: [],
       microphones: [],
@@ -67,6 +67,13 @@ const state = () => {
     },
     microphoneVolume: -100,
     notifications: [],
+    connectionStatus: {
+      visible: true,
+      internet: true,
+      api: false,
+      socket: false,
+      janus: false,
+    },
   };
 };
 
