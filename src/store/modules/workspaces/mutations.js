@@ -9,4 +9,5 @@ export default {
   SET_COLLECTION(state, collection) {
     state.collection = collection;
   },
+
 };

@@ -1,3 +1,5 @@
+import Vue from 'vue';
+
 /**
  * Max length of privacy log array
  * @type {number}
@@ -94,8 +96,6 @@ export default {
       }
     }
 
-    console.log('set real devices', realDevices);
-
     state.selectedDevices = devices;
     state.realSelectedDevices = realDevices;
   },
@@ -112,16 +112,15 @@ export default {
   },
 
   /**
-   * Set current socket parameters
+   * Set connection status
    *
    * @param {AppState} state – module app state
-   * @param {object} value – new parameters
-   * @param {string} value.id – id
-   * @param {number} value.connectedAt – last connected time
+   * @param {ConnectionStatus} statusObject – status object
    * @constructor
    */
-  SET_SOCKET_ID(state, value) {
-    state.socket.id = value.id;
-    state.socket.connectedAt = value.connectedAt;
+  SET_CONNECTION_STATUS(state, statusObject) {
+    Object.keys(statusObject).forEach(status => {
+      Vue.set(state.connectionStatus, status, statusObject[status]);
+    });
   },
 };

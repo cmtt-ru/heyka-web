@@ -1,9 +1,14 @@
 <template>
-  <div />
+  <div>
+    <p v-if="error">
+      {{ error }}
+    </p>
+  </div>
 </template>
 
 <script>
 import Cookies from 'js-cookie';
+import { COOKIE_URL } from '@sdk/Constants';
 
 export default {
   computed: {
@@ -45,22 +50,34 @@ export default {
   },
 
   async mounted() {
-    console.log(this.$route);
+    switch (this.action) {
+      case 'login':
+        if (this.status === 'true') {
+          this.launchDeepLink(`login/${this.authCode}`);
+        } else {
+          this.launchDeepLink(`login/false/${this.error}`);
+        }
+        break;
 
-    if (this.action === 'login') {
-      this.launchDeepLink(`login/${this.authCode}`);
-    }
+      case 'web-login':
+        if (this.status === 'true') {
+          this.$router.replace({ name: 'landing' }).catch(() => {});
+        }
+        break;
 
-    if (this.action === 'link') {
-      let deepLink = `social-link/${this.status}`;
+      case 'link': {
+        let deepLink = `social-link/${this.status}`;
 
-      if (this.error) {
-        deepLink += `/${encodeURIComponent(this.error)}`;
+        if (this.error) {
+          deepLink += `/${encodeURIComponent(this.error)}`;
+        }
+
+        Cookies.remove('heyka-access-token', { domain: COOKIE_URL });
+        Cookies.remove('heyka-auth-action', { domain: COOKIE_URL });
+
+        this.launchDeepLink(deepLink);
+        break;
       }
-
-      Cookies.remove('heyka-access-token');
-
-      this.launchDeepLink(deepLink);
     }
   },
 

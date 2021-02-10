@@ -1,4 +1,5 @@
 export default {
+
   /**
    * Set janus options
    *
@@ -30,4 +31,5 @@ export default {
   SET_IN_PROGRESS(state, flag) {
     state.inProgress = !!flag;
   },
+
 };

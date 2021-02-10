@@ -54,6 +54,14 @@ export default {
     authCode() {
       return this.$route.params.code;
     },
+
+    /**
+     * Workspace id from route
+     * @returns {string}
+     */
+    workspaceId() {
+      return this.$route.params.workspaceId;
+    },
   },
 
   async mounted() {
@@ -70,7 +78,10 @@ export default {
     async authorize() {
       if (this.authCode) {
         await this.$API.auth.signinByLink(this.authCode);
-        await this.$router.replace({ name: 'manage' });
+        await this.$router.replace({
+          name: 'manage',
+          params: { workspaceId: this.workspaceId },
+        });
       }
     },
 
@@ -80,7 +91,14 @@ export default {
      */
     async loadWorkspaces() {
       this.workspaces = await this.$API.admin.getWorkspaces();
-      this.selectedWorkspace = this.workspaces[0];
+
+      const selected = this.workspaces.find(w => w.id === this.workspaceId);
+
+      if (selected) {
+        this.selectedWorkspace = selected;
+      } else {
+        this.selectedWorkspace = this.workspaces[0];
+      }
     },
 
     /**
@@ -103,6 +121,11 @@ export default {
     async workspaceSelectHandler(workspace) {
       this.selectedWorkspace = workspace;
 
+      await this.$router.replace({
+        name: 'manage',
+        params: { workspaceId: workspace.id },
+      });
+
       await this.loadUsers();
     },
   },
@@ -117,7 +140,7 @@ export default {
     min-height 100vh
 
     &__wrapper
-      max-width 700px
+      //max-width 700px
       box-sizing border-box
       display flex
       padding-right 12px

@@ -3,15 +3,18 @@ import VueRouter from 'vue-router';
 
 const Landing = () => import(/* webpackChunkName: "main" */ '../views/Landing.vue');
 
-const Auth = () => import(/* webpackChunkName: "main" */ '../views/Auth/Auth.vue');
-const SignIn = () => import(/* webpackChunkName: "main" */ '../views/Auth/SignIn.vue');
-const Reset = () => import(/* webpackChunkName: "main" */ '../views/Auth/Reset.vue');
-const Register = () => import(/* webpackChunkName: "main" */ '../views/Auth/Register.vue');
-const RegSuccess = () => import(/* webpackChunkName: "main" */ '../views/Auth/RegSuccess.vue');
-const VerifyEmail = () => import(/* webpackChunkName: "main" */ '../views/Auth/Verify.vue');
-
-const SocialLogin = () => import(/* webpackChunkName: "main" */ '../views/Auth/SocialLogin.vue');
-const SocialCallback = () => import(/* webpackChunkName: "main" */ '../views/Auth/SocialCallback.vue');
+const AuthFormLayout = () => import(/* webpackChunkName: "main" */ '../views/Auth/FormLayout');
+const AuthOtherLayout = () => import(/* webpackChunkName: "main" */ '../views/Auth/OtherLayout');
+const AuthLayout = () => import(/* webpackChunkName: "main" */ '@components/Auth/Layout');
+const AuthMain = () => import(/* webpackChunkName: "main" */ '@components/Auth/Main');
+const AuthEmailSignin = () => import(/* webpackChunkName: "main" */ '@components/Auth/EmailSignin');
+const AuthEmailReset = () => import(/* webpackChunkName: "main" */ '@components/Auth/EmailReset');
+const AuthEmailSignup = () => import(/* webpackChunkName: "main" */ '@components/Auth/EmailSignup');
+const AuthEmailNewPassword = () => import(/* webpackChunkName: "main" */ '../views/Auth/EmailNewPassword.vue');
+const AuthEmailSignupSuccess = () => import(/* webpackChunkName: "main" */ '../views/Auth/EmailSignupSuccess.vue');
+const AuthEmailVerify = () => import(/* webpackChunkName: "main" */ '../views/Auth/EmailVerify.vue');
+const AuthSocialLogin = () => import(/* webpackChunkName: "main" */ '../views/Auth/SocialLogin.vue');
+const AuthSocialCallback = () => import(/* webpackChunkName: "main" */ '../views/Auth/SocialCallback.vue');
 
 const Guest = () => import(/* webpackChunkName: "main" */ '../views/Guest');
 const GuestStart = () => import(/* webpackChunkName: "main" */ '../views/Guest/Start');
@@ -21,6 +24,9 @@ const GuestFinish = () => import(/* webpackChunkName: "main" */ '../views/Guest/
 
 const Manage = () => import(/* webpackChunkName: "main" */ '../views/Manage');
 const WorkspaceEdit = () => import(/* webpackChunkName: "main" */ '../views/WorkspaceEdit');
+
+const JanusMonitoring = () => import(/* webpackChunkName: "janus" */ '../views/JanusMonitoring');
+const JanusDashboard = () => import(/* webpackChunkName: "janus" */ '../views/JanusDashboard');
 
 Vue.use(VueRouter);
 
@@ -35,51 +41,91 @@ const routes = [
   },
 
   /**
-   * Authorization routes
+   * Authorization form routes
    */
   {
     path: '/auth',
-    component: Auth,
+    component: AuthFormLayout,
     children: [
       {
         path: '',
-        name: 'auth',
-        component: SignIn,
+        component: AuthLayout,
+        children: [
+          {
+            path: '',
+            name: 'auth',
+            component: AuthMain,
+            meta: {
+              depth: 1,
+            },
+          },
+
+          {
+            path: 'email/signin',
+            name: 'auth-email-signin',
+            component: AuthEmailSignin,
+            meta: {
+              depth: 2,
+            },
+          },
+          {
+            path: 'email/reset',
+            name: 'auth-email-reset',
+            component: AuthEmailReset,
+            meta: {
+              depth: 3,
+            },
+          },
+
+          {
+            path: 'email/signup',
+            name: 'auth-email-signup',
+            component: AuthEmailSignup,
+            meta: {
+              depth: 3,
+            },
+          },
+        ],
       },
+    ],
+  },
+
+  /**
+   * Authorization other routes
+   */
+  {
+    path: '/auth',
+    component: AuthOtherLayout,
+    children: [
       {
-        path: 'register',
-        name: 'register',
-        component: Register,
-      },
-      {
-        path: 'reg-success',
-        name: 'regSuccess',
-        component: RegSuccess,
+        path: 'email/signup/success',
+        name: 'auth-email-signup-success',
+        component: AuthEmailSignupSuccess,
       },
       {
         path: 'email/verify',
-        name: 'verify',
-        component: VerifyEmail,
+        name: 'auth-email-verify',
+        component: AuthEmailVerify,
+      },
+      {
+        path: 'password/reset',
+        name: 'auth-email-password-reset',
+        component: AuthEmailNewPassword,
       },
       {
         path: 'social/callback',
         name: 'auth-social-callback',
-        component: SocialCallback,
+        component: AuthSocialCallback,
       },
       {
         path: 'social/:socialName/:action/',
         name: 'auth-social-login',
-        component: SocialLogin,
+        component: AuthSocialLogin,
       },
       {
         path: 'social/:socialName/:action/:code',
         name: 'auth-social-link',
-        component: SocialLogin,
-      },
-      {
-        path: 'password/reset',
-        name: 'reset',
-        component: Reset,
+        component: AuthSocialLogin,
       },
     ],
   },
@@ -89,11 +135,15 @@ const routes = [
    */
   {
     path: '/manage',
-    name: 'manage',
     component: Manage,
     children: [
       {
-        path: ':code',
+        path: ':workspaceId',
+        name: 'manage',
+        component: Manage,
+      },
+      {
+        path: ':workspaceId/:code',
         component: Manage,
       },
     ],
@@ -108,7 +158,6 @@ const routes = [
     children: [
       {
         path: 'create',
-        name: 'workspace-create',
         component: WorkspaceEdit,
       },
       {
@@ -153,6 +202,24 @@ const routes = [
         component: GuestFinish,
       },
     ],
+  },
+
+  /**
+   * Janus monitoring
+   */
+  {
+    path: '/janus-monitoring*',
+    name: 'janus-monitoring',
+    component: JanusMonitoring,
+  },
+
+  /**
+   * Janus dashboard
+   */
+  {
+    path: '/janus-dashboard*',
+    name: 'janus-dashboard',
+    component: JanusDashboard,
   },
 
 ];

@@ -20,4 +20,92 @@ export default {
 
     return state.collection[channelId];
   },
+
+  /**
+   * Get audio quality status by user id
+   *
+   * @param {ChannelState} state – channels module state
+   * @param {object} getters – vuex getters
+   * @returns {object}
+   */
+  getAudioQualityStatusByUserId: (state, getters) => userId => {
+    const aqiData = getters['getConversationData'](userId, 'audio-quality-indicator')?.status;
+
+    return aqiData || 0;
+  },
+
+  /**
+   * Get "raise hand" timestamp by user id
+   *
+   * @param {ChannelState} state – channels module state
+   * @param {object} getters – vuex getters
+   * @returns {object}
+   */
+  getHandUpStatusByUserId: (state, getters) => userId => {
+    const huiData = getters['getConversationData'](userId, 'hand-up')?.timestamp;
+
+    return huiData || 0;
+  },
+
+  /**
+   * Get audio quality status by user id
+   *
+   * @param {ChannelState} state – channels module state
+   * @param {object} getters – vuex getters
+   * @returns {object}
+   */
+  getReconnectingStatusByUserId: (state, getters) => userId => {
+    const rData = getters['getConversationData'](userId, 'socket-reconnecting');
+
+    return !!rData;
+  },
+
+  /**
+   * Get conversation data
+   *
+   * @param {ChannelState} state – channels module state
+   * @param {object} getters – vuex getters
+   * @param {object} rootState – vuex root state
+   * @param {object} rootGetters – vuex root getters
+   * @returns {object}
+   */
+  getConversationData: (state, getters, rootState, rootGetters) => (userId, action) => {
+    const channelId = rootGetters['me/getSelectedChannelId'];
+
+    if (!channelId || !userId) {
+      return null;
+    }
+
+    const channel = getters['getChannelById'](channelId);
+
+    if (!channel.conversationData || !channel.conversationData[userId] || !channel.conversationData[userId][action]) {
+      return null;
+    }
+
+    return channel.conversationData[userId][action];
+  },
+
+  /**
+   * Get conversation events
+   *
+   * @param {ChannelState} state – channels module state
+   * @param {object} getters – vuex getters
+   * @param {object} rootState – vuex root state
+   * @param {object} rootGetters – vuex root getters
+   * @returns {array}
+   */
+  getConversationEvents: (state, getters, rootState, rootGetters) => {
+    const channelId = rootGetters['me/getSelectedChannelId'];
+
+    if (!channelId) {
+      return null;
+    }
+
+    const channel = getters['getChannelById'](channelId);
+
+    if (channel) {
+      return channel.conversationEvents || [];
+    }
+  },
+
 };

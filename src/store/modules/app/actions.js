@@ -1,6 +1,7 @@
 import i18n from '@sdk/translations/i18n';
 import { v4 as uuidV4 } from 'uuid';
 import { heykaStore } from '@/store/localStore';
+import { conversationBroadcast } from '@api/socket/utils';
 
 /**
  * @typedef PrivacyLogData
@@ -8,6 +9,8 @@ import { heykaStore } from '@/store/localStore';
  * @property {string} method – method name, e.g. getWorkspaces
  * @property {object} data – data sent, e.g. {userId: '...'}
  */
+
+let selectedDevicesLoaded = false;
 
 export default {
   /**
@@ -50,22 +53,80 @@ export default {
    * @returns {void}
    */
   removeNotification({ commit }, id) {
-    commit('app/REMOVE_NOTIFICATION', id);
+    commit('REMOVE_NOTIFICATION', id);
   },
 
   /**
    * Set selected devices
    *
-   * @param {function} commit – store commit
-   * @param {object} selectedDevices – selected devices
+   * @param {object} vuex context
+   * @param {object} devices – selected devices
    * @returns {void}
    */
-  setSelectedDevices({ commit }, selectedDevices) {
+  setSelectedDevices({ state, commit, getters }, devices) {
+    const selectedDevices = devices ? { ...devices } : { ...state.selectedDevices };
+
+    /** Re-set default devices if previous id's are not found */
+    if (!state.devices.speakers.map(el => el.id).includes(selectedDevices.speaker)) {
+      selectedDevices.speaker = 'default';
+    }
+    if (!state.devices.microphones.map(el => el.id).includes(selectedDevices.microphone)) {
+      selectedDevices.microphone = 'default';
+    }
+    if (!state.devices.cameras.map(el => el.id).includes(selectedDevices.camera)) {
+      if (state.devices.cameras[0]) {
+        selectedDevices.camera = state.devices.cameras[0].id;
+      } else {
+        selectedDevices.camera = '';
+      }
+    }
+
     commit('SET_SELECTED_DEVICES', selectedDevices);
 
-    heykaStore.set('selectedSpeaker', selectedDevices.speaker);
-    heykaStore.set('selectedMicrophone', selectedDevices.microphone);
-    heykaStore.set('selectedCamera', selectedDevices.camera);
+    /** Save selected devices to storage */
+    Object.keys(selectedDevices).forEach(deviceType => {
+      const deviceTypeCapitalized = deviceType.charAt(0).toUpperCase() + deviceType.slice(1);
+
+      heykaStore.set(`selected${deviceTypeCapitalized}`, selectedDevices[deviceType]);
+
+      const device = getters.getDevice(deviceType, selectedDevices[deviceType]);
+
+      heykaStore.set(`selected${deviceTypeCapitalized}Label`, device?.rawLabel || '');
+    });
+  },
+
+  /**
+   * Load selected devices from storage
+   *
+   * @param {object} vuex context
+   * @returns {void}
+   */
+  loadSelectedDevices({ getters, dispatch }) {
+    const selectedDevices = {
+      speaker: getters.loadSelectedDevice('speaker'),
+      microphone: getters.loadSelectedDevice('microphone'),
+      camera: getters.loadSelectedDevice('camera'),
+    };
+
+    dispatch('setSelectedDevices', selectedDevices);
+  },
+
+  /**
+   * Set device list
+   *
+   * @param {object} vuex context
+   * @param {object} devices – device list
+   * @returns {void}
+   */
+  setDevices({ commit, dispatch }, devices) {
+    commit('SET_DEVICES', devices);
+
+    if (!selectedDevicesLoaded) {
+      dispatch('loadSelectedDevices');
+      selectedDevicesLoaded = true;
+    } else {
+      dispatch('setSelectedDevices');
+    }
   },
 
   /**
@@ -88,5 +149,11 @@ export default {
     }
 
     commit('SET_MICROPHONE_VOLUME', volume);
+  },
+
+  raiseHandInChannel({ commit }, myId) {
+    conversationBroadcast('hand-up', myId, {
+      timestamp: Date.now(),
+    });
   },
 };

@@ -5,15 +5,22 @@
       :key="user.id"
       class="user"
     >
-      <img
+      <avatar
         class="user__avatar"
-        loading="lazy"
-        :src="avatarUrl(user, 32)"
-        width="32"
-        height="32"
-      >
+        :user-id="user.id"
+        :image="avatarUrl(user, 32)"
+        :size="32"
+      />
+
       <div class="user__name">
         {{ user.name }}
+      </div>
+
+      <div
+        class="user__email"
+        :class="{'disabled': !user.isEmailVerified}"
+      >
+        {{ user.email }}
       </div>
 
       <div class="user__date">
@@ -26,6 +33,14 @@
       >
         Revoke
       </div>
+
+      <div
+        class="user__reset-password"
+        :class="{'disabled': !user.isEmailVerified}"
+        @click="resetHandler(user)"
+      >
+        Reset password
+      </div>
     </div>
   </div>
 </template>
@@ -34,8 +49,13 @@
 import cloneDeep from 'clone-deep';
 import dateFormat from 'dateformat';
 import { getUserAvatarUrl } from '@libs/image';
+import Avatar from '@components/Avatar';
 
 export default {
+  comments: {
+    Avatar,
+  },
+  components: { Avatar },
   props: {
     /**
      * Array of workspace
@@ -102,6 +122,25 @@ export default {
     },
 
     /**
+     * Send reset password mail to user's email
+     * @param {object} user – user
+     * @returns {Promise<void>}
+     */
+    async resetHandler(user) {
+      const state = confirm(`Are you sure want to send reset password mail to "${user.name}"?`);
+
+      if (state) {
+        try {
+          await this.$API.auth.discardPass({ email: user.email });
+          alert('Reset password mail sent');
+        } catch (e) {
+          console.log('ERROR');
+          console.log(e);
+        }
+      }
+    },
+
+    /**
      * Format date
      * @param {string} date – date
      * @returns {string}
@@ -138,13 +177,28 @@ export default {
         font-size 18px
         line-height 1
 
-      &__date
+      &__email
         margin-left auto
-        margin-right 12px
+        margin-right 16px
+
+        &.disabled
+          opacity 0.5
+
+      &__date
+        margin-right 16px
 
       &__delete
         color lightcoral
         cursor pointer
+        margin-right 16px
+
+      &__reset-password
+        color lightcoral
+        cursor pointer
+
+        &.disabled
+          pointer-events none
+          opacity 0.5
 
       &:hover
         background #eee

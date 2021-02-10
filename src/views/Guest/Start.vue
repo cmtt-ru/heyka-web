@@ -10,8 +10,21 @@
         You can still turn them back off at any time.
       </p>
 
+      <p
+        v-if="isSafari"
+        class="safari-issue"
+      >
+        <span>Issues with Safari</span>
+        The current version of Safari has known audio issues. Try to use other browser.
+      </p>
+
       <div class="webcam l-mt-24">
-        <video ref="video" />
+        <video
+          ref="video"
+          autoplay
+          playsinline
+          muted
+        />
         <div class="webcam__loader">
           <svg-icon
             name="video"
@@ -20,22 +33,23 @@
         </div>
       </div>
 
-      <p class="l-mt-24 l-mb-8">
-        Enter your name
-      </p>
-      <ui-input
-        v-model="userName"
-        class="user-name"
-        @keypress.enter.native="joinHandler"
-      />
+      <ui-form @submit="joinHandler">
+        <ui-input
+          v-model="userName"
+          placeholder="Enter your name"
+          class="user-name"
+          required
+          enter-submit
+        />
 
-      <ui-button
-        :type="1"
-        class="l-mt-24"
-        @click="joinHandler"
-      >
-        Join channel
-      </ui-button>
+        <ui-button
+          :type="1"
+          class="l-mt-24"
+          submit
+        >
+          Join channel
+        </ui-button>
+      </ui-form>
     </div>
   </transition>
 </template>
@@ -43,31 +57,30 @@
 <script>
 import mediaCapturer from '@classes/mediaCapturer';
 import { mapState, mapGetters } from 'vuex';
-import { UiInput } from '@components/Form';
+import { UiForm, UiInput } from '@components/Form';
 import UiButton from '@components/UiButton';
 
 let cameraStream = null;
 
+const IS_SAFARI = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
 export default {
   components: {
+    UiForm,
     UiInput,
     UiButton,
   },
 
   data() {
-    let userName;
+    let userName = '';
 
     try {
-      userName = localStorage.getItem('heyka-guest-name');
+      userName = localStorage.getItem('heyka-guest-name') || '';
     } catch (e) {
       console.error(e);
     }
 
-    if (!userName) {
-      userName = 'Guest';
-    }
-
-    console.log('NAME', userName);
+    console.log('userName', userName);
 
     return {
       userName,
@@ -89,6 +102,10 @@ export default {
     ...mapState({
       janusOptions: 'janus',
     }),
+
+    isSafari() {
+      return IS_SAFARI;
+    },
   },
 
   async mounted() {
@@ -101,11 +118,16 @@ export default {
     try {
       const immediate = await mediaCapturer.requestMediaPermissions();
 
-      if (immediate && this.userName !== 'Guest') {
-        await this.joinHandler();
-      } else {
-        await this.startCameraPreview();
+      // if (immediate && this.userName) {
+      //   await this.joinHandler();
+      // } else {
+      //   await this.startCameraPreview();
+      // }
+
+      if (immediate) {
+
       }
+      await this.startCameraPreview();
     } catch (e) {
       console.error('requestMediaPermissions', e);
     }
@@ -120,10 +142,6 @@ export default {
       cameraStream = await mediaCapturer.getCameraStream();
 
       this.$refs.video.srcObject = cameraStream;
-
-      this.$refs.video.onloadedmetadata = () => {
-        this.$refs.video.play();
-      };
     },
 
     async joinHandler() {
@@ -152,6 +170,9 @@ export default {
     background var(--button-bg-5)
     border-radius 12px
     box-sizing border-box
+
+    h1
+      letter-spacing -1.8px
 
     .webcam
       position relative
@@ -186,11 +207,34 @@ export default {
 
     .user-name
       width 50%
-      margin 0 auto
+      margin 24px auto 0 auto
+
+      /deep/ .input-wrapper
+        background rgba(0,0,0,0.85)
+
+        &:hover
+          background rgba(0,0,0,1)
+
+        &:focus-within
+          background rgba(0,0,0,1)
+          border-color rgba(255,255,255,0.5)
 
       /deep/ input
-        color var(--color-5) !important
+        color #fff
+        outline none
         text-align center
+
+  .safari-issue
+    background rgba(255,0,0,0.28)
+    border-radius 6px
+    padding 8px 36px
+    margin-top 20px
+    border 1px solid rgba(185, 0, 0, 0.21)
+
+    span
+      font-weight bold
+      display block
+      font-size 16px
 
   .fade-enter-active, .fade-leave-active {
     transition: opacity .25s;
