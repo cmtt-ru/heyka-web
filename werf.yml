@@ -41,7 +41,9 @@ ansible:
         ca-certificates,
         ttf-freefont,
         nodejs,
-        yarn
+        yarn,
+        git,
+        openssh-client
   - name: "Install puppeteer"
     yarn:
       name: puppeteer
@@ -49,7 +51,7 @@ ansible:
       global: yes
     environment:
       PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
-      PUPPETEER_EXECUTABLE_PATH: /usr/bin/chromium-browser 
+      PUPPETEER_EXECUTABLE_PATH: /usr/bin/chromium-browser
   install:
   - name: "npm install"
     shell: |
