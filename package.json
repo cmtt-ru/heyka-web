@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@popperjs/core": "^2.4.4",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "clone-deep": "^4.0.1",
     "core-js": "^3.6.5",
     "dateformat": "^3.0.3",
@@ -24,6 +24,7 @@
     "socket.io-client": "latest",
     "svg-sprite-loader": "^4.3.0",
     "throttle-debounce": "^2.3.0",
+    "ua-parser-js": "^0.7.23",
     "uuid": "latest",
     "vue": "^2.6.11",
     "vue-i18n": "^8.20.0",
