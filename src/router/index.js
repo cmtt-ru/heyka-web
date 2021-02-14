@@ -25,6 +25,9 @@ const GuestFinish = () => import(/* webpackChunkName: "main" */ '../views/Guest/
 const Manage = () => import(/* webpackChunkName: "main" */ '../views/Manage');
 const WorkspaceEdit = () => import(/* webpackChunkName: "main" */ '../views/WorkspaceEdit');
 
+const PagesLayout = () => import(/* webpackChunkName: "main" */ '../views/Pages');
+const PagesTest = () => import(/* webpackChunkName: "main" */ '../views/Pages/Test');
+
 const JanusMonitoring = () => import(/* webpackChunkName: "janus" */ '../views/JanusMonitoring');
 const JanusDashboard = () => import(/* webpackChunkName: "janus" */ '../views/JanusDashboard');
 
@@ -200,6 +203,61 @@ const routes = [
         path: 'finish',
         name: 'guest-finish',
         component: GuestFinish,
+      },
+    ],
+  },
+
+  /**
+   * Different pages
+   */
+  {
+    path: '/ws/pages',
+    component: PagesLayout,
+    children: [
+      /**
+       * Slack integration pages
+       */
+      {
+        path: 'slack-success',
+        name: 'page-slack-success',
+        component: PagesTest,
+      },
+      {
+        path: 'slack-error',
+        name: 'page-slack-error',
+        component: PagesTest,
+      },
+      {
+        path: 'slack-reject',
+        name: 'page-slack-reject',
+        component: PagesTest,
+      },
+
+      /**
+       * Changing password
+       */
+      {
+        path: 'password-change',
+        name: 'page-password-change',
+        component: PagesTest,
+      },
+
+      /**
+       * Social link
+       */
+      {
+        path: 'social-link',
+        name: 'page-social-link',
+        component: PagesTest,
+      },
+
+      /**
+       * Successful account creation
+       */
+      {
+        path: 'account-done',
+        name: 'page-account-done',
+        component: PagesTest,
       },
     ],
   },
