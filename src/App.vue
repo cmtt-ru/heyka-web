@@ -20,9 +20,18 @@ export default {
   components: {
     Notifications,
   },
-  created() {
+
+  async created() {
     this.loadSvgSprite();
-    prepareTokens();
+
+    await prepareTokens();
+
+    try {
+      await this.$API.auth.check();
+      await this.$store.dispatch('tryToAuthorize');
+    } catch (e) {
+
+    }
 
     window.addEventListener('beforeunload', () => {
       client.emit('logout');

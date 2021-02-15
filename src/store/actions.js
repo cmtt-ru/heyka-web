@@ -64,6 +64,28 @@ export default {
   },
 
   /**
+   * Initialize store and app state
+   * @param {object} context – store context
+   * @returns {void}
+   */
+  async tryToAuthorize({ commit }) {
+    try {
+      const authenticatedUser = await API.user.getAuthenticatedUser();
+
+      /** Authenticated user id */
+      const userId = authenticatedUser.id;
+
+      if (userId) {
+        commit('me/SET_USER_ID', userId);
+        commit('users/ADD_USER', authenticatedUser);
+        console.log('authenticatedUser', authenticatedUser);
+      }
+    } catch (err) {
+      cnsl.error(err);
+    }
+  },
+
+  /**
    * Update full state of current workspace
    * @param {function} commit Commit to state
    * @param {object} getters Store getters
