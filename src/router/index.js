@@ -27,6 +27,7 @@ const WorkspaceEdit = () => import(/* webpackChunkName: "main" */ '../views/Work
 
 const PagesLayout = () => import(/* webpackChunkName: "main" */ '../views/Pages');
 const PagesTest = () => import(/* webpackChunkName: "main" */ '../views/Pages/Test');
+const PagesSlackCallback = () => import(/* webpackChunkName: "main" */ '../views/Pages/SlackCallback');
 
 const JanusMonitoring = () => import(/* webpackChunkName: "janus" */ '../views/JanusMonitoring');
 const JanusDashboard = () => import(/* webpackChunkName: "janus" */ '../views/JanusDashboard');
@@ -215,22 +216,12 @@ const routes = [
     component: PagesLayout,
     children: [
       /**
-       * Slack integration pages
+       * Slack callback
        */
       {
-        path: 'slack-success',
-        name: 'page-slack-success',
-        component: PagesTest,
-      },
-      {
-        path: 'slack-error',
-        name: 'page-slack-error',
-        component: PagesTest,
-      },
-      {
-        path: 'slack-reject',
-        name: 'page-slack-reject',
-        component: PagesTest,
+        path: 'slack-callback',
+        name: 'page-slack-callback',
+        component: PagesSlackCallback,
       },
 
       /**

@@ -2,7 +2,9 @@
   <div class="layout">
     <ui-header />
 
-    <router-view />
+    <div class="layout__wrapper">
+      <router-view />
+    </div>
   </div>
 </template>
 
@@ -40,5 +42,13 @@ export default {
     flex-direction column
     width 100%
     min-height 100vh
+
+    &__wrapper
+      display flex
+      align-items center
+      justify-content center
+      height 100%
+      flex 1
+      text-align center
 
 </style>
