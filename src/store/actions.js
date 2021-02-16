@@ -278,4 +278,18 @@ export default {
       console.log(`Code ${authLink} is invalid:`, err);
     }
   },
+
+  /**
+   * Launch deep link
+   *
+   * @param {object} obj – vuex object
+   * @param {string} path – deep link path
+   * @returns {void}
+   */
+  launchDeepLink(obj, path) {
+    const deepLink = `heyka://${path}`;
+
+    console.log('launchDeepLink', deepLink);
+    document.location.href = deepLink;
+  },
 };

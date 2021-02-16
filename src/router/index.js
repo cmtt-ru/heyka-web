@@ -28,6 +28,7 @@ const WorkspaceEdit = () => import(/* webpackChunkName: "main" */ '../views/Work
 const PagesLayout = () => import(/* webpackChunkName: "main" */ '../views/Pages');
 const PagesTest = () => import(/* webpackChunkName: "main" */ '../views/Pages/Test');
 const PagesSlackCallback = () => import(/* webpackChunkName: "main" */ '../views/Pages/SlackCallback');
+const PagesSocialLink = () => import(/* webpackChunkName: "main" */ '../views/Pages/SocialLink');
 
 const JanusMonitoring = () => import(/* webpackChunkName: "janus" */ '../views/JanusMonitoring');
 const JanusDashboard = () => import(/* webpackChunkName: "janus" */ '../views/JanusDashboard');
@@ -239,7 +240,7 @@ const routes = [
       {
         path: 'social-link',
         name: 'page-social-link',
-        component: PagesTest,
+        component: PagesSocialLink,
       },
 
       /**

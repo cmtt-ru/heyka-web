@@ -55,12 +55,6 @@ export default {
       animationChannel: 'app/getAnimationChannel',
     }),
   },
-
-  async mounted() {
-    console.log(this.me);
-
-    // await this.$store.dispatch('initial');
-  },
 };
 </script>
 
@@ -78,9 +72,6 @@ export default {
     height 60px
     background #fff
     z-index 10
-
-    @media $desktop
-      box-shadow 0 1px 4px 0 rgba(0,0,0,0.1);
 
     .wrapper
       display flex

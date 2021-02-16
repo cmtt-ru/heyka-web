@@ -9,9 +9,9 @@
     <p>{{ subtitle }}</p>
     <ui-button
       :type="1"
-      size="large"
+      size="xlarge"
     >
-      Открыть приложение
+      {{ texts.button }}
     </ui-button>
   </div>
 </template>
@@ -51,7 +51,6 @@ export default {
       this.slackWorkspaceName = 'Комитет';
       this.heykaWorkspaceName = 'Комитет';
       this.title = this.texts.successTitle;
-      // this.subtitle = `Вы подключили Slack «${ this.slackWorkspaceName }» к команде ${ this.heykaWorkspaceName } в Heyka`;
       this.subtitle = this.$t('slackCallback.successSubtitle', [this.slackWorkspaceName, this.heykaWorkspaceName]);
       this.loading = false;
       // eslint-disable-next-line no-magic-numbers
