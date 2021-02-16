@@ -28,7 +28,8 @@ const WorkspaceEdit = () => import(/* webpackChunkName: "main" */ '../views/Work
 const PagesLayout = () => import(/* webpackChunkName: "main" */ '../views/Pages');
 const PagesTest = () => import(/* webpackChunkName: "main" */ '../views/Pages/Test');
 const PagesSlackCallback = () => import(/* webpackChunkName: "main" */ '../views/Pages/SlackCallback');
-const PagesSocialLink = () => import(/* webpackChunkName: "main" */ '../views/Pages/SocialLink');
+const PagesSocialCallback = () => import(/* webpackChunkName: "main" */ '../views/Pages/SocialCallback');
+const PagesEmailSignupSuccess = () => import(/* webpackChunkName: "main" */ '../views/Pages/EmailSignupSuccess');
 
 const JanusMonitoring = () => import(/* webpackChunkName: "janus" */ '../views/JanusMonitoring');
 const JanusDashboard = () => import(/* webpackChunkName: "janus" */ '../views/JanusDashboard');
@@ -235,12 +236,12 @@ const routes = [
       },
 
       /**
-       * Social link
+       * Social callback
        */
       {
-        path: 'social-link',
-        name: 'page-social-link',
-        component: PagesSocialLink,
+        path: 'social-callback',
+        name: 'page-social-callback',
+        component: PagesSocialCallback,
       },
 
       /**
@@ -249,7 +250,7 @@ const routes = [
       {
         path: 'account-done',
         name: 'page-account-done',
-        component: PagesTest,
+        component: PagesEmailSignupSuccess,
       },
     ],
   },

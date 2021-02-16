@@ -37,6 +37,8 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+  @import '~@styles/global.styl';
+
   .layout
     display flex
     flex-direction column
@@ -50,5 +52,8 @@ export default {
       height 100%
       flex 1
       text-align center
+
+      @media $mobile
+        padding 0 28px
 
 </style>
