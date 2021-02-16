@@ -26,10 +26,10 @@ const Manage = () => import(/* webpackChunkName: "main" */ '../views/Manage');
 const WorkspaceEdit = () => import(/* webpackChunkName: "main" */ '../views/WorkspaceEdit');
 
 const PagesLayout = () => import(/* webpackChunkName: "main" */ '../views/Pages');
-const PagesTest = () => import(/* webpackChunkName: "main" */ '../views/Pages/Test');
 const PagesSlackCallback = () => import(/* webpackChunkName: "main" */ '../views/Pages/SlackCallback');
 const PagesSocialCallback = () => import(/* webpackChunkName: "main" */ '../views/Pages/SocialCallback');
 const PagesEmailSignupSuccess = () => import(/* webpackChunkName: "main" */ '../views/Pages/EmailSignupSuccess');
+const PagesEmailNewPassword = () => import(/* webpackChunkName: "main" */ '../views/Pages/EmailNewPassword');
 
 const JanusMonitoring = () => import(/* webpackChunkName: "janus" */ '../views/JanusMonitoring');
 const JanusDashboard = () => import(/* webpackChunkName: "janus" */ '../views/JanusDashboard');
@@ -227,12 +227,12 @@ const routes = [
       },
 
       /**
-       * Changing password
+       * New password
        */
       {
-        path: 'password-change',
-        name: 'page-password-change',
-        component: PagesTest,
+        path: 'new-password',
+        name: 'page-new-password',
+        component: PagesEmailNewPassword,
       },
 
       /**
