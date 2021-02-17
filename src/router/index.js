@@ -27,9 +27,6 @@ const WorkspaceEdit = () => import(/* webpackChunkName: "main" */ '../views/Work
 
 const PagesLayout = () => import(/* webpackChunkName: "main" */ '../views/Pages');
 const PagesSlackCallback = () => import(/* webpackChunkName: "main" */ '../views/Pages/SlackCallback');
-const PagesSocialCallback = () => import(/* webpackChunkName: "main" */ '../views/Pages/SocialCallback');
-// const PagesEmailSignupSuccess = () => import(/* webpackChunkName: "main" */ '../views/Pages/EmailSignupSuccess');
-// const PagesEmailNewPassword = () => import(/* webpackChunkName: "main" */ '../views/Pages/EmailNewPassword');
 
 const JanusMonitoring = () => import(/* webpackChunkName: "janus" */ '../views/JanusMonitoring');
 const JanusDashboard = () => import(/* webpackChunkName: "janus" */ '../views/JanusDashboard');
@@ -215,14 +212,6 @@ const routes = [
   },
 
   /**
-   * New password
-   */
-  // {
-  //   path: '/new-password',
-  //   component: PagesEmailNewPassword,
-  // },
-
-  /**
    * Different pages
    */
   {
@@ -237,33 +226,6 @@ const routes = [
         name: 'page-slack-callback',
         component: PagesSlackCallback,
       },
-
-      /**
-       * New password
-       */
-      // {
-      //   path: 'new-password',
-      //   name: 'page-new-password',
-      //   component: PagesEmailNewPassword,
-      // },
-
-      /**
-       * Social callback
-       */
-      {
-        path: 'social-callback',
-        name: 'page-social-callback',
-        component: PagesSocialCallback,
-      },
-
-      /**
-       * Successful account creation
-       */
-      // {
-      //   path: 'account-done',
-      //   name: 'page-account-done',
-      //   component: PagesEmailSignupSuccess,
-      // },
     ],
   },
 
