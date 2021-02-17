@@ -1,27 +1,57 @@
 <template>
-  <div class="layout">
-    <ui-header />
+  <utility-page>
+    <h1>{{ texts.title }}</h1>
+    <p>{{ texts.subtitle }}</p>
 
-    <div
-      class="verify"
-    >
-      <div class="verify__header">
-        {{ texts.header }}
-      </div>
+    <div class="email-signup-buttons">
+      <router-link :to="{name: 'landing'}">
+        <ui-button
+          :type="1"
+          size="xlarge"
+          class="email-signup-buttons__download"
+        >
+          {{ texts.downloadApp }}
+        </ui-button>
+      </router-link>
 
-      <div class="verify__info">
-        {{ texts.disclaimer }}
-      </div>
+      <router-link :to="{name: 'workspace-create', params: {code: 'auth-code'}}">
+        <ui-button
+          :type="17"
+          size="xlarge"
+          class="email-signup-buttons__create"
+        >
+          {{ texts.createWorkspace }}
+        </ui-button>
+      </router-link>
     </div>
-  </div>
+
+    <ui-button
+      :type="9"
+      size="large"
+      class="l-mt-18"
+      @click="openAppHandler"
+    >
+      {{ texts.openApp }}
+    </ui-button>
+  </utility-page>
 </template>
 
 <script>
-import UiHeader from '@/components/UiHeader';
+import UtilityPage from '@/components/Layouts/UtilityPage';
+import UiButton from '@components/UiButton';
 
 export default {
   components: {
-    UiHeader,
+    UtilityPage,
+    UiButton,
+  },
+
+  data() {
+    return {
+      title: '',
+      subtitle: '',
+      deepLink: '',
+    };
   },
 
   computed: {
@@ -34,28 +64,26 @@ export default {
     },
   },
 
+  methods: {
+    openAppHandler() {
+      this.$store.dispatch('launchDeepLink', this.deepLink);
+    },
+  },
 };
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
+  .email-signup-buttons
+    &__download
+      @media $desktop
+        margin-right 16px
 
-.verify
-  padding 12px
-  width 500px
-  max-width 90vw
-  margin 10px auto 12px
-  box-sizing border-box
-  display flex
-  flex-direction column
-  align-items center
-  justify-content flex-start
+      @media $mobile
+        width 100%
+        margin-bottom 16px
 
-  &__header
-    font-size 25px
-    margin 24px 0
-    text-transform uppercase
+    &__create
+      @media $mobile
+        width 100%
 
-  &__info
-    margin-bottom 20px
-    text-align center
 </style>

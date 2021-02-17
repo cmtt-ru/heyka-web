@@ -10,7 +10,6 @@
 
 <script>
 import '@sdk/styles/fonts.styl';
-import '@styles/global.styl';
 import Notifications from '@components/Notifications';
 import { prepareTokens } from '@api/tokens';
 import { client } from '@api/socket/client';
@@ -60,7 +59,7 @@ export default {
 };
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
 .app-wrapper
   background-color var(--app-bg)
   color var(--text-0)

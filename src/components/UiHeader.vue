@@ -59,8 +59,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-  @import '~@styles/global.styl';
-
   header
     position sticky
     display flex
