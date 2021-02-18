@@ -56,19 +56,20 @@ export default {
     try {
       const res = await this.$API.workspace.resumeConnectWithSlack(window.location.search);
 
-      this.slackWorkspaceName = 'Комитет';
-      this.heykaWorkspaceName = 'Комитет';
+      this.slackWorkspaceName = res.slackWorkspaceName;
+      this.heykaWorkspaceName = res.workspaceName;
 
       this.title = this.texts.successTitle;
       this.subtitle = this.$t('slackCallback.successSubtitle', [this.slackWorkspaceName, this.heykaWorkspaceName]);
 
-      this.deepLink = 'heyka://slack-connect/true';
+      this.deepLink = '/slack-connect/true';
 
       console.log('res', res);
     } catch (err) {
+      console.error(err);
       this.title = this.texts.failTitle;
       this.subtitle = this.texts.errorSubtitle;
-      this.deepLink = `heyka://slack-connect/false/${err.message}`;
+      this.deepLink = `/slack-connect/false/${err.message}`;
     } finally {
       this.loading = false;
     }
