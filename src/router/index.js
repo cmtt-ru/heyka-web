@@ -132,15 +132,6 @@ const routes = [
   },
 
   /**
-   * Other callbacks routes
-   */
-  {
-    path: '/slack-redirect',
-    name: 'slack-redirect',
-    component: SlackInvite,
-  },
-
-  /**
    * Manage workspaces
    */
   {
