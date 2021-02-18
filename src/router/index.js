@@ -17,8 +17,6 @@ const AuthSocialLogin = () => import(/* webpackChunkName: "main" */ '../views/Au
 const AuthSocialCallback = () => import(/* webpackChunkName: "main" */ '../views/Auth/SocialCallback');
 const AuthSlackCallback = () => import(/* webpackChunkName: "main" */ '../views/Auth/SlackCallback');
 
-const SlackInvite = () => import(/* webpackChunkName: "main" */ '../views/Auth/SlackInvite.vue');
-
 const Guest = () => import(/* webpackChunkName: "main" */ '../views/Guest');
 const GuestStart = () => import(/* webpackChunkName: "main" */ '../views/Guest/Start');
 const GuestGrid = () => import(/* webpackChunkName: "main" */ '@sdk/views/Call/Grid');
