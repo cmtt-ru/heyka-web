@@ -10,7 +10,6 @@
 
 <script>
 import '@sdk/styles/fonts.styl';
-import '@styles/global.styl';
 import Notifications from '@components/Notifications';
 import { prepareTokens } from '@api/tokens';
 import { client } from '@api/socket/client';
@@ -20,9 +19,18 @@ export default {
   components: {
     Notifications,
   },
-  created() {
+
+  async created() {
     this.loadSvgSprite();
-    prepareTokens();
+
+    await prepareTokens();
+
+    try {
+      await this.$API.auth.check();
+      await this.$store.dispatch('tryToAuthorize');
+    } catch (e) {
+
+    }
 
     window.addEventListener('beforeunload', () => {
       client.emit('logout');
@@ -51,7 +59,7 @@ export default {
 };
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
 .app-wrapper
   background-color var(--app-bg)
   color var(--text-0)
