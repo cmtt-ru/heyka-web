@@ -132,10 +132,6 @@ const routes = [
   },
 
   /**
-   * Authorization routes with new layout
-   */
-
-  /**
    * Manage workspaces
    */
   {
