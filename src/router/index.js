@@ -15,6 +15,7 @@ const AuthEmailSignupSuccess = () => import(/* webpackChunkName: "main" */ '../v
 const AuthEmailVerify = () => import(/* webpackChunkName: "main" */ '../views/Auth/EmailVerify');
 const AuthSocialLogin = () => import(/* webpackChunkName: "main" */ '../views/Auth/SocialLogin');
 const AuthSocialCallback = () => import(/* webpackChunkName: "main" */ '../views/Auth/SocialCallback');
+const AuthSlackCallback = () => import(/* webpackChunkName: "main" */ '../views/Auth/SlackCallback');
 
 const Guest = () => import(/* webpackChunkName: "main" */ '../views/Guest');
 const GuestStart = () => import(/* webpackChunkName: "main" */ '../views/Guest/Start');
@@ -24,9 +25,6 @@ const GuestFinish = () => import(/* webpackChunkName: "main" */ '../views/Guest/
 
 const Manage = () => import(/* webpackChunkName: "main" */ '../views/Manage');
 const WorkspaceEdit = () => import(/* webpackChunkName: "main" */ '../views/WorkspaceEdit');
-
-const PagesLayout = () => import(/* webpackChunkName: "main" */ '../views/Pages');
-const PagesSlackCallback = () => import(/* webpackChunkName: "main" */ '../views/Pages/SlackCallback');
 
 const JanusMonitoring = () => import(/* webpackChunkName: "janus" */ '../views/JanusMonitoring');
 const JanusDashboard = () => import(/* webpackChunkName: "janus" */ '../views/JanusDashboard');
@@ -212,21 +210,12 @@ const routes = [
   },
 
   /**
-   * Different pages
+   * Slack callback
    */
   {
-    path: '/ws/pages',
-    component: PagesLayout,
-    children: [
-      /**
-       * Slack callback
-       */
-      {
-        path: 'slack-callback',
-        name: 'page-slack-callback',
-        component: PagesSlackCallback,
-      },
-    ],
+    path: '/slack-redirect',
+    name: 'slack-callback',
+    component: AuthSlackCallback,
   },
 
   /**
@@ -246,7 +235,6 @@ const routes = [
     name: 'janus-dashboard',
     component: JanusDashboard,
   },
-
 ];
 
 const router = new VueRouter({
