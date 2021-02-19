@@ -22,7 +22,7 @@
 <script>
 import UtilityPage from '@/components/Layouts/UtilityPage';
 import UiButton from '@components/UiButton';
-import Loader from '@components/Throbber';
+import Loader from '@components/Loader';
 
 export default {
   components: {
