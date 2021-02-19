@@ -1,6 +1,6 @@
 <template>
   <utility-page>
-    <throbber
+    <loader
       v-if="loading"
       :size="48"
     />
@@ -22,13 +22,13 @@
 <script>
 import UtilityPage from '@/components/Layouts/UtilityPage';
 import UiButton from '@components/UiButton';
-import Throbber from '@components/Throbber';
+import Loader from '@components/Throbber';
 
 export default {
   components: {
     UtilityPage,
     UiButton,
-    Throbber,
+    Loader,
   },
 
   data() {
