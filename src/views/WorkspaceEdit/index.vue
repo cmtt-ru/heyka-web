@@ -48,7 +48,10 @@
         {{ texts.openApp }}
       </ui-button>
 
-      <div class="link-wrapper l-ml-8" :class="{'link-wrapper--copied': linkCopied}">
+      <div
+        class="link-wrapper l-ml-8"
+        :class="{'link-wrapper--copied': linkCopied}"
+      >
         <ui-button
           :type="1"
           class="link-copy"
@@ -185,9 +188,7 @@ export default {
      * @returns {void}
      */
     openAppHandler() {
-      const deepLink = `heyka://workspace/${this.newWorkspace.id}`;
-
-      window.open(deepLink);
+      this.$store.dispatch('launchDeepLink', `workspace/${this.newWorkspace.id}`);
     },
 
     /**
