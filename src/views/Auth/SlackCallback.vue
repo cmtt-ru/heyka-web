@@ -62,14 +62,14 @@ export default {
       this.title = this.texts.successTitle;
       this.subtitle = this.$t('slackCallback.successSubtitle', [this.slackWorkspaceName, this.heykaWorkspaceName]);
 
-      this.deepLink = '/slack-connect/true';
+      this.deepLink = 'slack-connect/true';
 
       console.log('res', res);
     } catch (err) {
       console.error(err);
       this.title = this.texts.failTitle;
       this.subtitle = this.texts.errorSubtitle;
-      this.deepLink = `/slack-connect/false/${err.message}`;
+      this.deepLink = `slack-connect/false/${err.message}`;
     } finally {
       this.loading = false;
     }
