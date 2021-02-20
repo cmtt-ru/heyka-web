@@ -94,7 +94,7 @@ export default {
      * @returns {string}
      */
     deepLink() {
-      return `heyka://login/${this.authlink}`;
+      return `login/${this.authlink}`;
     },
   },
 
