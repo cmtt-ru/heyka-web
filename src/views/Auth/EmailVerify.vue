@@ -71,7 +71,7 @@ export default {
   computed: {
 
     deepLink() {
-      return `heyka://login/${this.authlink}`;
+      return `login/${this.authlink}`;
     },
 
     /**

@@ -1,97 +1,78 @@
 <template>
-  <div class="layout">
-    <ui-header />
+  <utility-page>
+    <h1>{{ texts.title }}</h1>
+    <p v-if="!success">
+      {{ texts.subtitle }}
+    </p>
+    <p v-else>
+      {{ texts.successSubtitle }}
+    </p>
 
-    <div
+    <ui-form
       v-if="!success"
-      class="reset"
+      class="reset-form"
+      @submit="submitHandler"
     >
-      <div class="reset__header">
-        {{ texts.header }}
-      </div>
-      <div class="reset__info">
-        {{ texts.disclaimer }}
-      </div>
-      <ui-form
-        class="reset__form"
-        @submit="submitHandler"
+      <ui-input
+        v-model="password"
+        class="reset-form__input"
+        placeholder="Новый пароль"
+        type="password"
+        required
+        :minlength="8"
+        :maxlength="120"
+      />
+      <ui-button
+        :type="1"
+        size="xlarge"
+        class="reset-form__submit"
+        submit
       >
-        <ui-input
-          v-model="pass"
-          class="reset__input"
-          placeholder="********"
-          type="password"
-          required
-          :minlength="8"
-          :maxlength="120"
-        />
-        <ui-button
-          :type="1"
-          class="reset__submit"
-          submit
-        >
-          {{ texts.button }}
-        </ui-button>
-      </ui-form>
-    </div>
-    <div
-      v-if="success"
-      class="reset"
+        {{ texts.save }}
+      </ui-button>
+    </ui-form>
+
+    <ui-button
+      v-else
+      :type="1"
+      size="xlarge"
+      @click="openAppHandler"
     >
-      <div class="reset__header">
-        {{ texts.saved }}
-      </div>
-      <a
-        :href="deepLink"
-        class="reset__form"
-      >
-        <ui-button
-          :type="1"
-          class=""
-          submit
-        >
-          {{ texts.openApp }}
-        </ui-button>
-      </a>
-      <router-link
-        :to="{ name: 'landing'}"
-        class="reset__landing"
-        target="_blank"
-      >
-        {{ texts.download }}
-      </router-link>
-    </div>
-  </div>
+      {{ texts.openApp }}
+    </ui-button>
+
+    <p
+      v-if="error"
+      class="l-mt-16"
+    >
+      {{ error }}
+    </p>
+  </utility-page>
 </template>
 
 <script>
+import UtilityPage from '@/components/Layouts/UtilityPage';
 import UiButton from '@components/UiButton';
-import UiHeader from '@/components/UiHeader';
 import { UiInput, UiForm } from '@components/Form';
 
 export default {
   components: {
+    UtilityPage,
     UiButton,
-    UiHeader,
     UiInput,
     UiForm,
   },
 
   data() {
     return {
-      pass: '',
-      JWT: null,
+      password: '',
       success: false,
-      authlink: '',
+      authLink: '',
+      error: '',
     };
   },
 
   computed: {
-
-    deepLink() {
-      return `heyka://login/${this.authlink}`;
-    },
-
     /**
      * Get needed texts from I18n-locale file
      * @returns {object}
@@ -99,11 +80,26 @@ export default {
     texts() {
       return this.$t('auth.newPassword');
     },
+
+    /**
+     * JWT token
+     * @returns {string}
+     */
+    jwt() {
+      return this.$route.query.token;
+    },
+
+    /**
+     * Deep link with auth link
+     * @returns {string}
+     */
+    deepLink() {
+      return `login/${this.authlink}`;
+    },
   },
 
   async mounted() {
-    this.JWT = this.$route.query.token;
-    const res = await this.$API.auth.checkWebToken(this.JWT);
+    const res = await this.$API.auth.checkWebToken(this.jwt);
 
     if (res.result === false) {
       this.$router.push({ name: 'auth' });
@@ -111,69 +107,56 @@ export default {
   },
 
   methods: {
+    openAppHandler() {
+      this.$store.dispatch('launchDeepLink', this.deepLink);
+    },
+
     async submitHandler() {
       try {
         const res = await this.$API.auth.resetPass({
-          token: this.JWT,
-          password: this.pass,
+          token: this.jwt,
+          password: this.password,
         });
 
-        this.authlink = res.code;
-        // await this.$API.auth.signinByLink(res.code);
+        this.authLink = res.code;
+        this.success = true;
       } catch (e) {
-        console.log('ERROR on pass reset:', e);
+        this.error = e.message;
       }
-      this.success = true;
     },
   },
 };
 </script>
 
-<style lang="stylus" scoped>
-  .layout
-    display flex
-    flex-direction column
-    width 100%
-
-    &__wrapper
-      box-sizing border-box
+<style lang="stylus">
+  .reset-form
+    @media $desktop
       display flex
-      padding-right 12px
-      flex 1 1 auto
 
-.reset
-  padding 012px
-  width 500px
-  max-width 90vw
-  margin 10px auto 12px
-  box-sizing border-box
-  display flex
-  flex-direction column
-  align-items center
-  justify-content flex-start
+    &__input
+      @media $desktop
+        margin-right 16px
+        width 260px !important
 
-  &__header
-    font-size 25px
-    margin 24px 0 8px
-    text-transform uppercase
+      @media $mobile
+        width 100%
+        margin-bottom 16px
 
-  &__info
-    margin-bottom 20px
-    text-align center
+      .input
+        min-height 46px
+        font-size 18px
+        font-weight 500
+        padding-left 18px
+        padding-right 40px
 
-  &__form
-    display flex
-    flex-direction row
-    align-items flex-start
+      .input__eye
+        width 24px
+        height 24px
 
-  &__input
-    margin-right 8px
-    flex-shrink 2
+    &__submit
+      flex-shrink 0
 
-  &__submit
-    flex-shrink 1
+      @media $mobile
+        width 100%
 
-  &__landing
-    margin-top 20px
-    color var(--text-tech-2)
 </style>

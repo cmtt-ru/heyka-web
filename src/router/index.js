@@ -10,11 +10,12 @@ const AuthMain = () => import(/* webpackChunkName: "main" */ '@components/Auth/M
 const AuthEmailSignin = () => import(/* webpackChunkName: "main" */ '@components/Auth/EmailSignin');
 const AuthEmailReset = () => import(/* webpackChunkName: "main" */ '@components/Auth/EmailReset');
 const AuthEmailSignup = () => import(/* webpackChunkName: "main" */ '@components/Auth/EmailSignup');
-const AuthEmailNewPassword = () => import(/* webpackChunkName: "main" */ '../views/Auth/EmailNewPassword.vue');
-const AuthEmailSignupSuccess = () => import(/* webpackChunkName: "main" */ '../views/Auth/EmailSignupSuccess.vue');
-const AuthEmailVerify = () => import(/* webpackChunkName: "main" */ '../views/Auth/EmailVerify.vue');
-const AuthSocialLogin = () => import(/* webpackChunkName: "main" */ '../views/Auth/SocialLogin.vue');
-const AuthSocialCallback = () => import(/* webpackChunkName: "main" */ '../views/Auth/SocialCallback.vue');
+const AuthEmailNewPassword = () => import(/* webpackChunkName: "main" */ '../views/Auth/EmailNewPassword');
+const AuthEmailSignupSuccess = () => import(/* webpackChunkName: "main" */ '../views/Auth/EmailSignupSuccess');
+const AuthEmailVerify = () => import(/* webpackChunkName: "main" */ '../views/Auth/EmailVerify');
+const AuthSocialLogin = () => import(/* webpackChunkName: "main" */ '../views/Auth/SocialLogin');
+const AuthSocialCallback = () => import(/* webpackChunkName: "main" */ '../views/Auth/SocialCallback');
+const AuthSlackCallback = () => import(/* webpackChunkName: "main" */ '../views/Auth/SlackCallback');
 
 const SlackInvite = () => import(/* webpackChunkName: "main" */ '../views/Auth/SlackInvite.vue');
 
@@ -216,6 +217,15 @@ const routes = [
   },
 
   /**
+   * Slack callback
+   */
+  {
+    path: '/slack-redirect',
+    name: 'slack-callback',
+    component: AuthSlackCallback,
+  },
+
+  /**
    * Janus monitoring
    */
   {
@@ -232,7 +242,6 @@ const routes = [
     name: 'janus-dashboard',
     component: JanusDashboard,
   },
-
 ];
 
 const router = new VueRouter({
