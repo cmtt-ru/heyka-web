@@ -1,15 +1,10 @@
 <template>
-  <div class="layout">
-    <ui-header />
-
+  <utility-page>
     <!-- Create state -->
-    <div
-      v-if="!finish"
-      class="layout__wrapper layout__wrapper--create"
-    >
+    <template v-if="!finish">
       <h1>{{ texts.title }}</h1>
 
-      <div class="form l-mt-24">
+      <div class="workspace-create-form l-mt-24">
         <ui-image
           :image="avatar"
           :size="76"
@@ -24,37 +19,37 @@
       </div>
 
       <ui-button
-        :type="6"
+        :type="1"
         wide
         class="l-mt-24"
+        size="xlarge"
         @click="createHandler"
       >
         {{ texts.createButton }}
       </ui-button>
-    </div>
+    </template>
 
     <!-- Finish state -->
-    <div
-      v-if="finish"
-      class="layout__wrapper layout__wrapper--finish"
-    >
-      <h1>{{ name }} {{ texts.finish }}</h1>
+    <template v-if="finish">
+      <h1>{{ name }} {{ texts.finishTitle }}</h1>
+      <p>{{ texts.finishSubtitle }}</p>
 
       <ui-button
         :type="1"
-        class="l-mt-24"
+        size="xlarge"
         @click="openAppHandler"
       >
         {{ texts.openApp }}
       </ui-button>
 
       <div
-        class="link-wrapper l-ml-8"
-        :class="{'link-wrapper--copied': linkCopied}"
+        class="workspace-create-link-wrapper l-ml-16"
+        :class="{'workspace-create-link-wrapper--copied': linkCopied}"
       >
         <ui-button
           :type="1"
           class="link-copy"
+          size="xlarge"
           @click="copyLinkHandler"
         >
           {{ texts.copy }}
@@ -64,23 +59,24 @@
           v-show="linkCopied"
           :type="5"
           class="link-copied"
+          size="xlarge"
           @click="copyLinkHandler"
         >
           {{ texts.copied }}
         </ui-button>
       </div>
-    </div>
-  </div>
+    </template>
+  </utility-page>
 </template>
 
 <script>
-import UiHeader from '@/components/UiHeader';
+import UtilityPage from '@/components/Layouts/UtilityPage';
 import UiButton from '@components/UiButton';
 import { UiInput, UiImage } from '@components/Form';
 
 export default {
   components: {
-    UiHeader,
+    UtilityPage,
     UiButton,
     UiInput,
     UiImage,
@@ -126,7 +122,8 @@ export default {
     async authorize() {
       if (this.authCode) {
         await this.$API.auth.signinByLink(this.authCode);
-        await this.$router.replace('/ws/create');
+        await this.$store.dispatch('tryToAuthorize');
+        // await this.$router.replace('/ws/create');
       }
     },
 
@@ -211,32 +208,22 @@ export default {
 };
 </script>
 
-<style lang="stylus" scoped>
-  .layout
+<style lang="stylus">
+  .workspace-create-form
     display flex
-    flex-direction column
-    width 100%
-    min-height 100vh
+    align-items center
 
-    &__wrapper
-      max-width 600px
-      margin 40px auto
+  .workspace-create-link-wrapper
+    display inline-block
+    position relative
 
-      .form
-        display flex
-        align-items center
+    &--copied
+      .link-copy
+        visibility hidden
 
-      .link-wrapper
-        display inline-block
-        position relative
-
-        &--copied
-          .link-copy
-            visibility hidden
-
-          .link-copied
-            position absolute
-            left 0
-            width 100%
+    .link-copied
+      position absolute
+      left 0
+      width 100%
 
 </style>
