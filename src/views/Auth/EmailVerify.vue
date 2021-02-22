@@ -1,79 +1,74 @@
 <template>
-  <div class="layout">
-    <ui-header />
+  <utility-page>
+    <loader
+      v-if="loading"
+      :size="48"
+    />
 
-    <div
-      class="verify"
-    >
-      <div class="verify__header">
-        {{ texts.header }}
-      </div>
+    <template v-else>
+      <h1>{{ title }}</h1>
+      <p>{{ subtitle }}</p>
 
-      <div class="verify__buttons-wrapper">
-        <router-link
-          :to="{ name: 'landing'}"
-          class="verify__button"
-          target="_blank"
-        >
+      <div
+        v-if="authCode"
+        class="email-verify-buttons"
+      >
+        <router-link :to="{name: 'landing'}">
           <ui-button
             :type="1"
-            class=""
-            submit
+            size="xlarge"
+            class="email-verify-buttons__download"
           >
-            {{ texts.download }}
+            {{ texts.downloadApp }}
           </ui-button>
         </router-link>
 
-        <router-link
-          :to="{ name: 'landing'}"
-          class="verify__button"
-          target="_blank"
-        >
+        <router-link :to="{name: 'workspace-create', params: {code: authCode}}">
           <ui-button
-            :type="1"
-            class=""
-            submit
+            :type="17"
+            size="xlarge"
+            class="email-verify-buttons__create"
           >
             {{ texts.createWorkspace }}
           </ui-button>
         </router-link>
       </div>
 
-      <a
-        :href="deepLink"
-        class="verify__open-app"
+      <ui-button
+        v-if="authCode"
+        :type="9"
+        size="large"
+        class="l-mt-18"
+        @click="openAppHandler"
       >
         {{ texts.openApp }}
-      </a>
-    </div>
-  </div>
+      </ui-button>
+    </template>
+  </utility-page>
 </template>
 
 <script>
+import UtilityPage from '@/components/Layouts/UtilityPage';
 import UiButton from '@components/UiButton';
-import UiHeader from '@/components/UiHeader';
+import Loader from '@components/Loader';
 
 export default {
   components: {
+    UtilityPage,
     UiButton,
-    UiHeader,
+    Loader,
   },
 
   data() {
     return {
-      pass: '',
-      JWT: null,
-      success: false,
-      authlink: '',
+      title: '',
+      subtitle: '',
+      loading: true,
+      authCode: '',
     };
   },
 
   computed: {
-
-    deepLink() {
-      return `login/${this.authlink}`;
-    },
-
     /**
      * Get needed texts from I18n-locale file
      * @returns {object}
@@ -81,63 +76,55 @@ export default {
     texts() {
       return this.$t('auth.verify');
     },
+
+    /**
+     * JWT token
+     * @returns {string}
+     */
+    jwt() {
+      return this.$route.query.token;
+    },
   },
 
   async mounted() {
-    this.JWT = this.$route.query.token;
-
     try {
-      const res = await this.$API.auth.verify(this.JWT);
+      await this.$API.auth.verify(this.jwt);
 
-      console.log(res);
       const linkData = await this.$API.auth.link();
 
-      this.authlink = linkData.code;
+      await this.$store.dispatch('tryToAuthorize');
+
+      this.authCode = linkData.code;
+      this.title = this.texts.successTitle;
+      this.subtitle = this.texts.successSubtitle;
     } catch (err) {
-      this.$router.push({ name: 'auth' });
-      console.log('ERROR:', err);
+      this.title = this.texts.failTitle;
+      this.subtitle = this.texts.failSubtitle;
+    } finally {
+      this.loading = false;
     }
+  },
+
+  methods: {
+    openAppHandler() {
+      this.$store.dispatch('launchDeepLink', `login/${this.authCode}`);
+    },
   },
 };
 </script>
 
-<style lang="stylus" scoped>
-.layout
-  display flex
-  flex-direction column
-  width 100%
+<style lang="stylus">
+  .email-verify-buttons
+    &__download
+      @media $desktop
+        margin-right 16px
 
-  &__wrapper
-    box-sizing border-box
-    display flex
-    padding-right 12px
-    flex 1 1 auto
+      @media $mobile
+        width 100%
+        margin-bottom 16px
 
-.verify
-  padding 012px
-  width 500px
-  max-width 90vw
-  margin 10px auto 12px
-  box-sizing border-box
-  display flex
-  flex-direction column
-  align-items center
-  justify-content flex-start
+    &__create
+      @media $mobile
+        width 100%
 
-  &__header
-    font-size 25px
-    margin 24px 0
-    text-transform uppercase
-
-  &__buttons-wrapper
-    display flex
-    flex-direction row
-    justify-content center
-
-  &__button
-   margin 0 12px
-
-  &__open-app
-    margin-top 20px
-    color var(--text-tech-2)
 </style>
