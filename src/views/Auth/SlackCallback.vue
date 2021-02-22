@@ -73,6 +73,10 @@ export default {
     } finally {
       this.loading = false;
     }
+
+    if (this.deepLink) {
+      this.openAppHandler();
+    }
   },
 
   methods: {
