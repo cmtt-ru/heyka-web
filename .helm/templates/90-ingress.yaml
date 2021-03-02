@@ -14,11 +14,7 @@ spec:
   - host: {{ pluck .Values.global.env .Values.app.url | first | default (printf "web-%s.%s" .Values.global.env .Values.app.domain_base) }}
     http:
       paths:
-      - path: /$
-        backend:
-          serviceName: {{ .Chart.Name }}
-          servicePort: static
-      - path: /(auth|guest|manage|ws|janus-monitoring|janus-dashboard)
+      - path: /
         backend:
           serviceName: {{ .Chart.Name }}
           servicePort: static
