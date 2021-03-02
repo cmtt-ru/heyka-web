@@ -1,17 +1,61 @@
 <template>
-  <div>
-    <p v-if="error">
-      {{ error }}
-    </p>
-  </div>
+  <utility-page>
+    <h1>{{ title }}</h1>
+    <p>{{ subtitle }}</p>
+    <ui-button
+      v-if="deepLink"
+      :type="1"
+      size="xlarge"
+      @click="openApp"
+    >
+      {{ texts.button }}
+    </ui-button>
+  </utility-page>
 </template>
 
 <script>
+import UtilityPage from '@/components/Layouts/UtilityPage';
+import UiButton from '@components/UiButton';
 import Cookies from 'js-cookie';
 import { COOKIE_URL } from '@sdk/Constants';
 
 export default {
+  components: {
+    UtilityPage,
+    UiButton,
+  },
+
+  data() {
+    return {
+      title: '',
+      subtitle: '',
+      deepLink: '',
+    };
+  },
+
   computed: {
+    /**
+     * Get needed texts from I18n-locale file
+     * @returns {object}
+     */
+    texts() {
+      return this.$t('auth.socialCallback');
+    },
+
+    /**
+     * Service name
+     * @returns {string | (string | null)[]}
+     */
+    serviceName() {
+      const serviceName = this.$route.query.s;
+
+      if (serviceName) {
+        return serviceName.charAt(0).toUpperCase() + serviceName.slice(1);
+      }
+
+      return '';
+    },
+
     /**
      * Authentication code
      * @returns {string | (string | null)[]}
@@ -33,7 +77,7 @@ export default {
      * @returns {string | (string | null)[]}
      */
     status() {
-      return this.$route.query.success;
+      return this.$route.query.success === 'true';
     },
 
     /**
@@ -50,17 +94,31 @@ export default {
   },
 
   async mounted() {
+    if (this.status) {
+      this.title = this.texts.successTitle;
+    } else {
+      this.title = this.texts.failTitle;
+      this.subtitle = this.texts.errorSubtitle;
+    }
+
     switch (this.action) {
+      case 'signup':
+        if (this.status) {
+          this.subtitle = this.texts.signupSubtitle;
+        }
+        break;
+
       case 'login':
-        if (this.status === 'true') {
-          this.launchDeepLink(`login/${this.authCode}`);
+        if (this.status) {
+          this.subtitle = this.$t('auth.socialCallback.loginSubtitle', [ this.serviceName ]);
+          this.deepLink = `login/${this.authCode}`;
         } else {
-          this.launchDeepLink(`login/false/${this.error}`);
+          this.deepLink = `login/false/${this.error}`;
         }
         break;
 
       case 'web-login':
-        if (this.status === 'true') {
+        if (this.status) {
           this.$router.replace({ name: 'landing' }).catch(() => {});
         }
         break;
@@ -72,29 +130,31 @@ export default {
           deepLink += `/${encodeURIComponent(this.error)}`;
         }
 
+        if (this.status) {
+          this.subtitle = this.$t('auth.socialCallback.linkSubtitle', [ this.serviceName ]);
+        }
+
         Cookies.remove('heyka-access-token', { domain: COOKIE_URL });
         Cookies.remove('heyka-auth-action', { domain: COOKIE_URL });
 
-        this.launchDeepLink(deepLink);
+        this.deepLink = deepLink;
         break;
       }
+    }
+
+    if (this.deepLink) {
+      this.$store.dispatch('launchDeepLink', this.deepLink);
     }
   },
 
   methods: {
-    /**
-     * Launch deep link
-     * @param {string} url – deep link url
-     * @returns {void}
-     */
-    launchDeepLink(url) {
-      console.log('launchDeepLink', `heyka://${url}`);
-      document.location.href = `heyka://${url}`;
+    openApp() {
+      this.$store.dispatch('launchDeepLink', this.deepLink);
     },
   },
 };
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
 
 </style>
