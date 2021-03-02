@@ -77,11 +77,6 @@ data:
                 index index.html;
             }
 
-            location ~* ^/(auth|guest|manage|ws|janus-monitoring|janus-dashboard) {
-                set $log_location "auth";
-                try_files $uri /app.html;
-            }
-
             location ~ \.(js|css|ico|woff2|png|jpeg|jpg|gif) {
                 set $log_location "static";
                 expires 2w;
@@ -102,6 +97,11 @@ data:
             location ~* "^/_tech/nginx/status$" {
                 access_log off;
                 stub_status;
+            }
+
+            location ~* / {
+               set $log_location "auth";
+               try_files $uri /app.html;
             }
         }
     }
