@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 
 const Landing = () => import(/* webpackChunkName: "main" */ '../views/Landing.vue');
 const PrivacyPolicy = () => import(/* webpackChunkName: "main" */ '../views/Static/PrivacyPolicy.vue');
+const TermsConditions = () => import(/* webpackChunkName: "main" */ '../views/Static/TermsConditions.vue');
 
 const AuthFormLayout = () => import(/* webpackChunkName: "main" */ '../views/Auth/FormLayout');
 const AuthOtherLayout = () => import(/* webpackChunkName: "main" */ '../views/Auth/OtherLayout');
@@ -48,6 +49,12 @@ const routes = [
     path: '/privacy-policy',
     name: 'privacy-policy',
     component: PrivacyPolicy,
+  },
+
+  {
+    path: '/terms-conditions',
+    name: 'terms-conditions',
+    component: TermsConditions,
   },
 
   /**
