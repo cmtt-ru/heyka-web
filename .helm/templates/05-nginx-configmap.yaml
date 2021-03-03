@@ -100,8 +100,8 @@ data:
             }
 
             location ~* / {
-               set $log_location "auth";
-               try_files $uri /app.html;
+                set $log_location "auth";
+                try_files $uri /app.html;
             }
         }
     }
