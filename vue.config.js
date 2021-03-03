@@ -80,7 +80,7 @@ module.exports = {
   css: {
     loaderOptions: {
       stylus: {
-        import: '~@styles/global.styl',
+        import: '~@styles/variables.styl',
       },
     },
   },
