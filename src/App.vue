@@ -23,8 +23,6 @@ export default {
   async created() {
     this.loadSvgSprite();
 
-    await prepareTokens();
-
     try {
       await this.$API.auth.check();
       await this.$store.dispatch('tryToAuthorize');
