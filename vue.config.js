@@ -77,6 +77,14 @@ module.exports = {
     },
   },
 
+  css: {
+    loaderOptions: {
+      stylus: {
+        import: '~@styles/global.styl',
+      },
+    },
+  },
+
   chainWebpack: config => {
     config.module
       .rule('svg-sprite')
