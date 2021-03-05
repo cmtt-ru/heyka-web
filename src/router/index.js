@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
-const Landing = () => import(/* webpackChunkName: "main" */ '../views/Landing.vue');
+const Landing = () => import(/* webpackChunkName: "main" */ '../views/Landing');
+const Downloads = () => import(/* webpackChunkName: "main" */ '../views/Landing/Downloads.vue');
 const PrivacyPolicy = () => import(/* webpackChunkName: "main" */ '../views/Static/PrivacyPolicy.vue');
 const TermsConditions = () => import(/* webpackChunkName: "main" */ '../views/Static/TermsConditions.vue');
 
@@ -39,8 +40,14 @@ const routes = [
    */
   {
     path: '/',
-    name: 'landing',
+    name: 'Landing',
     component: Landing,
+  },
+
+  {
+    path: '/downloads',
+    name: 'Downloads',
+    component: Downloads,
   },
 
   {
