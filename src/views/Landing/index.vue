@@ -8,13 +8,19 @@
       />
       <div class="controls">
         <div
-          v-popover.click="{name: 'Downloads'}"
+          v-popover.click="{name: 'Downloads', options: {modifiers:[{name: 'offset',
+                                                                     options: {
+                                                                       offset: [0, 14],
+                                                                     },}]}}"
           class="controls__downloads"
         >
-          Downloads
+          {{ texts.downloads }}
         </div>
         <div
-          v-popover.click="{name: 'Language'}"
+          v-popover.click="{name: 'Language', options: {modifiers:[{name: 'offset',
+                                                                    options: {
+                                                                      offset: [0, 14],
+                                                                    },}]}}"
           class="controls__language"
         >
           English
@@ -22,17 +28,18 @@
         <ui-button
           class="controls__signIn"
           :type="3"
+          size="large"
         >
-          Sign In
+          {{ texts.signIn }}
         </ui-button>
       </div>
     </div>
     <div class="page__inner">
       <div class="app-text">
-        <div class="info-header">
+        <div class="app-text__header">
           Скорость
         </div>
-        <div class="info-content">
+        <div class="app-text__content">
           Мгновенное подключение к комнатам обсуждения — пока до 32 участников одновременно
         </div>
       </div>
@@ -46,10 +53,10 @@
 
         class="app-text app-text--fading"
       >
-        <div class="info-header">
+        <div class="app-text__header">
           Лаконичность
         </div>
-        <div class="info-content">
+        <div class="app-text__content">
           Компактный, как рация, и чистый дизайн. Без раздражающих звонков, перекрывающих экран, и неприятных звуков
         </div>
       </div>
@@ -63,10 +70,10 @@
 
         class="app-text app-text--fading"
       >
-        <div class="info-header">
+        <div class="app-text__header">
           Прозрачность
         </div>
-        <div class="info-content">
+        <div class="app-text__content">
           Все данные, отправляемые на сервер, в реальном времени отражаются в приложении, мы не собираем персональных данных
         </div>
       </div>
@@ -77,10 +84,10 @@
       >
 
       <div class="app-text app-text--fading">
-        <div class="info-header">
+        <div class="app-text__header">
           Все платформы
         </div>
-        <div class="info-content">
+        <div class="app-text__content">
           Heyka работает на Web, iOS, Android, Windows, Mac и Linux
         </div>
       </div>
@@ -89,38 +96,38 @@
         alt=""
         class="app-image"
       >
+    </div>
 
-      <div class="bottom-info">
-        <div class="bottom-info__inner">
-          <ui-form class="email-form">
-            <ui-input
-              v-model="email"
-              class="email-form__input"
-              placeholder="Your mail to be first..."
-              email
-              required
-            />
-            <ui-button
-              :type="1"
-              size="large"
-              class="email-form__submit"
-              submit
-            >
-              Submit
-            </ui-button>
-          </ui-form>
-          <div class="extra-info">
-            <span class="extra-info--strong">{{ regAmount }} people</span>
-            <span> in waiting list now</span>
-            <br>
-            <span>Beta users will receive a free premium account for year </span>
-          </div>
+    <div class="bottom-info">
+      <div class="bottom-info__inner">
+        <ui-form class="email-form">
+          <ui-input
+            v-model="email"
+            class="email-form__input"
+            placeholder="Your mail to be first..."
+            email
+            required
+          />
+          <ui-button
+            :type="1"
+            size="large"
+            class="email-form__submit"
+            submit
+          >
+            {{ texts.submit }}
+          </ui-button>
+        </ui-form>
+        <div class="extra-info">
+          <span class="extra-info--strong">{{ regAmount }} people</span>
+          <span> in waiting list now</span>
+          <br>
+          <span>Beta users will receive a free premium account for year </span>
         </div>
       </div>
-
-      <div class="top-grad" />
-      <div class="bottom-grad" />
     </div>
+
+    <div class="top-grad" />
+    <div class="bottom-grad" />
   </div>
 </template>
 
@@ -147,7 +154,19 @@ export default {
     };
   },
 
+  computed: {
+    /**
+     * Get needed texts from I18n-locale file
+     * @returns {object}
+     */
+    texts() {
+      return this.$t('landing');
+    },
+  },
+
   mounted() {
+    document.getElementsByTagName('html')[0].classList.add('dark-html');
+
     observer = new IntersectionObserver(entries => {
       for (const entry of entries) {
         this.elementCheck(entry);
@@ -177,7 +196,6 @@ export default {
 
   methods: {
     elementCheck(el) {
-      console.log(el);
       if (el.intersectionRatio === 0) {
         el.target.classList.remove(STICKED_CLASS);
       } else {
@@ -189,6 +207,7 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+
 .page
   background-color #000000
   color #DFE0E3
@@ -211,15 +230,23 @@ export default {
   .controls
     display flex
     flex-direction row
+    align-items center
 
     &__downloads
       margin-right 28px
+      cursor pointer
 
     &__language
       margin-right 24px
+      cursor pointer
+
+    &__signIn
+      font-weight 500
+      font-size 18px
 
   &__inner
-    padding-top 200px
+    padding-top 25vh
+    padding-bottom 50px
     max-width 1200px
     margin 0 auto
 
@@ -250,13 +277,14 @@ export default {
   &.ui-sticked
     opacity 1
 
-.info-header
-  font-size 48px
-  line-height 54px
-  padding-bottom 24px
+  &__header
+    font-weight 900
+    font-size 48px
+    line-height 54px
+    padding-bottom 24px
 
-.info-content
-  height 220px
+  &__content
+    height 220px
 
 .app-image
     width 520px
@@ -283,7 +311,7 @@ export default {
 
   &__inner
     width 486px
-    margin 40px 120px 0 auto
+    margin 40px 116px 0 auto
 
     & .email-form
       position relative
@@ -294,15 +322,17 @@ export default {
       &__submit
         position absolute
         right 4px
-        top 4px
+        top 5px
         height 52px
-        width 120px
         border-radius 12px
         font-size 24px
         font-weight normal
 
+/deep/ .input-wrapper
+  border-radius 14px
+
 /deep/ .input
-  padding-right 132px
+  padding-right 162px
   padding-left 20px
   height 60px
   min-height 60px
@@ -311,11 +341,6 @@ export default {
   background-color rgba(255, 255, 255, 0.1)
   border-radius 14px
   font-size 24px
-  color white
-
-  &:focus
-    color black
-    border-radius 14px
 
 .extra-info
   font-size 16px
@@ -341,4 +366,101 @@ export default {
   right 0
   width 50%
   height 150px
+
+@media screen and (max-height: 800px)
+  .page__inner
+    width 1040px
+
+  .app-image
+    width 360px
+    padding-bottom calc(50vh - 180px)
+
+  .app-text
+    font-size 28px
+    line-height 38px
+
+    &__header
+      font-size 44px
+      line-height 52px
+
+  .bottom-info
+    height calc(75vh - 250px)
+
+    &__inner
+      margin 30px 44px 0 auto
+
+</style>
+
+<style lang="stylus">
+.dark-html
+    --app-bg: #333333 !important;
+    --text-tech-0: #DE4B39 !important;
+    --text-tech-1: #27AE60 !important;
+    --text-tech-2: #2886ff !important;
+    --text-tech-3: #FFFFFF !important;
+    --color-0: #DE4B39 !important;
+    --color-1: #27AE60 !important;
+    --color-2: #2886ff !important;
+    --color-3: #FDCB4B !important;
+    --color-4: #B1B3B5 !important;
+    --color-5: #000000 !important;
+    --stroke-0: #F6D4CF !important;
+    --stroke-1: #C9EAD7 !important;
+    --stroke-2: #C4DCFB !important;
+    --stroke-3: #D7D8D9 !important;
+    --button-bg-0: #FDF6F5 !important;
+    --button-bg-1: #F4FBF7 !important;
+    --button-bg-2: #F3F8FE !important;
+    --button-bg-3: #000000 !important;
+    --button-bg-4: #707070 !important;
+    --button-bg-5: transparent !important;
+    --button-bg-6: #555555 !important;
+    --button-bg-7: transparent !important;
+    --icon-bg: #E8F2FE !important;
+    --input: #222222 !important;
+    --item-bg-hover: #333333 !important;
+    --item-bg-active: #FFFFFF !important;
+    --item-bg-multi-pick: #222222 !important;
+    --shadow-10: rgba(0,0,0,0.1) !important;
+    --shadow-15: rgba(255,255,255,0.15) !important;
+    --shadow-20: rgba(255,255,255,0.2) !important;
+    --shadow-50: rgba(255,255,255,0.5) !important;
+    --scroll-bar: 255, 255, 255 !important;
+    --new-signal-01: #FFC876 !important;
+    --new-signal-02: #62C971 !important;
+    --new-signal-02-1: #2B6233 !important;
+    --new-signal-03: #FFA9A3 !important;
+    --new-signal-03-1: #FFADA9 !important;
+    --new-signal-03-2: #FFB2AD !important;
+    --new-signal-03-3: rgba(255, 97, 87, 0.1) !important;
+    --new-icon-0: #525B67 !important;
+    --new-UI-01: #3D92FF !important;
+    --new-UI-01-1: #4798FF !important;
+    --new-UI-01-2: #509DFF !important;
+    --new-UI-02: #DFE0E3 !important;
+    --new-UI-03: rgba(255, 255, 255, 0.7) !important;
+    --new-UI-04: #6B6E73 !important;
+    --new-UI-05: rgba(255, 255, 255, 0.3) !important;
+    --new-UI-06: rgba(255, 255, 255, 0.05) !important;
+    --new-UI-07: rgba(0, 0, 0, 0.1) !important;
+    --new-UI-08: rgba(255, 255, 255, 0.15) !important;
+    --new-UI-09: #000000 !important;
+    --new-bg-01: #272A30 !important;
+    --new-bg-02: rgba(0, 0, 0, 0.65) !important;
+    --new-bg-03: #3D4046 !important;
+    --new-bg-04: #1F2227 !important;
+    --new-bg-05: #141414 !important;
+    --new-stroke-01: rgba(255, 255, 255, 0.1) !important;
+    --new-system-01: #FFC12F !important;
+    --new-system-01-1: #FFE097 !important;
+    --new-system-01-2: #DFA023 !important;
+    --new-system-02: #FF6157 !important;
+    --new-system-02-1: #FFB0AB !important;
+    --new-system-02-2: #E24640 !important;
+    --new-overlay-01: #333333 !important;
+    --new-overlay-02: #404040 !important;
+    --new-overlay-03: #262626 !important;
+    --new-shadow-01: 0px 2px 6px rgba(0, 0, 0, 0.12) !important;
+    --new-shadow-02: 0px 1px 1px rgba(0, 0, 0, 0.06), 0px 2px 6px rgba(0, 0, 0, 0.12) !important;
+    --new-shadow-03: 0px 0px 20px rgba(0, 0, 0, 0.08), 0px 10px 30px rgba(0, 0, 0, 0.12) !important;
 </style>

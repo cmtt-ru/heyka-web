@@ -46,7 +46,7 @@ const routes = [
 
   {
     path: '/downloads',
-    name: 'Downloads',
+    name: 'downloads',
     component: Downloads,
   },
 
