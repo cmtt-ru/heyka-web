@@ -1,40 +1,111 @@
 <template>
   <div class="page">
-    <div class="page__header">
-      <svg-icon
-        name="logo-full"
-        width="105"
-        height="32"
-      />
-      <div class="controls">
-        <div
-          v-popover.click="{name: 'Downloads', options: {modifiers:[{name: 'offset',
-                                                                     options: {
-                                                                       offset: [0, 14],
-                                                                     },}]}}"
-          class="controls__downloads"
-        >
-          {{ texts.downloads }}
+    <div class="page__inner">
+      <div class="page__header">
+        <div class="controls">
+          <div class="burger mobile-element">
+            <svg-icon
+              name="burger"
+              width="24"
+              height="24"
+            />
+          </div>
+          <svg-icon
+            name="logo-full"
+            width="105"
+            height="32"
+          />
         </div>
-        <div
-          v-popover.click="{name: 'Language', options: {modifiers:[{name: 'offset',
-                                                                    options: {
-                                                                      offset: [0, 14],
-                                                                    },}]}}"
-          class="controls__language"
-        >
-          English
+
+        <div class="controls desktop-element">
+          <div
+            v-popover.click="{name: 'Downloads', options: {modifiers:[{name: 'offset',
+                                                                       options: {
+                                                                         offset: [0, 14],
+                                                                       },}]}}"
+            class="controls__downloads"
+          >
+            {{ texts.downloads }}
+            <svg-icon
+              class="arrow"
+              name="arrow-down"
+              width="16"
+              height="16"
+            />
+          </div>
+          <div
+            v-popover.click="{name: 'Language', options: {modifiers:[{name: 'offset',
+                                                                      options: {
+                                                                        offset: [0, 14],
+                                                                      },}]}}"
+            class="controls__language"
+          >
+            <svg-icon
+              name="globe"
+              width="16"
+              height="16"
+            />
+            {{ languages[language] }}
+            <svg-icon
+              class="arrow"
+              name="arrow-down"
+              width="16"
+              height="16"
+            />
+          </div>
+          <ui-button
+            class="controls__signIn"
+            :type="3"
+            size="large"
+          >
+            {{ texts.signIn }}
+          </ui-button>
         </div>
+
         <ui-button
-          class="controls__signIn"
+          class="controls__signIn mobile-element"
           :type="3"
           size="large"
         >
-          {{ texts.signIn }}
+          Get app
         </ui-button>
       </div>
-    </div>
-    <div class="page__inner">
+
+      <div class="bottom-info mobile-element">
+        <div class="bottom-info__inner">
+          <ui-form class="email-form">
+            <ui-input
+              v-model="email"
+              class="email-form__input"
+              :placeholder="texts.mailPlaceholder"
+              email
+              required
+            />
+            <ui-button
+              :type="1"
+              size="large"
+              class="email-form__submit"
+              submit
+            >
+              <span class="email-form__submit--long">{{ texts.submit }}</span>
+              <span class="email-form__submit--short">
+                <svg-icon
+                  name="arrow-down"
+                  width="16"
+                  height="16"
+                />
+              </span>
+            </ui-button>
+          </ui-form>
+          <div class="extra-info">
+            <span class="extra-info--strong">{{ regAmount }} people</span>
+            <span> in waiting list now</span>
+            <br>
+            <span>Beta users will receive a free premium account for year </span>
+          </div>
+        </div>
+      </div>
+
       <div class="app-text">
         <div class="app-text__header">
           Скорость
@@ -63,7 +134,7 @@
       <img
         src="./assets/img2.png"
         alt=""
-        class="app-image"
+        class="app-image app-image--fading"
       >
 
       <div
@@ -80,7 +151,7 @@
       <img
         src="./assets/img3.png"
         alt=""
-        class="app-image"
+        class="app-image app-image--fading"
       >
 
       <div class="app-text app-text--fading">
@@ -94,7 +165,7 @@
       <img
         src="./assets/img4.png"
         alt=""
-        class="app-image"
+        class="app-image app-image--fading"
       >
     </div>
 
@@ -104,7 +175,7 @@
           <ui-input
             v-model="email"
             class="email-form__input"
-            placeholder="Your mail to be first..."
+            :placeholder="texts.mailPlaceholder"
             email
             required
           />
@@ -114,20 +185,32 @@
             class="email-form__submit"
             submit
           >
-            {{ texts.submit }}
+            <span class="email-form__submit--long">{{ texts.submit }}</span>
+            <span class="email-form__submit--short">
+              <svg-icon
+                name="arrow-down"
+                width="16"
+                height="16"
+              />
+            </span>
           </ui-button>
         </ui-form>
         <div class="extra-info">
-          <span class="extra-info--strong">{{ regAmount }} people</span>
-          <span> in waiting list now</span>
+          <span class="extra-info--strong">{{ $tc('landing.peopleAmount',regAmount ) }} </span>
+          <span>{{ texts.waitingListText }}</span>
           <br>
-          <span>Beta users will receive a free premium account for year </span>
+          <span>{{ texts.betaBonus }}</span>
+        </div>
+
+        <div class="bottom-links desktop-element">
+          <a href="https://heyka.app/terms-conditions">{{ texts.terms }}</a>
+          <a href="https://heyka.app/privacy-policy">{{ texts.privacy }}</a>
         </div>
       </div>
     </div>
 
-    <div class="top-grad" />
-    <div class="bottom-grad" />
+    <div class="top-grad desktop-element" />
+    <div class="bottom-grad desktop-element" />
   </div>
 </template>
 
@@ -151,10 +234,17 @@ export default {
       version: '1.1.12',
       regAmount: 483,
       email: '',
+      languages: {
+        en: 'English',
+        ru: 'Русский',
+      },
     };
   },
 
   computed: {
+    language() {
+      return this.$store.state.app.language;
+    },
     /**
      * Get needed texts from I18n-locale file
      * @returns {object}
@@ -172,34 +262,22 @@ export default {
         this.elementCheck(entry);
       }
     }, {
-      threshold: 0,
-      rootMargin: `0px 0px -74%`,
+      threshold: 1,
+      rootMargin: `100% 0px 25%`,
     });
 
-    for (const el of document.getElementsByClassName('app-text--fading')) {
+    for (const el of document.getElementsByClassName('app-image--fading')) {
+      el.previousSibling.classList.add('app-text--observable');
       observer.observe(el);
     }
-
-    // observer2 = new IntersectionObserver(entries => {
-    //   for (const entry of entries) {
-    //     this.elementCheck(entry);
-    //   }
-    // }, {
-    //   threshold: 0,
-    //   rootMargin: `0px 0px -80%`,
-    // });
-
-    // for (const el of document.getElementsByClassName('app-image')) {
-    //   observer2.observe(el);
-    // }
   },
 
   methods: {
     elementCheck(el) {
-      if (el.intersectionRatio === 0) {
-        el.target.classList.remove(STICKED_CLASS);
+      if (el.intersectionRatio === 1) {
+        el.target.previousSibling.classList.add(STICKED_CLASS);
       } else {
-        el.target.classList.add(STICKED_CLASS);
+        el.target.previousSibling.classList.remove(STICKED_CLASS);
       }
     },
   },
@@ -213,14 +291,19 @@ export default {
   color #DFE0E3
   font-size 18px
 
+  &__inner
+    max-width 1200px
+    margin 0 auto
+
   &__header
-    position fixed
+    position sticky
     top 0
-    width 100vw
+    left 0
+    width 100%
     box-sizing border-box
-    padding 0 40px
     background-color #000000
     height 80px
+    margin-bottom calc(50vh - 340px)
     display flex
     flex-direction row
     align-items center
@@ -236,34 +319,45 @@ export default {
       margin-right 28px
       cursor pointer
 
+      & .arrow
+        opacity 0.5
+        transform translateY(2px)
+
     &__language
       margin-right 24px
       cursor pointer
 
+      & .icon
+        transform translateY(2px)
+
+      & .arrow
+        opacity 0.5
+
     &__signIn
       font-weight 500
       font-size 18px
-
-  &__inner
-    padding-top 25vh
-    padding-bottom 50px
-    max-width 1200px
-    margin 0 auto
+      color #FFFFFF
+      border none
+      background-color rgba(255, 255, 255, 0.2)
 
 .app-text
   position sticky
   display inline-block
-  top 25%
+  top calc(50vh - 260px)
   width 486px
   font-size 32px
   line-height 44px
   background-color #000000
   margin-right 194px
+
   vertical-align top
 
   &--fading
     opacity 0
-    transition opacity 0.3s ease-out
+    transition opacity 0.2s ease-out
+
+  &--observable
+    margin-top -10000px
 
   &:before
     content ''
@@ -288,7 +382,7 @@ export default {
 
 .app-image
     width 520px
-    flex-srink 0
+    flex-shrink 0
     padding-bottom calc(50vh - 260px)
     vertical-align top
 
@@ -298,13 +392,13 @@ export default {
   bottom 0
   left 0
   width 50%
-  height calc(75vh - 320px)
+  height calc(50vh - 60px)
 
   &:before
     content ''
     position absolute
     width 100%
-    height 29px
+    height 10px
     background linear-gradient(rgba(0,0,0,0), #000000);
     bottom 100%
     left 0
@@ -313,20 +407,26 @@ export default {
     width 486px
     margin 40px 116px 0 auto
 
-    & .email-form
-      position relative
+.email-form
+  position relative
 
-      &__input
-        height 60px
+  &__input
+    height 60px
 
-      &__submit
-        position absolute
-        right 4px
-        top 5px
-        height 52px
-        border-radius 12px
-        font-size 24px
-        font-weight normal
+  &__submit
+    position absolute
+    right 4px
+    top 5px
+    height 52px
+    border-radius 12px
+    font-size 24px
+    font-weight normal
+
+    &--short
+      display none
+
+      & .icon
+        transform rotate(-90deg)
 
 /deep/ .input-wrapper
   border-radius 14px
@@ -351,12 +451,23 @@ export default {
   &--strong
     color #FFFFFF
 
+.bottom-links
+  font-size 18px
+  opacity 0.5
+  position absolute
+  bottom 24px
+
+  & a
+    color #DFE0E3
+    margin-right 24px
+    display inline-block
+
 .top-grad
   background linear-gradient(#000000, rgba(0,0,0,0));
   position fixed
   top 0
   right 0
-  width 50%
+  width calc(50% - 50px)
   height 150px
 
 .bottom-grad
@@ -364,30 +475,171 @@ export default {
   position fixed
   bottom 0
   right 0
-  width 50%
+  width calc(50% - 50px)
   height 150px
 
-@media screen and (max-height: 800px)
-  .page__inner
-    width 1040px
+.mobile-element
+  display none
+
+@media screen and (max-height: 800px), screen and (max-width: 1230px)
+  .page
+
+    &__header
+      margin-bottom calc(50vh - 260px)
+
+    &__inner
+      width 944px
 
   .app-image
     width 360px
     padding-bottom calc(50vh - 180px)
 
   .app-text
+    top calc(50vh - 180px)
     font-size 28px
     line-height 38px
+    margin-right 98px
 
     &__header
       font-size 44px
       line-height 52px
 
   .bottom-info
-    height calc(75vh - 250px)
+    height calc(50vh - 60px)
+    width calc(50% + 12px)
 
     &__inner
-      margin 30px 44px 0 auto
+      margin 30px 0 0 auto
+
+    .bottom-grad
+      height 100px
+
+@media screen and (max-width: 1024px), screen and (max-height: 650px)
+  .page__inner
+    width 640px
+
+  .app-image
+    width 320px
+    padding-bottom calc(50vh - 160px)
+
+  .app-text
+    width 294px
+    font-size 20px
+    line-height 28px
+    margin-right 26px
+
+    &__header
+      font-size 32px
+      line-height 52px
+
+  .bottom-info
+    height calc(50vh - 70px)
+    width 50%
+
+    &__inner
+      width 294px
+      margin 20px 30px 0 auto
+
+  .email-form
+
+      &__input
+        height 40px
+
+      &__submit
+        right 4px
+        top 5px
+        height 32px
+        border-radius 6px
+        font-size 16px
+
+        &--short
+          display flex
+
+        &--long
+          display none
+
+  /deep/ .input-wrapper
+    border-radius 10px
+
+  /deep/ .input
+    padding-right 52px
+    padding-left 12px
+    height 40px
+    min-height 40px
+    border-radius 10px
+    font-size 16px
+
+  .extra-info
+    margin-top 24px
+
+  .top-grad
+    width 50%
+    height 150px
+
+  .bottom-grad
+    width 50%
+    height 100px
+
+@media screen and (max-width: 720px)
+
+  .mobile-element
+    display initial
+
+  .desktop-element
+    display none !important
+
+  .page__inner
+    max-width 520px
+    width calc(100vw - 48px)
+    padding-bottom 0
+
+  .page__header
+    margin-bottom 24px
+
+  .burger
+    margin-right 12px
+    display flex
+    flex-direction row
+    align-items center
+
+  .app-image
+    width 100%
+    padding-bottom 32px
+
+  .app-text
+    position initial
+    font-size 16px
+    line-height  22px
+    margin 0 auto 32px
+    width auto
+
+    &--fading
+      opacity 1
+
+    &__header
+      font-size 24px
+      line-height 32px
+
+    &__content
+      height auto
+
+  .bottom-info
+    position initial
+    height auto
+    width 100%
+
+    &:before
+      display none
+
+    &__inner
+      max-width 520px
+      width calc(100vw - 48px)
+      margin 0 auto
+      padding-bottom 32px
+
+  .extra-info
+    font-size 12px
+    line-height 16px
 
 </style>
 

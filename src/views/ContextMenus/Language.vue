@@ -5,12 +5,14 @@
     <div class="buttons">
       <ui-button
         :type="11"
+        data-popover-close
         @click="setLanguage('en')"
       >
         English
       </ui-button>
       <ui-button
         :type="11"
+        data-popover-close
         @click="setLanguage('ru')"
       >
         Русский

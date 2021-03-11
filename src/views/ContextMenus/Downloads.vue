@@ -5,6 +5,7 @@
     <div class="buttons">
       <ui-button
         :type="11"
+        data-popover-close
       >
         <a
           class="link"
@@ -15,6 +16,7 @@
       </ui-button>
       <ui-button
         :type="11"
+        data-popover-close
       >
         <a
           class="link"
@@ -25,6 +27,7 @@
       </ui-button>
       <ui-button
         :type="11"
+        data-popover-close
       >
         <a
           class="link"
@@ -36,6 +39,7 @@
       <router-link :to="{ name: 'downloads'}">
         <ui-button
           :type="11"
+          data-popover-close
         >
           Downloads
         </ui-button>
