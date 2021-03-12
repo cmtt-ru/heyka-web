@@ -3,9 +3,13 @@
     <div class="page__inner">
       <div class="page__header">
         <div class="controls">
-          <div class="burger mobile-element">
+          <div
+            id="burger-button"
+            class="burger mobile-element"
+            @click="menuClickHandler"
+          >
             <svg-icon
-              name="burger"
+              :name="menuIcon"
               width="24"
               height="24"
             />
@@ -53,13 +57,17 @@
               height="16"
             />
           </div>
-          <ui-button
-            class="controls__signIn"
-            :type="3"
-            size="large"
+          <a
+            href="https://heyka.app/auth"
+            target="loginFrame"
           >
-            {{ texts.signIn }}
-          </ui-button>
+            <ui-button
+              class="controls__signIn"
+              :type="3"
+              size="large"
+            >
+              {{ texts.signIn }}
+            </ui-button></a>
         </div>
 
         <ui-button
@@ -67,7 +75,7 @@
           :type="3"
           size="large"
         >
-          Get app
+          {{ texts.getApp }}
         </ui-button>
       </div>
 
@@ -98,10 +106,10 @@
             </ui-button>
           </ui-form>
           <div class="extra-info">
-            <span class="extra-info--strong">{{ regAmount }} people</span>
-            <span> in waiting list now</span>
+            <span class="extra-info--strong">{{ $tc('landing.peopleAmount',regAmount ) }} </span>
+            <span>{{ texts.waitingListText }}</span>
             <br>
-            <span>Beta users will receive a free premium account for year </span>
+            <span>{{ texts.betaBonus }}</span>
           </div>
         </div>
       </div>
@@ -115,6 +123,7 @@
         </div>
       </div>
       <img
+        id="img1"
         src="./assets/img1.png"
         alt=""
         class="app-image"
@@ -162,11 +171,66 @@
           Heyka работает на Web, iOS, Android, Windows, Mac и Linux
         </div>
       </div>
-      <img
-        src="./assets/img4.png"
-        alt=""
+      <div
         class="app-image app-image--fading"
       >
+        <a
+          class="app-image__quarter"
+          target="_blank"
+          :href="macLink"
+        >
+          <svg-icon
+            name="apple-white"
+            width="60"
+            height="60"
+          />
+          <div class="app-image__quarter__label">
+            macOS | iOS
+          </div>
+        </a>
+        <a
+          class="app-image__quarter"
+          target="_blank"
+          href="#"
+        >
+          <svg-icon
+            name="android"
+            width="60"
+            height="60"
+          />
+          <div class="app-image__quarter__label">
+            Android
+          </div>
+        </a>
+        <a
+          class="app-image__quarter"
+          target="_blank"
+          :href="winLink"
+        >
+          <svg-icon
+            name="windows"
+            width="60"
+            height="60"
+          />
+          <div class="app-image__quarter__label">
+            Windows
+          </div>
+        </a>
+        <a
+          class="app-image__quarter"
+          target="_blank"
+          :href="linuxLink"
+        >
+          <svg-icon
+            name="ubuntu"
+            width="60"
+            height="60"
+          />
+          <div class="app-image__quarter__label">
+            Linux
+          </div>
+        </a>
+      </div>
     </div>
 
     <div class="bottom-info">
@@ -211,6 +275,54 @@
 
     <div class="top-grad desktop-element" />
     <div class="bottom-grad desktop-element" />
+
+    <svg-icon
+      id="more-arrow"
+      class="more-arrow desktop-element"
+      name="scroll-down"
+      width="60"
+      height="137"
+      @click.native="scrollPage"
+    />
+
+    <div
+      id="menu"
+      class="menu mobile-element"
+    >
+      <a
+        class="menu__item"
+        href="https://heyka.app/auth"
+      >{{ texts.signIn }}</a>
+      <div
+        v-popover.click="{name: 'Language'}"
+        class="menu__item"
+      >
+        <svg-icon
+          name="globe"
+          width="16"
+          height="16"
+        />
+        {{ languages[language] }}
+        <svg-icon
+          class="arrow"
+          name="arrow-down"
+          width="16"
+          height="16"
+        />
+      </div>
+      <a
+        class="menu__item menu__item--secondary"
+        href="https://heyka.app/terms-conditions"
+      >{{ texts.terms }}</a>
+      <a
+        class="menu__item menu__item--secondary"
+        href="https://heyka.app/privacy-policy"
+      >{{ texts.privacy }}</a>
+    </div>
+
+    <!-- <div class="auth-wrapper">
+      <auth class="auth" />
+    </div> -->
   </div>
 </template>
 
@@ -218,6 +330,7 @@
 
 import { UiInput, UiForm } from '@components/Form';
 import UiButton from '@components/UiButton';
+// import Auth from '@components/Auth/Layout';
 
 let observer;
 // let observer2;
@@ -228,12 +341,14 @@ export default {
     UiButton,
     UiInput,
     UiForm,
+    // Auth,
   },
   data() {
     return {
       version: '1.1.12',
       regAmount: 483,
       email: '',
+      menuOpened: false,
       languages: {
         en: 'English',
         ru: 'Русский',
@@ -252,10 +367,30 @@ export default {
     texts() {
       return this.$t('landing');
     },
+
+    menuIcon() {
+      if (this.menuOpened) {
+        return 'close';
+      } else {
+        return 'burger';
+      }
+    },
+
+    macLink() {
+      return `https://storage.yandexcloud.net/heyka-beta-bin/download/Heyka-${this.version}.dmg`;
+    },
+    winLink() {
+      return `https://storage.yandexcloud.net/heyka-beta-bin/download/Heyka%20Setup%20${this.version}.exe`;
+    },
+    linuxLink() {
+      return `https://storage.yandexcloud.net/heyka-beta-bin/download/heyka_${this.version}_amd64.deb`;
+    },
   },
 
   mounted() {
     document.getElementsByTagName('html')[0].classList.add('dark-html');
+
+    window.addEventListener('scroll', this.onScroll);
 
     observer = new IntersectionObserver(entries => {
       for (const entry of entries) {
@@ -279,6 +414,24 @@ export default {
       } else {
         el.target.previousSibling.classList.remove(STICKED_CLASS);
       }
+    },
+
+    menuClickHandler() {
+      this.menuOpened = !this.menuOpened;
+      document.getElementById('menu').classList.toggle('menu--opened');
+      document.getElementById('burger-button').classList.toggle('burger--opened');
+    },
+
+    scrollPage() {
+      window.scrollBy(0, document.getElementById('img1').offsetHeight);
+      window.removeEventListener('scroll', this.onScroll);
+      document.getElementById('more-arrow').classList.add('more-arrow--hidden');
+    },
+
+    onScroll() {
+      console.log('scroll');
+      window.removeEventListener('scroll', this.onScroll);
+      document.getElementById('more-arrow').classList.add('more-arrow--hidden');
     },
   },
 };
@@ -381,10 +534,39 @@ export default {
     height 220px
 
 .app-image
-    width 520px
-    flex-shrink 0
-    padding-bottom calc(50vh - 260px)
-    vertical-align top
+  display inline-block
+  width 520px
+  height 520px
+  flex-shrink 0
+  padding-bottom calc(50vh - 260px)
+  vertical-align top
+
+  &__quarter
+    display inline-block
+    background-color #171717
+    color white
+    padding 32px
+    font-size 24px
+    line-height 32px
+    box-sizing border-box
+    border-radius 10px
+    width calc(50% - 10px)
+    height calc(50% - 10px)
+    position relative
+    cursor pointer
+
+    &:hover
+      transform translateY(-4px)
+
+    &:nth-child(odd)
+      margin-right 20px
+
+    &:nth-child(-n+2)
+      margin-bottom 20px
+
+    &__label
+      position absolute
+      bottom 32px
 
 .bottom-info
   background-color black
@@ -442,6 +624,15 @@ export default {
   border-radius 14px
   font-size 24px
 
+/deep/ .ui-error
+  border 1px solid transparent
+
+  & input
+    background-color rgba(255, 121, 121, 0.21)
+
+/deep/ .error-text
+  color var(--new-signal-03-1)
+
 .extra-info
   font-size 16px
   line-height 22px
@@ -478,6 +669,39 @@ export default {
   width calc(50% - 50px)
   height 150px
 
+.more-arrow
+  position fixed
+  bottom 0
+  left 0
+  right 0
+  margin 0 auto
+  opacity 1
+  transition opacity 0.2s ease-out
+
+  &--hidden
+    opacity 0
+    pointer-events none
+
+.auth-wrapper
+  position fixed
+  top 0
+  left 0
+  right 0
+  bottom 0
+  margin 0 auto
+  background rgba(0,0,0,0.5)
+  display flex
+  flex-direction column
+  justify-content center
+  align-items center
+  z-index 20
+
+  & .auth
+     width calc(100vw - 32px)
+     height calc(100vh - 32px)
+     max-width 520px
+     max-height 520px
+
 .mobile-element
   display none
 
@@ -492,7 +716,17 @@ export default {
 
   .app-image
     width 360px
+    height 360px
     padding-bottom calc(50vh - 180px)
+
+    &__quarter
+      padding 24px
+      font-size 16px
+      line-height 24px
+      border-radius 8px
+
+      &__label
+        bottom 24px
 
   .app-text
     top calc(50vh - 180px)
@@ -515,14 +749,30 @@ export default {
       height 100px
 
 @media screen and (max-width: 1024px), screen and (max-height: 650px)
-  .page__inner
-    width 640px
+  .page
+
+    &__header
+      margin-bottom calc(50vh - 240px)
+
+    &__inner
+       width 640px
 
   .app-image
     width 320px
+    height 320px
     padding-bottom calc(50vh - 160px)
 
+    &__quarter
+      padding 16px
+      font-size 16px
+      line-height 24px
+      border-radius 6px
+
+      &__label
+        bottom 16px
+
   .app-text
+    top calc(50vh - 160px)
     width 294px
     font-size 20px
     line-height 28px
@@ -601,9 +851,16 @@ export default {
     display flex
     flex-direction row
     align-items center
+    transform rotate(0deg)
+    transition transform 0.2s ease-out
+
+    &--opened
+      transform rotate(90deg)
 
   .app-image
     width 100%
+    height calc(100vw - 48px)
+    max-height 520px
     padding-bottom 32px
 
   .app-text
@@ -640,6 +897,58 @@ export default {
   .extra-info
     font-size 12px
     line-height 16px
+
+  .menu
+    position fixed
+    top 80px
+    left 0
+    right 0
+    bottom 0
+    margin 0 auto
+    max-width 520px
+    display flex
+    flex-direction column
+    justify-content flex-start
+    align-items flex-start
+    padding 20px 23px
+    background-color #000
+    pointer-events none
+    opacity 0
+    transition opacity 0.2s ease-out
+
+    &__item
+      font-size 24px
+      line-height 32px
+      padding-bottom 16px
+      display inline-block
+      pointer-events none
+      opacity 0
+      transition opacity 0.2s linear
+      transition-delay 0
+
+      &--secondary
+        color #7f7f7f
+
+    &--opened
+      pointer-events auto
+      opacity 1
+
+      & .menu__item
+        pointer-events auto
+        opacity 1
+
+        &:nth-child(1) {
+          transition-delay 0.1s
+        }
+        &:nth-child(2) {
+          transition-delay 0.2s
+        }
+        &:nth-child(3) {
+          transition-delay 0.3s
+        }
+        &:nth-child(4) {
+          transition-delay 0.4s
+        }
 
 </style>
 
@@ -681,9 +990,9 @@ export default {
     --new-signal-01: #FFC876 !important;
     --new-signal-02: #62C971 !important;
     --new-signal-02-1: #2B6233 !important;
-    --new-signal-03: #FFA9A3 !important;
-    --new-signal-03-1: #FFADA9 !important;
-    --new-signal-03-2: #FFB2AD !important;
+    --new-signal-03: #FF6157 !important;
+    --new-signal-03-1: #FF6157 !important;
+    --new-signal-03-2: #FF6157 !important;
     --new-signal-03-3: rgba(255, 97, 87, 0.1) !important;
     --new-icon-0: #525B67 !important;
     --new-UI-01: #3D92FF !important;
