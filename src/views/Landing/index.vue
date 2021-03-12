@@ -58,7 +58,7 @@
             />
           </div>
           <a
-            href="https://heyka.app/auth"
+            :href="WEB_URL+'/auth'"
             target="loginFrame"
           >
             <ui-button
@@ -267,8 +267,8 @@
         </div>
 
         <div class="bottom-links desktop-element">
-          <a href="https://heyka.app/terms-conditions">{{ texts.terms }}</a>
-          <a href="https://heyka.app/privacy-policy">{{ texts.privacy }}</a>
+          <a :href="WEB_URL+'/terms-conditions'">{{ texts.terms }}</a>
+          <a :href="WEB_URL+'/privacy-policy'">{{ texts.privacy }}</a>
         </div>
       </div>
     </div>
@@ -291,7 +291,7 @@
     >
       <a
         class="menu__item"
-        href="https://heyka.app/auth"
+        :href="WEB_URL+'/auth'"
       >{{ texts.signIn }}</a>
       <div
         v-popover.click="{name: 'Language'}"
@@ -312,11 +312,11 @@
       </div>
       <a
         class="menu__item menu__item--secondary"
-        href="https://heyka.app/terms-conditions"
+        :href="WEB_URL+'/terms-conditions'"
       >{{ texts.terms }}</a>
       <a
         class="menu__item menu__item--secondary"
-        href="https://heyka.app/privacy-policy"
+        :href="WEB_URL+'/privacy-policy'"
       >{{ texts.privacy }}</a>
     </div>
 
@@ -330,6 +330,7 @@
 
 import { UiInput, UiForm } from '@components/Form';
 import UiButton from '@components/UiButton';
+import { WEB_URL } from '@sdk/Constants';
 // import Auth from '@components/Auth/Layout';
 
 let observer;
@@ -346,6 +347,7 @@ export default {
   data() {
     return {
       version: '1.1.12',
+      WEB_URL,
       regAmount: 483,
       email: '',
       menuOpened: false,
@@ -938,16 +940,16 @@ export default {
         opacity 1
 
         &:nth-child(1) {
-          transition-delay 0.1s
+          transition-delay 0.075s
         }
         &:nth-child(2) {
-          transition-delay 0.2s
+          transition-delay 0.15s
         }
         &:nth-child(3) {
-          transition-delay 0.3s
+          transition-delay 0.225s
         }
         &:nth-child(4) {
-          transition-delay 0.4s
+          transition-delay 0.3s
         }
 
 </style>
