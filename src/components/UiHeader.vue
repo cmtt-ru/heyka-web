@@ -52,7 +52,6 @@ export default {
     ...mapGetters({
       me: 'myInfo',
       userAvatar: 'users/getUserAvatarUrl',
-      animationChannel: 'app/getAnimationChannel',
     }),
   },
 };

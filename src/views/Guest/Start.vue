@@ -161,7 +161,7 @@ export default {
 };
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
   .guest-start
     max-width 500px
     margin 48px auto

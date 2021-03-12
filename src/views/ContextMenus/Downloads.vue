@@ -1,61 +1,84 @@
 <template>
-  <div class="wrapper">
-    <div class="content">
-      <img
-        width="200"
-        height="200"
-        alt="Vue logo"
-        :src="logo"
+  <popover
+    :min-width="148"
+  >
+    <div class="buttons">
+      <ui-button
+        :type="11"
+        data-popover-close
       >
-      <p class="title">
-        Heyka {{ version }}
-      </p>
-
-      <div class="download">
         <a
           class="link"
           target="_blank"
           :href="macLink"
           @click="startPinging"
         >macOS</a>
+      </ui-button>
+      <ui-button
+        :type="11"
+        data-popover-close
+      >
         <a
           class="link"
           target="_blank"
           :href="winLink"
           @click="startPinging"
         >Windows</a>
+      </ui-button>
+      <ui-button
+        :type="11"
+        data-popover-close
+      >
         <a
           class="link"
           target="_blank"
           :href="linuxLink"
           @click="startPinging"
         >Linux</a>
-      </div>
+      </ui-button>
+      <router-link :to="{ name: 'downloads'}">
+        <ui-button
+          :type="11"
+          data-popover-close
+        >
+          Downloads
+        </ui-button>
+      </router-link>
     </div>
-  </div>
+  </popover>
 </template>
 
 <script>
+import Popover from '@components/Popover';
+import UiButton from '@components/UiButton';
 import { authFileStore } from '@/store/localStore';
-import logo from '@assets/logo.png';
 
 // eslint-disable-next-line no-magic-numbers
 const PORTS = [9615, 48757, 48852, 49057, 49086];
 const pingTime = 2000;
 
 export default {
-  name: 'Home',
   components: {
-
+    Popover,
+    UiButton,
   },
+
   data() {
     return {
-      version: '1.1.11',
+      version: '1.1.12',
       pingInterval: null,
-      logo,
     };
   },
+
   computed: {
+    /**
+     * Get needed texts from I18n-locale file
+     * @returns {object}
+     */
+    texts() {
+      return this.$t('landing');
+    },
+
     macLink() {
       return `https://storage.yandexcloud.net/heyka-beta-bin/download/Heyka-${this.version}.dmg`;
     },
@@ -65,6 +88,7 @@ export default {
     linuxLink() {
       return `https://storage.yandexcloud.net/heyka-beta-bin/download/heyka_${this.version}_amd64.deb`;
     },
+
   },
 
   methods: {
@@ -91,34 +115,3 @@ export default {
   },
 };
 </script>
-
-<style lang="stylus" scoped>
-.wrapper
-  display flex
-  height 100vh
-  justify-content center
-  background #F1FAFF
-
-.content
-  max-width 700px
-  text-align center
-  line-height 1
-  margin-top 70px
-
-  .title
-    font-size 48px
-    font-weight 500
-    margin-top 24px
-    color #151515
-
-.download
-  margin-top 64px
-
-  a
-    margin 0 6px
-    color #777
-    text-decoration none
-    border-bottom 1px solid #ccc
-    cursor pointer
-    display inline
-</style>
