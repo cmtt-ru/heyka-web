@@ -57,17 +57,16 @@
               height="16"
             />
           </div>
-          <a
-            :href="WEB_URL+'/auth'"
-            target="loginFrame"
-          >
+          <router-link :to="{ name: 'auth'}">
             <ui-button
               class="controls__signIn"
               :type="3"
               size="large"
+              @click="showSignIn=true"
             >
               {{ texts.signIn }}
-            </ui-button></a>
+            </ui-button>
+          </router-link>
         </div>
 
         <ui-button
@@ -319,10 +318,6 @@
         :href="WEB_URL+'/privacy-policy'"
       >{{ texts.privacy }}</a>
     </div>
-
-    <!-- <div class="auth-wrapper">
-      <auth class="auth" />
-    </div> -->
   </div>
 </template>
 
@@ -331,10 +326,9 @@
 import { UiInput, UiForm } from '@components/Form';
 import UiButton from '@components/UiButton';
 import { WEB_URL } from '@sdk/Constants';
-// import Auth from '@components/Auth/Layout';
 
 let observer;
-// let observer2;
+
 const STICKED_CLASS = 'ui-sticked';
 
 export default {
@@ -342,7 +336,6 @@ export default {
     UiButton,
     UiInput,
     UiForm,
-    // Auth,
   },
   data() {
     return {
@@ -351,6 +344,7 @@ export default {
       regAmount: 483,
       email: '',
       menuOpened: false,
+      showSignIn: false,
       languages: {
         en: 'English',
         ru: 'Русский',
@@ -431,7 +425,6 @@ export default {
     },
 
     onScroll() {
-      console.log('scroll');
       window.removeEventListener('scroll', this.onScroll);
       document.getElementById('more-arrow').classList.add('more-arrow--hidden');
     },
@@ -463,7 +456,6 @@ export default {
     flex-direction row
     align-items center
     justify-content space-between
-    z-index 10
 
   .controls
     display flex
@@ -656,16 +648,18 @@ export default {
     display inline-block
 
 .top-grad
-  background linear-gradient(#000000, rgba(0,0,0,0));
+  background linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0));
   position fixed
-  top 0
+  pointer-events none
+  top 80px
   right 0
   width calc(50% - 50px)
-  height 150px
+  height 70px
 
 .bottom-grad
   background linear-gradient(rgba(0,0,0,0), #000000);
   position fixed
+  pointer-events none
   bottom 0
   right 0
   width calc(50% - 50px)
@@ -683,26 +677,6 @@ export default {
   &--hidden
     opacity 0
     pointer-events none
-
-.auth-wrapper
-  position fixed
-  top 0
-  left 0
-  right 0
-  bottom 0
-  margin 0 auto
-  background rgba(0,0,0,0.5)
-  display flex
-  flex-direction column
-  justify-content center
-  align-items center
-  z-index 20
-
-  & .auth
-     width calc(100vw - 32px)
-     height calc(100vh - 32px)
-     max-width 520px
-     max-height 520px
 
 .mobile-element
   display none
