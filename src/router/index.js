@@ -27,6 +27,9 @@ const GuestExpanded = () => import(/* webpackChunkName: "main" */ '@sdk/views/Ca
 const GuestFinish = () => import(/* webpackChunkName: "main" */ '../views/Guest/Finish');
 
 const Manage = () => import(/* webpackChunkName: "main" */ '../views/Manage');
+const ManageEmpty = () => import(/* webpackChunkName: "main" */ '../views/Manage/Empty');
+const WorkspaceUsers = () => import(/* webpackChunkName: "main" */ '../views/Manage/Users');
+const WorkspaceGroups = () => import(/* webpackChunkName: "main" */ '../views/Manage/Groups');
 const WorkspaceEdit = () => import(/* webpackChunkName: "main" */ '../views/WorkspaceEdit');
 
 const JanusMonitoring = () => import(/* webpackChunkName: "janus" */ '../views/JanusMonitoring');
@@ -156,19 +159,29 @@ const routes = [
    * Manage workspaces
    */
   {
-    path: '/manage',
+    path: '/manage/:workspaceId',
     component: Manage,
     children: [
       {
-        path: ':workspaceId',
+        path: '',
         name: 'manage',
-        component: Manage,
+        component: ManageEmpty,
       },
       {
-        path: ':workspaceId/:code',
-        component: Manage,
+        path: 'users',
+        name: 'manage-users',
+        component: WorkspaceUsers,
+      },
+      {
+        path: 'groups',
+        name: 'manage-groups',
+        component: WorkspaceGroups,
       },
     ],
+  },
+  {
+    path: '/manage/:workspaceId/:code',
+    component: Manage,
   },
 
   /**

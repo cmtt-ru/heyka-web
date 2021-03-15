@@ -11,16 +11,28 @@
         />
       </div>
 
-      <div class="layout__col layout__col--content">
+      <div class="layout__col layout__col--sidebar">
         <p class="workspace-name">
           {{ selectedWorkspace.name }}
         </p>
+        <router-link
+          class="manage-workspace-link"
+          :to="{name: 'manage-users'}"
+          replace
+        >
+          Users
+        </router-link>
+        <router-link
+          class="manage-workspace-link"
+          :to="{name: 'manage-groups'}"
+          replace
+        >
+          Groups
+        </router-link>
+      </div>
 
-        <users
-          :workspace="selectedWorkspace"
-          :users="workspaceUsers"
-          @update="loadUsers"
-        />
+      <div class="layout__col layout__col--content">
+        <router-view />
       </div>
     </div>
   </div>
@@ -28,13 +40,11 @@
 
 <script>
 import Workspaces from '@/components/Manage/Workspaces';
-import Users from '@/components/Manage/Users';
 import UiHeader from '@/components/UiHeader';
 
 export default {
   components: {
     Workspaces,
-    Users,
     UiHeader,
   },
 
@@ -42,7 +52,6 @@ export default {
     return {
       workspaces: [],
       selectedWorkspace: {},
-      workspaceUsers: [],
     };
   },
 
@@ -138,29 +147,51 @@ export default {
     flex-direction column
     width 100%
     min-height 100vh
+    background-color var(--new-bg-04)
 
     &__wrapper
-      //max-width 700px
+      border-top 1px solid rgba(0,0,0,0.1)
       box-sizing border-box
       display flex
-      padding-right 12px
       flex 1 1 auto
+      height calc(100vh - 60px)
 
     &__col
       &--workspaces
-        flex 0 0 60px
-        background #59a748
-        padding-top 24px
+        flex 0 0 136px
+        padding-top 32px
+
+      &--sidebar
+        flex 0 0 366px
+        padding 32px 40px
+        box-sizing border-box
+        border-left 1px solid rgba(0,0,0,0.1)
 
       &--content
         flex 1 1 auto
         border-left 1px solid rgba(0,0,0,0.1)
-        padding-left 18px
-        padding-top 24px
+        padding 32px 40px
+        overflow-y auto
 
   .workspace-name
     font-size 32px
     font-weight 500
     line-height 44px
     margin-bottom 24px
+
+.manage-workspace-link
+  display block
+  padding 6px
+  border-radius 8px
+  font-size 18px
+  line-height 32px
+  text-decoration none
+  color var(--text-0)
+  margin 2px 4px 8px
+
+  &:hover:not(.router-link-exact-active)
+    background-color var(--new-UI-06)
+
+  &.router-link-exact-active
+    background-color var(--new-UI-06)
 </style>
