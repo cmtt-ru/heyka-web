@@ -10,6 +10,16 @@ export default {
   },
 
   /**
+   * Get user email
+   *
+   * @param {MeState} state – module me state
+   * @returns {string}
+   */
+  getMyEmail(state) {
+    return state.email;
+  },
+
+  /**
    * Get selected workspace id
    *
    * @param {MeState} state – me module state
@@ -47,5 +57,15 @@ export default {
    */
   getAllowDraw: state => {
     return state.allowDraw;
+  },
+
+  /**
+   * Get socialAuth state
+   *
+   * @param {MeState} state – me module state
+   * @returns {string}
+   */
+  getSocialAuth: state => {
+    return state.socialAuth;
   },
 };

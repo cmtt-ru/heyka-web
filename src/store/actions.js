@@ -146,7 +146,7 @@ export default {
    * @param {object} connectionOptions Connection options object
    * @returns {object} selected channel
    */
-  selectChannelWithoutAPICall({ commit, getters, state }, { id, connectionOptions }) {
+  selectChannelWithoutAPICall({ commit, dispatch, getters, state }, { id, connectionOptions }) {
     if (id === getters['me/getSelectedChannelId']) {
       return;
     }
@@ -162,6 +162,9 @@ export default {
         userId: state.me.id,
         channelId: state.me.selectedChannelId,
       });
+
+      commit('channels/CLEAR_CONVERSATION_DATA', { channelId: id });
+      commit('channels/CLEAR_CONVERSATION_EVENTS', { channelId: id });
     }
 
     commit('janus/SET_OPTIONS', connectionOptions);

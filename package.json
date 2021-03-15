@@ -11,6 +11,7 @@
   "dependencies": {
     "@popperjs/core": "^2.4.4",
     "axios": "^0.21.1",
+    "capture-frame": "^3.0.3",
     "clone-deep": "^4.0.1",
     "core-js": "^3.6.5",
     "dateformat": "^3.0.3",
@@ -33,6 +34,7 @@
     "vue2-hammer": "^2.1.2",
     "vuex": "^3.4.0",
     "webrtc-adapter": "^7.7.0",
+    "xss": "^1.0.8",
     "zingchart-vue": "^2.0.3"
   },
   "devDependencies": {
