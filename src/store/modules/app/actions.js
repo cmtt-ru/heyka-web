@@ -156,4 +156,10 @@ export default {
       timestamp: Date.now(),
     });
   },
+
+  sendMiniChatMessage({ commit, rootGetters }, message) {
+    conversationBroadcast('mini-chat', rootGetters['me/getMyId'], {
+      message,
+    });
+  },
 };
