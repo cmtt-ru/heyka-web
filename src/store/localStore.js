@@ -8,7 +8,7 @@ const accessor = localStorage.bind({});
  * @param {object} defaultvalue default value
  * @returns {object}
  */
-function get(key, defaultvalue = null) {
+function get(key, defaultvalue) {
   let item = localStorage.get(key);
 
   if (item === null) {
