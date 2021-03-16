@@ -32,6 +32,8 @@ import { heykaStore } from '@/store/localStore';
  * @property {number} microphoneVolume – current microphone volume in decibels
  * @property {array} notifications – in-app notifications
  * @property {string} search – workspace search
+ *
+ * @property {number} miniChatLastMessageTimestamp - last mini chat message timestamp
  */
 
 /**
@@ -70,6 +72,7 @@ const state = () => {
       socket: false,
       janus: false,
     },
+    miniChatLastReadTimestamp: 0,
   };
 };
 

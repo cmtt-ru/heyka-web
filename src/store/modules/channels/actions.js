@@ -57,6 +57,7 @@ export default {
         break;
 
       case 'mini-chat':
+        commitData.data.timestamp = Date.now();
         commit('ADD_CONVERSATION_EVENT', commitData);
         break;
     }

@@ -123,4 +123,15 @@ export default {
       Vue.set(state.connectionStatus, status, statusObject[status]);
     });
   },
+
+  /**
+   * Set last mini chat message timestamp
+   *
+   * @param {AppState} state – module app state
+   * @param {number} timestamp – last message timestamp
+   * @constructor
+   */
+  SET_MINI_CHAT_READ_TIMESTAMP(state, timestamp) {
+    state.miniChatLastReadTimestamp = timestamp;
+  },
 };
