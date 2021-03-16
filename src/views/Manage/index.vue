@@ -12,7 +12,7 @@
       </div>
 
       <div class="layout__col layout__col--sidebar">
-        <p class="workspace-name">
+        <p class="sub-header">
           {{ selectedWorkspace.name }}
         </p>
         <router-link
@@ -20,14 +20,26 @@
           :to="{name: 'manage-users'}"
           replace
         >
-          Users
+          <svg-icon
+            name="user"
+            :width="24"
+            :height="24"
+            class="manage-workspace-link__icon"
+          />
+          <div>Members</div>
         </router-link>
         <router-link
           class="manage-workspace-link"
           :to="{name: 'manage-groups'}"
           replace
         >
-          Groups
+          <svg-icon
+            name="group"
+            :width="24"
+            :height="24"
+            class="manage-workspace-link__icon"
+          />
+          <div>Groups</div>
         </router-link>
       </div>
 
@@ -166,6 +178,7 @@ export default {
         padding 32px 40px
         box-sizing border-box
         border-left 1px solid rgba(0,0,0,0.1)
+        background-color var(--new-bg-01)
 
       &--content
         flex 1 1 auto
@@ -173,21 +186,29 @@ export default {
         padding 32px 40px
         overflow-y auto
 
-  .workspace-name
-    font-size 32px
-    font-weight 500
-    line-height 44px
+  .sub-header
+    font-weight bold
+    font-size 22px
+    line-height 36px
     margin-bottom 24px
 
 .manage-workspace-link
-  display block
-  padding 6px
+  display flex
+  flex-direction row
+  align-items center
+  justify-content flex-start
+  padding 6px 12px
   border-radius 8px
   font-size 18px
   line-height 32px
+  font-weight 500
   text-decoration none
   color var(--text-0)
   margin 2px 4px 8px
+
+  &__icon
+    color var(--new-UI-01)
+    padding-right 12px
 
   &:hover:not(.router-link-exact-active)
     background-color var(--new-UI-06)

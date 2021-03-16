@@ -3,26 +3,45 @@
     <avatar
       class="user__avatar"
       :user-id="user.id"
-      :image="avatarUrl(user, 32)"
-      :size="32"
+      :image="avatarUrl(user, 40)"
+      :size="40"
     />
-
-    <div class="user__name">
-      {{ user.name }}
-    </div>
-
-    <div
-      class="user__email"
-      :class="{'disabled': !user.isEmailVerified}"
-    >
-      {{ user.email }}
+    <div class="user__info">
+      <div
+        v-textfade
+        class="user__name"
+      >
+        {{ user.name }}
+        <svg-icon
+          v-if="user.role === 'admin'"
+          name="admin"
+          :width="18"
+          :height="18"
+          class="user__name__admin"
+        />
+      </div>
+      <div
+        v-textfade
+        class="user__email"
+        :class="{'disabled': !user.isEmailVerified}"
+      >
+        {{ user.email }}
+      </div>
     </div>
 
     <div class="user__date">
       {{ dateFormat(user.latestActivityAt) }}
     </div>
 
-    <div
+    <ui-button
+      v-popover.click="{name: 'EditUserInWorkspace', data: {id: user.id}}"
+      class="user__more"
+      :type="7"
+      size="medium"
+      icon="more"
+    />
+
+    <!-- <div
       class="user__delete"
       @click="revokeHandler(user)"
     >
@@ -35,20 +54,21 @@
       @click="resetHandler(user)"
     >
       Reset password
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script>
-import dateFormat from 'dateformat';
 import { getUserAvatarUrl } from '@libs/image';
+import { dateToElapsedTime } from '@libs/texts';
 import Avatar from '@components/Avatar';
+import UiButton from '@components/UiButton';
 
 export default {
-  comments: {
+  components: {
     Avatar,
+    UiButton,
   },
-  components: { Avatar },
   props: {
     /**
      * user object
@@ -120,7 +140,7 @@ export default {
      * @returns {string}
      */
     dateFormat(date) {
-      return dateFormat(new Date(date), 'dd.mm.yy HH:MM:ss');
+      return dateToElapsedTime(date, this.$t('calendar'));
     },
 
     /**
@@ -134,45 +154,60 @@ export default {
 <style scoped lang="stylus">
   .user
     display flex
-    align-items center
-    margin 8px 0
-    padding 4px 12px 4px 4px
-    border-radius 2px
+    flex-direction row
+    justify-content space-between
+    align-items flex-start
+    padding 12px
+    height 80px
+    box-sizing border-box
     cursor default
+    position relative
 
     &__avatar
       border-radius 100%
       object-fit cover
-      margin-right 12px
-      min-width 32px
+      margin 0 12px 0 4px
+      flex-shrink 0
+
+    &__info
+      flex-grow 2
 
     &__name
       font-size 18px
-      line-height 1
+      line-height 28px
+      font-weight 500
+      display flex
+      flex-direction row
+      justify-content flex-start
+      align-items center
+
+      &__admin
+        color var(--new-UI-01)
+        padding-left 8px
 
     &__email
-      margin-left auto
-      margin-right 16px
+      font-size 16px
+      line-height 26px
+      color var(--new-UI-04)
 
       &.disabled
         opacity 0.5
 
     &__date
-      margin-right 16px
+      margin 0 16px
+      font-size 16px
+      line-height 26px
+      flex-shrink 0
 
-    &__delete
-      color lightcoral
-      cursor pointer
-      margin-right 16px
+    &__more
+      flex-shrink 0
 
-    &__reset-password
-      color lightcoral
-      cursor pointer
-
-      &.disabled
-        pointer-events none
-        opacity 0.5
-
-    &:hover
-      background #eee
+    &:after
+      content ''
+      position absolute
+      bottom 0
+      right 0
+      left 72px
+      height 1px
+      background-color var(--new-stroke-01)
 </style>

@@ -1,13 +1,19 @@
 <template>
   <div>
-    <p class="workspace-name">
-      Members
-    </p>
+    <div class="sub-header">
+      <p class="sub-header__text">
+        Members
+      </p>
+      <ui-switch
+        v-model="canAllInvite"
+        class="sub-header__switch"
+        text="Все участники могут приглашать новых пользователей"
+      />
+    </div>
 
     <user
       v-for="user in sortedUsers"
       :key="user.id"
-      class="user"
       :user="user"
       :workspace="selectedWorkspace"
       @update="loadUsers"
@@ -19,14 +25,18 @@
 
 import User from '@/components/Manage/User';
 import cloneDeep from 'clone-deep';
+import { sortAny } from '@libs/arrays';
+import { UiSwitch } from '@components/Form';
 
 export default {
   components: {
     User,
+    UiSwitch,
   },
 
   data() {
     return {
+      canAllInvite: true,
       workspaceUsers: [],
       selectedWorkspace: {},
     };
@@ -48,16 +58,12 @@ export default {
     sortedUsers() {
       console.log(this.workspaceUsers);
 
-      return cloneDeep(this.workspaceUsers).sort(function (a, b) {
-        if (a.name < b.name) {
-          return -1;
-        }
-        if (a.name > b.name) {
-          return 1;
-        }
-
-        return 0;
-      });
+      return cloneDeep(this.workspaceUsers).sort(sortAny([
+        {
+          key: 'latestActivityAt',
+          type: 'date',
+          order: 'desc',
+        } ]));
     },
   },
 
@@ -101,9 +107,22 @@ export default {
 
 <style lang="stylus" scoped>
 
-  .workspace-name
-    font-size 32px
-    font-weight 500
-    line-height 44px
+  .sub-header
+    display flex
+    flex-direction row
+    justify-content space-between
+    align-items center
+    flex-wrap wrap
     margin-bottom 24px
+
+    &__text
+      font-weight bold
+      font-size 22px
+      line-height 36px
+      margin-right 16px
+      flex-shrink 0
+      flex-grow 2
+
+    &__switch
+      max-width 500px
 </style>

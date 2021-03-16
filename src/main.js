@@ -8,10 +8,12 @@ import i18n from '@sdk/translations/i18n';
 import SvgIcon from '@components/SvgIcon.vue';
 import API from '@api';
 import '@sdk/directives';
+import permissions from '@sdk/classes/permissions';
 
 Vue.prototype.$API = API;
 Vue.component('SvgIcon', SvgIcon);
 Vue.prototype.$themes = themes;
+Vue.prototype.$permissions = permissions;
 
 themes.manualSetTheme('light'); // TODO remove if dark theme can be selected
 
