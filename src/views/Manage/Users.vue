@@ -11,13 +11,38 @@
       />
     </div>
 
-    <user
-      v-for="user in sortedUsers"
-      :key="user.id"
-      :user="user"
-      :workspace="selectedWorkspace"
-      @update="loadUsers"
+    <ui-input
+      v-model="searchText"
+      icon="search"
+      class="search-input"
+      placeholder="Search"
+      @keydown.native.esc="closeInput"
     />
+
+    <list
+      v-if="workspaceUsers.length"
+      v-model="filteredWorkspaceUsers"
+      :items="sortedUsers"
+      filter-key="name"
+      :filter-by="searchText"
+    >
+      <list-item
+        v-for="user in filteredWorkspaceUsers"
+        :key="user.id"
+        :similarity="user.similarity"
+      >
+        <user
+          :user="user"
+          :workspace="selectedWorkspace"
+          @update="loadUsers"
+        />
+      </list-item>
+    </list>
+
+    <div class="footer">
+      You can invite users via
+      <a href="">Heyka app</a>
+    </div>
   </div>
 </template>
 
@@ -26,18 +51,24 @@
 import User from '@/components/Manage/User';
 import cloneDeep from 'clone-deep';
 import { sortAny } from '@libs/arrays';
-import { UiSwitch } from '@components/Form';
+import { UiSwitch, UiInput } from '@components/Form';
+import { List, ListItem } from '@components/List';
 
 export default {
   components: {
     User,
     UiSwitch,
+    UiInput,
+    List,
+    ListItem,
   },
 
   data() {
     return {
+      searchText: '',
       canAllInvite: true,
       workspaceUsers: [],
+      filteredWorkspaceUsers: [],
       selectedWorkspace: {},
     };
   },
@@ -56,8 +87,6 @@ export default {
      * @returns {array}
      */
     sortedUsers() {
-      console.log(this.workspaceUsers);
-
       return cloneDeep(this.workspaceUsers).sort(sortAny([
         {
           key: 'latestActivityAt',
@@ -107,22 +136,56 @@ export default {
 
 <style lang="stylus" scoped>
 
-  .sub-header
-    display flex
-    flex-direction row
-    justify-content space-between
-    align-items center
-    flex-wrap wrap
-    margin-bottom 24px
+.sub-header
+  display flex
+  flex-direction row
+  justify-content space-between
+  align-items center
+  flex-wrap wrap
+  margin-bottom 24px
 
-    &__text
-      font-weight bold
-      font-size 22px
-      line-height 36px
-      margin-right 16px
-      flex-shrink 0
-      flex-grow 2
+  &__text
+    font-weight bold
+    font-size 22px
+    line-height 36px
+    margin-right 16px
+    flex-shrink 0
+    flex-grow 2
 
-    &__switch
-      max-width 500px
+  &__switch
+    max-width 500px
+
+.search-input
+  margin-bottom 24px
+
+/deep/ .input
+  padding-right 24px
+  padding-left 72px
+  height 44px
+  min-height 44px
+  box-sizing border-box
+  font-size 18px
+  line-height 32px
+
+/deep/ .input__icon
+  padding-left 24px
+
+.footer
+  position fixed
+  bottom 0
+  left 0
+  right 0
+  width 100%
+  height 48px
+  display flex
+  flex-direction row
+  justify-content center
+  align-items center
+  background-color var(--new-bg-04)
+  border-top 1px solid rgba(0,0,0,0.1)
+
+  & a
+    padding-left 4px
+    color var(--new-UI-01)
+
 </style>

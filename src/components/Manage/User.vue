@@ -40,21 +40,6 @@
       size="medium"
       icon="more"
     />
-
-    <!-- <div
-      class="user__delete"
-      @click="revokeHandler(user)"
-    >
-      Revoke
-    </div>
-
-    <div
-      class="user__reset-password"
-      :class="{'disabled': !user.isEmailVerified}"
-      @click="resetHandler(user)"
-    >
-      Reset password
-    </div> -->
   </div>
 </template>
 
@@ -159,6 +144,7 @@ export default {
     align-items flex-start
     padding 12px
     height 80px
+    width 100%
     box-sizing border-box
     cursor default
     position relative
@@ -166,7 +152,7 @@ export default {
     &__avatar
       border-radius 100%
       object-fit cover
-      margin 0 12px 0 4px
+      margin 0 16px 0 4px
       flex-shrink 0
 
     &__info

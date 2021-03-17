@@ -12,9 +12,18 @@
       </div>
 
       <div class="layout__col layout__col--sidebar">
-        <p class="sub-header">
-          {{ selectedWorkspace.name }}
-        </p>
+        <div class="sub-header">
+          <p class="sub-header__text">
+            {{ selectedWorkspace.name }}
+          </p>
+          <ui-button
+            v-popover.click="{name: 'EditWorkspace', data: {id: selectedWorkspace.id}}"
+            class="user__more"
+            :type="7"
+            size="medium"
+            icon="more"
+          />
+        </div>
         <router-link
           class="manage-workspace-link"
           :to="{name: 'manage-users'}"
@@ -53,11 +62,13 @@
 <script>
 import Workspaces from '@/components/Manage/Workspaces';
 import UiHeader from '@/components/UiHeader';
+import UiButton from '@components/UiButton';
 
 export default {
   components: {
     Workspaces,
     UiHeader,
+    UiButton,
   },
 
   data() {
@@ -187,10 +198,20 @@ export default {
         overflow-y auto
 
   .sub-header
-    font-weight bold
-    font-size 22px
-    line-height 36px
+    display flex
+    flex-direction row
+    justify-content space-between
+    align-items center
+    flex-wrap wrap
     margin-bottom 24px
+
+    &__text
+      font-weight bold
+      font-size 22px
+      line-height 36px
+      margin-right 16px
+      flex-shrink 0
+      flex-grow 2
 
 .manage-workspace-link
   display flex
@@ -204,7 +225,7 @@ export default {
   font-weight 500
   text-decoration none
   color var(--text-0)
-  margin 2px 4px 8px
+  margin 2px 0 8px
 
   &__icon
     color var(--new-UI-01)
