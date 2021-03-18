@@ -11,8 +11,10 @@
   "dependencies": {
     "@popperjs/core": "^2.4.4",
     "axios": "^0.21.1",
+    "capture-frame": "^3.0.3",
     "clone-deep": "^4.0.1",
     "core-js": "^3.6.5",
+    "cyrillic-to-translit-js": "^3.1.0",
     "dateformat": "^3.0.3",
     "draggable-vue-directive": "^2.1.0",
     "es7-sleep": "^1.0.0",
@@ -33,6 +35,7 @@
     "vue2-hammer": "^2.1.2",
     "vuex": "^3.4.0",
     "webrtc-adapter": "^7.7.0",
+    "xss": "^1.0.8",
     "zingchart-vue": "^2.0.3"
   },
   "devDependencies": {
@@ -52,6 +55,7 @@
     "eslint-plugin-strict-vue": "^1.0.0",
     "eslint-plugin-vue": "^6.2.2",
     "hark": "^1.2.3",
+    "linkifyjs": "^3.0.0-beta.3",
     "prerender-spa-plugin": "^3.2.1",
     "stylus": "^0.54.7",
     "stylus-loader": "^3.0.2",

@@ -5,6 +5,7 @@ import { sortAny } from '@libs/arrays';
  * @type {null}
  */
 let lastSpeakingUser = null;
+let lastChannelId = null;
 /**
  * Last user who shares media
  * @type {null}
@@ -39,7 +40,7 @@ export default {
   },
 
   /**
-   * Get user who share's screen or camera
+   * Get user who shares screen or camera
    *
    * @param {object} state – global state
    * @param {object} getters – global getters
@@ -58,7 +59,7 @@ export default {
 
         lastUserWhoSharesMedia = sortedSharings[0].userId;
 
-        return sortedSharings[0].userId;
+        return lastUserWhoSharesMedia;
       }
 
       const speakingUserWithCamera = usersWhoSharesCamera.filter(user => user.speaking);
@@ -78,9 +79,11 @@ export default {
       }
 
       if (usersWhoSharesCamera.length > 0) {
-        lastUserWhoSharesMedia = usersWhoSharesCamera[0].userId;
+        const sortedBySpeakingTs = usersWhoSharesCamera.sort((a, b) => Date.parse(b.startSpeakingTs || 0) - Date.parse(a.startSpeakingTs || 0));
 
-        return usersWhoSharesCamera[0].userId;
+        lastUserWhoSharesMedia = sortedBySpeakingTs[0].userId;
+
+        return sortedBySpeakingTs[0].userId;
       }
     }
 
@@ -109,6 +112,8 @@ export default {
         return sortedSharings[0].userId;
       }
     }
+
+    return null;
   },
 
   /**
@@ -213,6 +218,12 @@ export default {
     const selectedChannel = getters['channels/getChannelById'](selectedChannelId);
 
     if (selectedChannel) {
+      // remove "last talked" user if we changed channel or user left
+      if (lastChannelId !== selectedChannelId || !selectedChannel.users.find(el => el.userId === lastSpeakingUser?.userId)) {
+        lastSpeakingUser = null;
+      }
+      lastChannelId = selectedChannelId;
+
       const speakingUsers = selectedChannel.users.filter(u => u.speaking && u.microphone);
 
       if (speakingUsers.length) {
@@ -236,12 +247,10 @@ export default {
     if (myId === undefined) {
       return null;
     }
-    const commonInfo = getters['users/getUserById'](myId);
-    const myMedia = getters['me/getMediaState'];
 
     return {
-      ...commonInfo,
-      ...myMedia,
+      user: getters['users/getUserById'](myId),
+      mediaState: getters['me/getMediaState'],
     };
   },
 
