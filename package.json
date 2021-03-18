@@ -14,6 +14,7 @@
     "capture-frame": "^3.0.3",
     "clone-deep": "^4.0.1",
     "core-js": "^3.6.5",
+    "cyrillic-to-translit-js": "^3.1.0",
     "dateformat": "^3.0.3",
     "draggable-vue-directive": "^2.1.0",
     "es7-sleep": "^1.0.0",
