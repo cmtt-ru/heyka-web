@@ -166,16 +166,25 @@ const routes = [
         path: '',
         name: 'manage',
         component: ManageEmpty,
+        meta: {
+          depth: 1,
+        },
       },
       {
         path: 'users',
         name: 'manage-users',
         component: WorkspaceUsers,
+        meta: {
+          depth: 2,
+        },
       },
       {
         path: 'groups',
         name: 'manage-groups',
         component: WorkspaceGroups,
+        meta: {
+          depth: 2,
+        },
       },
     ],
   },

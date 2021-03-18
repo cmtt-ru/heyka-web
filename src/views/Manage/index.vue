@@ -25,9 +25,9 @@
           />
         </div>
         <router-link
+          rel="preload"
           class="manage-workspace-link"
           :to="{name: 'manage-users'}"
-          replace
         >
           <svg-icon
             name="user"
@@ -40,7 +40,6 @@
         <router-link
           class="manage-workspace-link"
           :to="{name: 'manage-groups'}"
-          replace
         >
           <svg-icon
             name="group"
@@ -53,7 +52,14 @@
       </div>
 
       <div class="layout__col layout__col--content">
-        <router-view />
+        <transition
+          class="animatin"
+          :name="transitionName"
+        >
+          <keep-alive>
+            <router-view @go-back="backHandler" />
+          </keep-alive>
+        </transition>
       </div>
     </div>
   </div>
@@ -73,6 +79,7 @@ export default {
 
   data() {
     return {
+      transitionName: 'next',
       workspaces: [],
       selectedWorkspace: {},
     };
@@ -96,6 +103,27 @@ export default {
     },
   },
 
+  watch: {
+    $route(to, from) {
+      this.transitionName = to.meta.depth > from.meta.depth ? 'next' : 'prev';
+    },
+  },
+
+  // beforeRouteEnter(to, from, next) {
+  //   getPost(to.params.id, (err, post) => {
+  //     next(vm => vm.setData(err, post));
+  //   });
+  // },
+  // // when route changes and this component is already rendered,
+  // // the logic will be slightly different.
+  // beforeRouteUpdate(to, from, next) {
+  //   this.post = null;
+  //   getPost(to.params.id, (err, post) => {
+  //     this.setData(err, post);
+  //     next();
+  //   });
+  // },
+
   async mounted() {
     await this.authorize();
     await this.loadWorkspaces();
@@ -103,6 +131,13 @@ export default {
   },
 
   methods: {
+    // setData(err, post) {
+    //   if (err) {
+    //     this.error = err.toString();
+    //   } else {
+    //     this.post = post;
+    //   }
+    // },
     /**
      * Authorization
      * @returns {Promise<date>}
@@ -160,6 +195,21 @@ export default {
 
       await this.loadUsers();
     },
+
+    /**
+     * Back button handler
+     * @returns {void}
+     */
+    backHandler() {
+      if (window.history.length > 2) {
+        this.$router.go(-1);
+      } else {
+        this.$router.push({
+          name: 'manage',
+          params: { workspaceId: this.workspaceId },
+        });
+      }
+    },
   },
 };
 </script>
@@ -194,8 +244,8 @@ export default {
       &--content
         flex 1 1 auto
         border-left 1px solid rgba(0,0,0,0.1)
-        padding 32px 40px
         overflow-y auto
+        position relative
 
   .sub-header
     display flex
@@ -236,4 +286,69 @@ export default {
 
   &.router-link-exact-active
     background-color var(--new-UI-06)
+
+/* Page transitions */
+$animation-duration = 350ms
+
+.manage-page
+  position absolute
+  width 100%
+  box-sizing border-box
+  padding 32px 40px
+  will-change transform
+
+.next-leave-to
+  animation leaveToLeft $animation-duration both cubic-bezier(0.165, 0.84, 0.44, 1)
+
+.next-enter-active
+  transform translateX(100%)
+
+.next-enter-to
+  animation enterFromRight $animation-duration both cubic-bezier(0.165, 0.84, 0.44, 1)
+  transform translateX(100%)
+
+.prev-leave-to
+  animation leaveToRight $animation-duration both cubic-bezier(0.165, 0.84, 0.44, 1)
+
+.prev-enter-active
+  transform translateX(-100%)
+
+.prev-enter-to
+  animation enterFromLeft $animation-duration both cubic-bezier(0.165, 0.84, 0.44, 1)
+
+@keyframes leaveToLeft {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes enterFromLeft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes leaveToRight {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes enterFromRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
 </style>

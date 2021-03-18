@@ -1,5 +1,5 @@
 <template>
-  <div class="layout">
+  <div class="manage-page">
     loading...
   </div>
 </template>

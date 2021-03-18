@@ -170,6 +170,7 @@ export default {
       &__admin
         color var(--new-UI-01)
         padding-left 8px
+        flex-shrink 0
 
     &__email
       font-size 16px

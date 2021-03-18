@@ -1,6 +1,18 @@
 <template>
-  <div>
+  <div class="manage-page">
     <div class="sub-header">
+      <ui-button
+        :type="9"
+        size="small"
+        @click="$emit('go-back')"
+      >
+        <svg-icon
+          class="sub-header__back"
+          name="back"
+          :height="24"
+          :width="24"
+        />
+      </ui-button>
       <p class="sub-header__text">
         Members
       </p>
@@ -53,6 +65,7 @@ import cloneDeep from 'clone-deep';
 import { sortAny } from '@libs/arrays';
 import { UiSwitch, UiInput } from '@components/Form';
 import { List, ListItem } from '@components/List';
+import UiButton from '@components/UiButton';
 
 export default {
   components: {
@@ -61,6 +74,7 @@ export default {
     UiInput,
     List,
     ListItem,
+    UiButton,
   },
 
   data() {
@@ -130,6 +144,7 @@ export default {
         this.workspaceUsers = workspaceData.users;
       }
     },
+
   },
 };
 </script>
@@ -143,6 +158,10 @@ export default {
   align-items center
   flex-wrap wrap
   margin-bottom 24px
+
+  &__back
+    color var(--new-UI-01)
+    padding-right 16px
 
   &__text
     font-weight bold

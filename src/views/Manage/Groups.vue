@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="manage-page">
     groups
   </div>
 </template>
