@@ -168,4 +168,8 @@ export default {
 
     commit('UPDATE', filteredData);
   },
+
+  setChannelId({ commit }, id) {
+    commit('SET_CHANNEL_ID', id);
+  },
 };
