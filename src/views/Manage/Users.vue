@@ -67,6 +67,9 @@ import { UiSwitch, UiInput } from '@components/Form';
 import { List, ListItem } from '@components/List';
 import UiButton from '@components/UiButton';
 
+import broadcastEvents from '@sdk/classes/broadcastEvents';
+import Modal from '@sdk/classes/Modal';
+
 export default {
   components: {
     User,
@@ -113,6 +116,8 @@ export default {
   async mounted() {
     await this.loadWorkspaces();
     await this.loadUsers();
+
+    broadcastEvents.on('delete', this.deleteModal);
   },
 
   methods: {
@@ -145,6 +150,26 @@ export default {
       }
     },
 
+    deleteModal(id) {
+      Modal.show({
+        name: 'DeleteUser',
+        data: {
+          userId: id,
+          title: '',
+          description: '',
+          buttonOk: '',
+          buttonCancel: '',
+        },
+        onClose: (state, data) => {
+          if (state === true) {
+            console.log('true');
+          } else {
+            console.log('false');
+          }
+        },
+      });
+    },
+
   },
 };
 </script>
@@ -162,6 +187,10 @@ export default {
   &__back
     color var(--new-UI-01)
     padding-right 16px
+    display none
+
+    @media $tablet
+      display initial
 
   &__text
     font-weight bold

@@ -67,6 +67,7 @@ const state = () => {
     },
     microphoneVolume: -100,
     notifications: [],
+    modals: [],
     connectionStatus: {
       visible: true,
       internet: true,

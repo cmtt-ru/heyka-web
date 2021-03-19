@@ -77,47 +77,6 @@ export default {
   },
 
   methods: {
-    /**
-     * Revoke user's session
-     * @param {object} user – user
-     * @returns {Promise<void>}
-     */
-    async revokeHandler(user) {
-      const state = confirm(`Are you sure want to revoke access for "${user.name}"?`);
-
-      if (state) {
-        try {
-          await this.$API.admin.revokeAccess({
-            workspaceId: this.workspace.id,
-            userId: user.id,
-          });
-
-          this.$emit('update');
-        } catch (e) {
-          console.log('ERROR');
-          console.log(e);
-        }
-      }
-    },
-
-    /**
-     * Send reset password mail to user's email
-     * @param {object} user – user
-     * @returns {Promise<void>}
-     */
-    async resetHandler(user) {
-      const state = confirm(`Are you sure want to send reset password mail to "${user.name}"?`);
-
-      if (state) {
-        try {
-          await this.$API.auth.discardPass({ email: user.email });
-          alert('Reset password mail sent');
-        } catch (e) {
-          console.log('ERROR');
-          console.log(e);
-        }
-      }
-    },
 
     /**
      * Format date

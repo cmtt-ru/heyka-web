@@ -3,7 +3,10 @@
     <ui-header />
 
     <div class="layout__wrapper">
-      <div class="layout__col layout__col--workspaces">
+      <div
+        v-show="showWorkspaces"
+        class="layout__col layout__col--workspaces"
+      >
         <workspaces
           :selected-workspace="selectedWorkspace"
           :workspaces="workspaces"
@@ -25,7 +28,6 @@
           />
         </div>
         <router-link
-          rel="preload"
           class="manage-workspace-link"
           :to="{name: 'manage-users'}"
         >
@@ -53,7 +55,6 @@
 
       <div class="layout__col layout__col--content">
         <transition
-          class="animatin"
           :name="transitionName"
         >
           <keep-alive>
@@ -79,7 +80,8 @@ export default {
 
   data() {
     return {
-      transitionName: 'next',
+      transitionName: null,
+      showWorkspaces: true,
       workspaces: [],
       selectedWorkspace: {},
     };
@@ -105,24 +107,20 @@ export default {
 
   watch: {
     $route(to, from) {
-      this.transitionName = to.meta.depth > from.meta.depth ? 'next' : 'prev';
+      if (to.meta.depth > from.meta.depth) {
+        this.transitionName = 'next';
+      } else if (to.meta.depth === from.meta.depth) {
+        this.transitionName = null;
+      } else {
+        this.transitionName = 'prev';
+      }
+      if (to.meta.depth > 1) {
+        this.showWorkspaces = false;
+      } else {
+        this.showWorkspaces = true;
+      }
     },
   },
-
-  // beforeRouteEnter(to, from, next) {
-  //   getPost(to.params.id, (err, post) => {
-  //     next(vm => vm.setData(err, post));
-  //   });
-  // },
-  // // when route changes and this component is already rendered,
-  // // the logic will be slightly different.
-  // beforeRouteUpdate(to, from, next) {
-  //   this.post = null;
-  //   getPost(to.params.id, (err, post) => {
-  //     this.setData(err, post);
-  //     next();
-  //   });
-  // },
 
   async mounted() {
     await this.authorize();
@@ -131,13 +129,6 @@ export default {
   },
 
   methods: {
-    // setData(err, post) {
-    //   if (err) {
-    //     this.error = err.toString();
-    //   } else {
-    //     this.post = post;
-    //   }
-    // },
     /**
      * Authorization
      * @returns {Promise<date>}
@@ -241,6 +232,9 @@ export default {
         border-left 1px solid rgba(0,0,0,0.1)
         background-color var(--new-bg-01)
 
+        @media $tablet
+          display none
+
       &--content
         flex 1 1 auto
         border-left 1px solid rgba(0,0,0,0.1)
@@ -287,68 +281,74 @@ export default {
   &.router-link-exact-active
     background-color var(--new-UI-06)
 
-/* Page transitions */
-$animation-duration = 350ms
-
 .manage-page
-  position absolute
   width 100%
   box-sizing border-box
   padding 32px 40px
-  will-change transform
+  background-color var(--new-bg-04)
 
-.next-leave-to
-  animation leaveToLeft $animation-duration both cubic-bezier(0.165, 0.84, 0.44, 1)
+@media $tablet
 
-.next-enter-active
-  transform translateX(100%)
+/* Page transitions */
 
-.next-enter-to
-  animation enterFromRight $animation-duration both cubic-bezier(0.165, 0.84, 0.44, 1)
-  transform translateX(100%)
+  $animation-duration = 350ms
 
-.prev-leave-to
-  animation leaveToRight $animation-duration both cubic-bezier(0.165, 0.84, 0.44, 1)
+  .manage-page
+    position absolute
+    will-change transform
 
-.prev-enter-active
-  transform translateX(-100%)
+  .next-leave-to
+    animation leaveToLeft $animation-duration both cubic-bezier(0.165, 0.84, 0.44, 1)
 
-.prev-enter-to
-  animation enterFromLeft $animation-duration both cubic-bezier(0.165, 0.84, 0.44, 1)
+  .next-enter-active
+    transform translateX(100%)
 
-@keyframes leaveToLeft {
-  from {
-    transform: translateX(0);
+  .next-enter-to
+    animation enterFromRight $animation-duration both cubic-bezier(0.165, 0.84, 0.44, 1)
+    transform translateX(100%)
+
+  .prev-leave-to
+    animation leaveToRight $animation-duration both cubic-bezier(0.165, 0.84, 0.44, 1)
+
+  .prev-enter-active
+    transform translateX(-100%)
+
+  .prev-enter-to
+    animation enterFromLeft $animation-duration both cubic-bezier(0.165, 0.84, 0.44, 1)
+
+  @keyframes leaveToLeft {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-100%);
+    }
   }
-  to {
-    transform: translateX(-100%);
-  }
-}
 
-@keyframes enterFromLeft {
-  from {
-    transform: translateX(-100%);
+  @keyframes enterFromLeft {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(0);
+    }
   }
-  to {
-    transform: translateX(0);
-  }
-}
 
-@keyframes leaveToRight {
-  from {
-    transform: translateX(0);
+  @keyframes leaveToRight {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(100%);
+    }
   }
-  to {
-    transform: translateX(100%);
-  }
-}
 
-@keyframes enterFromRight {
-  from {
-    transform: translateX(100%);
+  @keyframes enterFromRight {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
   }
-  to {
-    transform: translateX(0);
-  }
-}
 </style>

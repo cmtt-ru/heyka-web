@@ -6,6 +6,7 @@
       <ui-button
         :type="11"
         icon="admin"
+        data-popover-close
         @click="makeAdminHandler"
       >
         Make an admin
@@ -14,6 +15,8 @@
         :type="11"
         icon="trash"
         class="delete-button"
+        data-popover-close
+        @click="deleteHandler"
       >
         Delete
       </ui-button>
@@ -24,11 +27,22 @@
 <script>
 import Popover from '@components/Popover';
 import UiButton from '@components/UiButton';
+import broadcastEvents from '@sdk/classes/broadcastEvents';
 
 export default {
   components: {
     Popover,
     UiButton,
+  },
+
+  props: {
+    /**
+     * User id
+     */
+    id: {
+      type: String,
+      required: true,
+    },
   },
 
   computed: {
@@ -46,6 +60,10 @@ export default {
 
     makeAdminHandler() {
 
+    },
+
+    deleteHandler() {
+      broadcastEvents.dispatch('delete', this.id);
     },
   },
 };

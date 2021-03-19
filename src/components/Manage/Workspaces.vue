@@ -103,6 +103,9 @@ export default {
         justify-content center
         align-items center
 
+        &:hover
+          background-color rgba(21, 117, 241, 0.2)
+
       &--selected
         cursor default
 
