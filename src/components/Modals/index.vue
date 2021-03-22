@@ -1,22 +1,33 @@
 <template>
-  <div
-    v-if="modalsAmount"
-    role="dialog"
-    aria-modal="true"
-    class="modal"
-  >
+  <transition name="modal-background">
     <div
-      class="modal__backdrop"
-      @click="close"
-    />
-    <modal-wrapper
-      class="modal-wrapper"
-      :modal="lastModal"
-      @confirm="$emit('confirm')"
-      @reject="$emit('reject')"
-      @close="$emit('close')"
-    />
-  </div>
+      v-if="modalVisible"
+      role="dialog"
+      aria-modal="true"
+      class="modal"
+    >
+      <div
+        class="modal__backdrop"
+        @click="close"
+      />
+      <transition-group
+        tag="div"
+        class="modal-container"
+        name="modal"
+      >
+        <modal-wrapper
+          v-for="(modal, index) in modals"
+          :key="modal.id"
+          class="modal-wrapper"
+          :class="{'modal-wrapper--visible': index>=modalsAmount-1}"
+          :modal="modal"
+          @confirm="$emit('confirm')"
+          @reject="$emit('reject')"
+          @close="$emit('close')"
+        />
+      </transition-group>
+    </div>
+  </transition>
 </template>
 
 <script>
@@ -71,42 +82,48 @@ export default {
     modalsAmount(val) {
       if (val === 0) {
         this.modalVisible = false;
+        this.$nextTick(() => {
+          this.deactivate();
+        });
       } else {
         this.modalVisible = true;
+        this.$nextTick(() => {
+          this.activate();
+        });
       }
     },
   },
 
   mounted() {
     Modal.setModalComponent(this);
+  },
 
-    const close = (e) => {
+  beforeDestroy() {
+    document.removeEventListener('keyup', this.escHandler);
+    this.deactivate();
+  },
+
+  methods: {
+    escHandler(e) {
       const ESC = 27;
 
       if (e.keyCode !== ESC) {
         return;
       }
       this.close();
-    };
+    },
 
-    // Close the modal when the
-    // user presses the ESC key.
-    document.addEventListener('keyup', close);
-    // Activate the modal when the component is mounted.
-    this.activate();
-  },
-
-  destroyed() {
-    document.removeEventListener('keyup', close);
-    this.deactivate();
-  },
-
-  methods: {
     activate() {
+      // Close the modal when the
+      // user presses the ESC key.
+      document.addEventListener('keyup', this.escHandler);
       this.disableScrolling();
+      // Focus the first focusable element in the dialog.
+      this.focusFirstDescendant();
     },
 
     async deactivate() {
+      document.removeEventListener('keyup', this.escHandler);
       this.enableScrolling();
     },
 
@@ -116,7 +133,7 @@ export default {
 
       const body = document.querySelector('body');
 
-      body.style.overflowY = 'scroll';
+      body.style.overflowY = 'hidden';
       body.style.position = 'fixed';
       body.style.top = `-${this.scrollPosition}px`;
       body.style.width = '100%';
@@ -125,7 +142,7 @@ export default {
     enableScrolling() {
       const body = document.querySelector('body');
 
-      body.style.removeProperty('overflowY');
+      body.style.removeProperty('overflow-y');
       body.style.removeProperty('position');
       body.style.removeProperty('top');
       body.style.removeProperty('width');
@@ -136,8 +153,16 @@ export default {
       });
     },
 
+    focusFirstDescendant() {
+      const focusable = this.$el.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+
+      if (focusable[0] && focusable[0].focus) {
+        focusable[0].focus();
+      }
+    },
+
     close() {
-      this.$store.dispatch('app/removeModal');
+      this.$emit('close');
     },
 
   },
@@ -156,6 +181,7 @@ export default {
   justify-content center
   align-items center
   z-index 999
+  opacity 1
 
 .modal__backdrop
   position absolute
@@ -163,4 +189,58 @@ export default {
   height 100%
   background-color rgba(0, 0, 0, 0.28)
 
+.modal-container
+  z-index 1000
+  position relative
+  display contents
+
+$ANIM = 330ms
+
+.modal-wrapper
+  position absolute
+  opacity 0
+  pointer-events none
+  transform scale(1.1)
+  transition opacity $ANIM ease, transform $ANIM ease
+
+  @media $mobile
+    bottom 16px
+
+  &--visible
+    opacity 1
+    transform scale(1)
+    pointer-events auto
+
+.modal-background-enter
+  opacity 0
+
+.modal-background-enter-to
+  pointer-events none
+  transition opacity $ANIM ease
+
+.modal-background-leave
+  opacity 1
+
+.modal-background-leave-to
+  opacity 0
+  transition opacity $ANIM ease
+
+.modal-enter
+  opacity 0
+  transform scale(1.1)
+
+.modal-enter-to
+  pointer-events none
+  opacity 1
+  transform scale(1)
+  transition opacity $ANIM ease, transform $ANIM ease
+
+.modal-leave
+  opacity 1
+  transform scale(1)
+
+.modal-leave-to
+  opacity 0
+  transform scale(1.1)
+  transition opacity $ANIM ease, transform $ANIM ease
 </style>

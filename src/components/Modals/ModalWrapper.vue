@@ -1,20 +1,20 @@
 <template>
-  <transition name="modal">
-    <component
-      :is="modal.name"
-      class="modal-wrapper"
-      :data="modal.data"
-      @confirm="$emit('confirm')"
-      @reject="$emit('reject')"
-      @close="$emit('close')"
-    />
-  </transition>
+  <component
+    :is="modal.name"
+    class="modal-wrapper"
+    :data="modal.data"
+    @confirm="$emit('confirm')"
+    @reject="$emit('reject')"
+    @close="$emit('close')"
+  />
 </template>
 
 <script>
 export default {
   components: {
-    DeleteUser: () => import(/* webpackChunkName: "modals" */ './Templates/DeleteUser'),
+    ConfirmDelete: () => import(/* webpackChunkName: "modals" */ './Templates/ConfirmDelete'),
+    NewGroupName: () => import(/* webpackChunkName: "modals" */ './Templates/NewGroupName'),
+    NewGroupUsers: () => import(/* webpackChunkName: "modals" */ './Templates/NewGroupUsers'),
   },
   props: {
     /**
@@ -26,53 +26,12 @@ export default {
     },
   },
 
-  data() {
-    return {
-      scrollPosition: null,
-    };
-  },
-
-  mounted() {
-    console.log(this.modal);
-  },
-
-  beforeDestroy() {
-    //
-  },
-
-  methods: {
-
-  },
-
 };
 </script>
 
 <style lang="stylus" scoped>
-$ANIM = 330ms
-$ANIM_DELAY = 200ms
 
 .modal-wrapper
-  background-color white
-  padding 16px
-  z-index 1000
+  background-color var(--new-bg-04)
 
-.modal-enter
-  opacity 0
-  transform translateX(200px)
-  margin-bottom var(--offset)
-
-.modal-enter-to
-  pointer-events none
-  margin-bottom 12px
-  transition opacity $ANIM ease $ANIM_DELAY, margin-bottom $ANIM ease, transform $ANIM ease $ANIM_DELAY
-
-.modal-leave
-  opacity 0
-  margin-bottom 12px
-
-.modal-leave-to
-  opacity 0
-  margin-bottom var(--offset)
-  transform translateY(var(--offset))
-  transition opacity $ANIM ease, margin-bottom $ANIM ease, transform $ANIM ease
 </style>

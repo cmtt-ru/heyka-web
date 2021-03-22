@@ -4,7 +4,7 @@
 
     <div class="layout__wrapper">
       <div
-        v-show="showWorkspaces"
+        :class="{'layout__col--workspaces--hidden': !showWorkspacesMobile}"
         class="layout__col layout__col--workspaces"
       >
         <workspaces
@@ -81,7 +81,7 @@ export default {
   data() {
     return {
       transitionName: null,
-      showWorkspaces: true,
+      showWorkspacesMobile: true,
       workspaces: [],
       selectedWorkspace: {},
     };
@@ -115,9 +115,9 @@ export default {
         this.transitionName = 'prev';
       }
       if (to.meta.depth > 1) {
-        this.showWorkspaces = false;
+        this.showWorkspacesMobile = false;
       } else {
-        this.showWorkspaces = true;
+        this.showWorkspacesMobile = true;
       }
     },
   },
@@ -225,6 +225,10 @@ export default {
         flex 0 0 136px
         padding-top 32px
 
+        &--hidden
+          @media $tablet
+            display none
+
       &--sidebar
         flex 0 0 366px
         padding 32px 40px
@@ -295,7 +299,6 @@ export default {
 
   .manage-page
     position absolute
-    will-change transform
 
   .next-leave-to
     animation leaveToLeft $animation-duration both cubic-bezier(0.165, 0.84, 0.44, 1)

@@ -151,16 +151,15 @@ export default {
     },
 
     deleteModal(id) {
+      const name = this.workspaceUsers.find(user => user.id === id).name;
+
       Modal.show({
-        name: 'DeleteUser',
+        name: 'NewGroupName',
         data: {
-          userId: id,
-          title: '',
-          description: '',
-          buttonOk: '',
-          buttonCancel: '',
+          header: this.$t('modal.deleteUser.header'),
+          body: this.$tc('modal.deleteUser.body', name),
         },
-        onClose: (state, data) => {
+        onClose: (state) => {
           if (state === true) {
             console.log('true');
           } else {

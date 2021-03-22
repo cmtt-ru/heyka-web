@@ -111,7 +111,7 @@ export default {
     &__avatar
       border-radius 100%
       object-fit cover
-      margin 0 16px 0 4px
+      margin 8px 16px 0 4px
       flex-shrink 0
 
     &__info
