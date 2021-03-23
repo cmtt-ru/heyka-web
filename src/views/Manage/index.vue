@@ -287,6 +287,7 @@ export default {
 
 .manage-page
   width 100%
+  position absolute
   box-sizing border-box
   padding 32px 40px
   background-color var(--new-bg-04)
@@ -296,9 +297,6 @@ export default {
 /* Page transitions */
 
   $animation-duration = 350ms
-
-  .manage-page
-    position absolute
 
   .next-leave-to
     animation leaveToLeft $animation-duration both cubic-bezier(0.165, 0.84, 0.44, 1)

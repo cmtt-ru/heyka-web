@@ -1,7 +1,7 @@
 <template>
   <transition name="modal-background">
     <div
-      v-if="modalVisible"
+      v-show="modalVisible"
       role="dialog"
       aria-modal="true"
       class="modal"
