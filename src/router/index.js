@@ -156,7 +156,7 @@ const routes = [
     path: '/manage',
     component: Manage,
     meta: {
-      role: 'admin',
+      requiresAuth: true,
     },
     children: [
       {
@@ -287,20 +287,15 @@ const router = new VueRouter({
   routes,
 });
 
+/**
+ * Router middleware
+ */
 let authenticatedUser = null;
 
 router.beforeEach(async (to, from, next) => {
-  console.log('to', to);
-  console.log('from', from);
-  const routeWithRole = to.matched.find(entry => entry.meta.role);
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
 
-  let role = null;
-
-  if (routeWithRole) {
-    role = routeWithRole.meta.role;
-  }
-
-  if (role) {
+  if (requiresAuth) {
     if (!authenticatedUser) {
       try {
         authenticatedUser = await API.user.getAuthenticatedUser();
@@ -308,10 +303,6 @@ router.beforeEach(async (to, from, next) => {
       } catch (e) {
         return next({ name: 'error-403' });
       }
-    }
-
-    if (role === 'admin') {
-      /** Some code */
     }
   }
 

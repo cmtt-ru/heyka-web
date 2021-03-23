@@ -13,13 +13,13 @@
       </div>
 
       <div
-        v-if="me.id"
+        v-if="myId"
         v-popover.click="{name: 'UserMenu'}"
         class="user"
       >
         <avatar
-          :user-id="me.id"
-          :image="userAvatar(me.id, 32)"
+          :user-id="myId"
+          :image="userAvatar(myId, 32)"
           :size="32"
         />
 
@@ -50,7 +50,7 @@ export default {
   components: { Avatar },
   computed: {
     ...mapGetters({
-      me: 'myInfo',
+      myId: 'me/getMyId',
       userAvatar: 'users/getUserAvatarUrl',
     }),
   },
