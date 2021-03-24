@@ -8,6 +8,7 @@
       <avatar
         class="call-controls__avatar"
         :user-id="speakingUser.id"
+        :image="userAvatar(speakingUser.id, 12)"
         :size="36"
         round-corners
       />

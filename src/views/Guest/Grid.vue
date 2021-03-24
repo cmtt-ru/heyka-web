@@ -60,6 +60,7 @@
           <avatar
             v-show="!user.camera && !user.screen"
             class="cell__avatar"
+            :image="userAvatar(user, 100)"
             :user-id="user.id"
             :size="100"
             square

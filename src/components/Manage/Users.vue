@@ -8,6 +8,7 @@
       <avatar
         class="user__avatar"
         :user-id="user.id"
+        :image="avatarUrl(user, 32)"
         :size="32"
       />
 
