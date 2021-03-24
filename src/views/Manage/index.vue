@@ -58,7 +58,10 @@
           :name="transitionName"
         >
           <keep-alive>
-            <router-view @go-back="backHandler" />
+            <router-view
+              :key="$route.fullPath"
+              @go-back="backHandler"
+            />
           </keep-alive>
         </transition>
       </div>

@@ -31,6 +31,15 @@
       @keydown.native.esc="closeInput"
     />
 
+    <placeholder
+      v-if="!workspaceUsers.length"
+      class="users-placeholder"
+      avatar
+      two-lines
+      right-button
+      :height="80"
+    />
+
     <list
       v-if="workspaceUsers.length"
       v-model="filteredWorkspaceUsers"
@@ -53,13 +62,13 @@
 
     <div class="footer">
       You can invite users via
-      <a href="">Heyka app</a>
+      <a @click="openWorkspaceHandler">Heyka app</a>
     </div>
   </div>
 </template>
 
 <script>
-
+import Placeholder from '@components/Placeholder';
 import User from '@/components/Manage/User';
 import cloneDeep from 'clone-deep';
 import { sortAny } from '@libs/arrays';
@@ -78,6 +87,7 @@ export default {
     List,
     ListItem,
     UiButton,
+    Placeholder,
   },
 
   data() {
@@ -150,6 +160,10 @@ export default {
       }
     },
 
+    openWorkspaceHandler() {
+      this.$store.dispatch('launchDeepLink', `workspace/${this.workspaceId}`);
+    },
+
     deleteModal(id) {
       const name = this.workspaceUsers.find(user => user.id === id).name;
 
@@ -216,6 +230,9 @@ export default {
 
 /deep/ .input__icon
   padding-left 24px
+
+.users-placeholder
+  padding 0 17px
 
 .footer
   position fixed
