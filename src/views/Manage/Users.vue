@@ -234,6 +234,9 @@ export default {
 .users-placeholder
   padding 0 17px
 
+.list-view
+  margin-bottom 48px
+
 .footer
   position fixed
   bottom 0
