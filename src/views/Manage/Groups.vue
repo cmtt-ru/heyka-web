@@ -14,8 +14,21 @@ export default {
     };
   },
 
-  async mounted() {
+  computed: {
+    /**
+     * Workspace id from route
+     * @returns {string}
+     */
+    workspaceId() {
+      return this.$route.params.workspaceId;
+    },
 
+  },
+
+  async mounted() {
+    const groups = await this.$API.group.getGroups(this.workspaceId);
+
+    console.log(groups);
   },
 
   methods: {
