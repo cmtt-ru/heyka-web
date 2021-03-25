@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import API from '@sdk/api';
 
 const Landing = () => import(/* webpackChunkName: "main" */ '../views/Landing');
 const Downloads = () => import(/* webpackChunkName: "main" */ '../views/Landing/Downloads.vue');
@@ -31,6 +32,9 @@ const ManageEmpty = () => import(/* webpackChunkName: "main" */ '../views/Manage
 const WorkspaceUsers = () => import(/* webpackChunkName: "main" */ '../views/Manage/Users');
 const WorkspaceGroups = () => import(/* webpackChunkName: "main" */ '../views/Manage/Groups');
 const WorkspaceEdit = () => import(/* webpackChunkName: "main" */ '../views/WorkspaceEdit');
+
+const Error403 = () => import(/* webpackChunkName: "main" */ '../views/Errors/Error403');
+const Error404 = () => import(/* webpackChunkName: "main" */ '../views/Errors/Error404');
 
 const JanusMonitoring = () => import(/* webpackChunkName: "janus" */ '../views/JanusMonitoring');
 const JanusDashboard = () => import(/* webpackChunkName: "janus" */ '../views/JanusDashboard');
@@ -161,6 +165,9 @@ const routes = [
   {
     path: '/manage/:workspaceId',
     component: Manage,
+    meta: {
+      requiresAuth: true,
+    },
     children: [
       {
         path: '',
@@ -258,6 +265,24 @@ const routes = [
   },
 
   /**
+   * 403 Error page
+   */
+  {
+    path: '/403',
+    name: 'error-403',
+    component: Error403,
+  },
+
+  /**
+   * 404 Error page
+   */
+  {
+    path: '/404',
+    name: 'error-404',
+    component: Error404,
+  },
+
+  /**
    * Janus monitoring
    */
   {
@@ -274,11 +299,43 @@ const routes = [
     name: 'janus-dashboard',
     component: JanusDashboard,
   },
+
+  /**
+   * If no route matched than redirect to 404 page
+   */
+  {
+    path: '*',
+    redirect: {
+      name: 'error-404',
+    },
+  },
 ];
 
 const router = new VueRouter({
   mode: 'history',
   routes,
+});
+
+/**
+ * Router middleware
+ */
+let authenticatedUser = null;
+
+router.beforeEach(async (to, from, next) => {
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+
+  if (requiresAuth) {
+    if (!authenticatedUser) {
+      try {
+        authenticatedUser = await API.user.getAuthenticatedUser();
+        console.log('authenticatedUser', authenticatedUser);
+      } catch (e) {
+        return next({ name: 'error-403' });
+      }
+    }
+  }
+
+  return next();
 });
 
 export default router;

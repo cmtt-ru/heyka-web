@@ -16,7 +16,7 @@
       <ui-input
         v-model="password"
         class="reset-form__input"
-        placeholder="Новый пароль"
+        :placeholder="texts.newPassword"
         type="password"
         required
         :minlength="8"

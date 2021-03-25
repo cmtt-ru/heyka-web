@@ -11,7 +11,7 @@
   "dependencies": {
     "@popperjs/core": "^2.4.4",
     "axios": "^0.21.1",
-    "capture-frame": "^4.0.0",
+    "capture-frame": "^3.0.3",
     "clone-deep": "^4.0.1",
     "core-js": "^3.6.5",
     "cyrillic-to-translit-js": "^3.1.0",
@@ -55,6 +55,7 @@
     "eslint-plugin-strict-vue": "^1.0.0",
     "eslint-plugin-vue": "^6.2.2",
     "hark": "^1.2.3",
+    "linkifyjs": "^3.0.0-beta.3",
     "prerender-spa-plugin": "^3.2.1",
     "stylus": "^0.54.7",
     "stylus-loader": "^3.0.2",

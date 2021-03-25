@@ -186,4 +186,14 @@ export default {
       timestamp: Date.now(),
     });
   },
+
+  sendMiniChatMessage({ commit, rootGetters }, message) {
+    conversationBroadcast('mini-chat', rootGetters['me/getMyId'], {
+      message,
+    });
+  },
+
+  markMiniChatAsRead({ commit }) {
+    commit('SET_MINI_CHAT_READ_TIMESTAMP', Date.now());
+  },
 };
