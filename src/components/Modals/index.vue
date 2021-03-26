@@ -21,7 +21,7 @@
           class="modal-wrapper"
           :class="{'modal-wrapper--visible': index>=modalsAmount-1}"
           :modal="modal"
-          @confirm="$emit('confirm')"
+          @confirm="$emit('confirm', $event)"
           @reject="$emit('reject')"
           @close="$emit('close')"
         />
@@ -162,7 +162,7 @@ export default {
     },
 
     close() {
-      this.$emit('close');
+      this.$emit('reject');
     },
 
   },

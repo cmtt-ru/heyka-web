@@ -11,8 +11,9 @@
           {{ $t('modal.common.name') }}
         </div>
         <ui-input
-
           v-model="name"
+          :regex="newNameRegex"
+          :regex-error="data.errorString"
           required
           :minlength="2"
           enter-submit
@@ -62,26 +63,30 @@ export default {
 
   computed: {
     /**
-      * RegEx with full match
+      * RegEx 'not any of these strings'
       *
       * @returns {RegEx}
     */
-    confirmRegex() {
-      return new RegExp(`^${this.data.confirmString}$`);
+    newNameRegex() {
+      const groupNamesString = this.data.groupNames.join('|');
+
+      return new RegExp(`^(?!(${groupNamesString})$).*`);
     },
   },
 
   methods: {
     next() {
       Modal.show({
-        name: 'ConfirmDelete',
+        name: 'NewGroupUsers',
         data: {
-          header: this.$t('modal.deleteUser.header'),
-          body: this.$tc('modal.deleteUser.body', this.name),
+          header: this.$tc('modal.addGroup.header2', this.name),
         },
-        onClose: (state) => {
-          if (state === true) {
-            this.$emit('confirm');
+        onClose: (status, data) => {
+          if (status === 'confirm') {
+            this.$emit('confirm', {
+              name: this.name,
+              users: data,
+            });
           }
         },
       });

@@ -48,7 +48,6 @@
 export default {
 
   mounted() {
-    console.log(document.body.clientWidth, getComputedStyle(document.documentElement).getPropertyValue('--tablet-width'));
     if (document.body.clientWidth > getComputedStyle(document.documentElement).getPropertyValue('--tablet-width')) {
       this.$router.replace({ name: 'manage-users' }).catch(() => {});
     }

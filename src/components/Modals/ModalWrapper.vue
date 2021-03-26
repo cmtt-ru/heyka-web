@@ -4,7 +4,7 @@
       :is="modal.name"
 
       :data="modal.data"
-      @confirm="$emit('confirm')"
+      @confirm="$emit('confirm', $event)"
       @reject="$emit('reject')"
       @close="$emit('close')"
     />
@@ -12,7 +12,7 @@
       :type="7"
       icon="close"
       class="modal-wrapper-outer__close"
-      @click="$emit('close')"
+      @click="$emit('reject')"
     />
   </div>
 </template>
@@ -49,8 +49,8 @@ export default {
 
   &__close
     position absolute
-    top 24px
-    right 24px
+    top 20px
+    right 20px
 
     @media $mobile
       top 13px

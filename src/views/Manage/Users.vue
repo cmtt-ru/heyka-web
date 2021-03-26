@@ -28,7 +28,7 @@
       icon="search"
       class="search-input"
       placeholder="Search"
-      @keydown.native.esc="closeInput"
+      @keydown.native.esc="searchText=''"
     />
 
     <placeholder
@@ -168,7 +168,7 @@ export default {
       const name = this.workspaceUsers.find(user => user.id === id).name;
 
       Modal.show({
-        name: 'NewGroupName',
+        name: 'ConfirmDelete',
         data: {
           header: this.$t('modal.deleteUser.header'),
           body: this.$tc('modal.deleteUser.body', name),
@@ -188,48 +188,7 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-
-.sub-header
-  display flex
-  flex-direction row
-  justify-content space-between
-  align-items center
-  flex-wrap wrap
-  margin-bottom 24px
-
-  &__back
-    color var(--new-UI-01)
-    padding-right 16px
-    display none
-
-    @media $tablet
-      display initial
-
-  &__text
-    font-weight bold
-    font-size 22px
-    line-height 36px
-    margin-right 16px
-    flex-shrink 0
-    flex-grow 2
-
-  &__switch
-    max-width 500px
-
-.search-input
-  margin-bottom 24px
-
-/deep/ .input
-  padding-right 24px
-  padding-left 72px
-  height 44px
-  min-height 44px
-  box-sizing border-box
-  font-size 18px
-  line-height 32px
-
-/deep/ .input__icon
-  padding-left 24px
+@import 'content.styl'
 
 .users-placeholder
   padding 0 17px
