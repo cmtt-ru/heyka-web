@@ -34,6 +34,16 @@
     </div>
 
     <ui-button
+      v-if="deleteButton"
+      class="user__more user__more--delete"
+      :type="7"
+      size="medium"
+      icon="close"
+      @click="deleteHandler"
+    />
+
+    <ui-button
+      v-else
       v-popover.click="{name: 'EditUserInWorkspace', data: {id: user.id}}"
       class="user__more"
       :type="7"
@@ -48,6 +58,8 @@ import { getUserAvatarUrl } from '@libs/image';
 import { dateToElapsedTime } from '@libs/texts';
 import Avatar from '@components/Avatar';
 import UiButton from '@components/UiButton';
+
+import broadcastEvents from '@sdk/classes/broadcastEvents';
 
 export default {
   components: {
@@ -66,14 +78,13 @@ export default {
     },
 
     /**
-     * Workspace
+     * true if red cross instead of "more" button
      */
-    workspace: {
-      type: Object,
-      default: function () {
-        return {};
-      },
+    deleteButton: {
+      type: Boolean,
+      default: false,
     },
+
   },
 
   methods: {
@@ -85,6 +96,10 @@ export default {
      */
     dateFormat(date) {
       return dateToElapsedTime(date, this.$t('calendar'));
+    },
+
+    deleteHandler() {
+      broadcastEvents.dispatch('delete-group-user', this.user.id);
     },
 
     /**
@@ -147,6 +162,9 @@ export default {
 
     &__more
       flex-shrink 0
+
+      &--delete
+        color var(--new-signal-03)
 
     &:after
       content ''

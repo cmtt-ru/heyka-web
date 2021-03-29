@@ -52,7 +52,7 @@
         icon="add"
         class="add-button"
         size="large"
-        @click="createGroupHandler()"
+        @click="createGroupHandler"
       >
         New group
       </ui-button>
@@ -93,7 +93,7 @@
           </div>
 
           <ui-button
-            v-popover.click="{name: 'EditUserInWorkspace', data: {id: group.id}}"
+            v-popover.click="{name: 'EditGroup', data: {id: group.id}}"
             class="group__more"
             :type="7"
             size="medium"
@@ -110,6 +110,7 @@ import UiButton from '@components/UiButton';
 import { UiInput } from '@components/Form';
 import { List, ListItem } from '@components/List';
 
+import broadcastEvents from '@sdk/classes/broadcastEvents';
 import Modal from '@sdk/classes/Modal';
 
 export default {
@@ -143,7 +144,8 @@ export default {
   async mounted() {
     this.groups = await this.$API.group.getGroups(this.workspaceId);
 
-    console.log(this.groups);
+    broadcastEvents.on('delete-group', this.deleteModal);
+    broadcastEvents.on('open-group-members', this.openMembers);
   },
 
   methods: {
@@ -165,6 +167,33 @@ export default {
             this.groups = await this.$API.group.getGroups(this.workspaceId);
           }
         },
+      });
+    },
+
+    deleteModal(id) {
+      console.log(id, this.groups);
+      const name = this.groups.find(group => group.id === id).name;
+
+      Modal.show({
+        name: 'ConfirmDelete',
+        data: {
+          header: this.$t('modal.deleteGroup.header'),
+          body: this.$tc('modal.deleteGroup.body', name),
+        },
+        onClose: async (status) => {
+          if (status === 'confirm') {
+            await this.$API.group.remove(id);
+            this.groups = await this.$API.group.getGroups(this.workspaceId);
+          }
+        },
+      });
+    },
+
+    async openMembers(id) {
+      console.log(id);
+      await this.$router.push({
+        name: 'manage-groups-members',
+        params: { groupId: id },
       });
     },
   },
@@ -210,20 +239,6 @@ export default {
     font-size 18px
     line-height 24px
     padding 12px 38px
-
-.add-button
-    margin-left 16px
-    height 80px
-
-/deep/ .ui-button__icon-bg
-    width 40px
-    height 40px
-    border 1px solid var(--new-stroke-01)
-    margin-right 16px
-
-    & .icon
-      width 20px
-      height 20px
 
  .group
     display flex

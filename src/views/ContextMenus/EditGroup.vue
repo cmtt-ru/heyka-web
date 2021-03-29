@@ -5,11 +5,19 @@
     <div class="buttons">
       <ui-button
         :type="11"
-        icon="admin"
+        icon="user"
         data-popover-close
-        @click="makeAdminHandler"
+        @click="membersHandler"
       >
-        Make an admin
+        Members
+      </ui-button>
+      <ui-button
+        :type="11"
+        icon="drawing"
+        data-popover-close
+        @click="editHandler"
+      >
+        Edit
       </ui-button>
       <ui-button
         :type="11"
@@ -58,12 +66,16 @@ export default {
 
   methods: {
 
-    makeAdminHandler() {
+    membersHandler() {
+      broadcastEvents.dispatch('open-group-members', this.id);
+    },
+
+    editHandler() {
 
     },
 
     deleteHandler() {
-      broadcastEvents.dispatch('delete-user', this.id);
+      broadcastEvents.dispatch('delete-group', this.id);
     },
   },
 };

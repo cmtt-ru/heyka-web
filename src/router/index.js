@@ -31,6 +31,7 @@ const Manage = () => import(/* webpackChunkName: "main" */ '../views/Manage');
 const ManageEmpty = () => import(/* webpackChunkName: "main" */ '../views/Manage/Empty');
 const WorkspaceUsers = () => import(/* webpackChunkName: "main" */ '../views/Manage/Users');
 const WorkspaceGroups = () => import(/* webpackChunkName: "main" */ '../views/Manage/Groups');
+const WorkspaceGroupMembers = () => import(/* webpackChunkName: "main" */ '../views/Manage/GroupMembers');
 const WorkspaceEdit = () => import(/* webpackChunkName: "main" */ '../views/WorkspaceEdit');
 
 const Error403 = () => import(/* webpackChunkName: "main" */ '../views/Errors/Error403');
@@ -191,6 +192,14 @@ const routes = [
         component: WorkspaceGroups,
         meta: {
           depth: 2,
+        },
+      },
+      {
+        path: ':groupId/members',
+        name: 'manage-groups-members',
+        component: WorkspaceGroupMembers,
+        meta: {
+          depth: 3,
         },
       },
     ],

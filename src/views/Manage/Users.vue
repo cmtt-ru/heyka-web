@@ -54,7 +54,6 @@
       >
         <user
           :user="user"
-          :workspace="selectedWorkspace"
           @update="loadUsers"
         />
       </list-item>
@@ -110,7 +109,7 @@ export default {
     },
 
     /**
-     * Sort users alphabetically
+     * Sort users by latestActivityAt
      * @returns {array}
      */
     sortedUsers() {
@@ -127,7 +126,7 @@ export default {
     await this.loadWorkspaces();
     await this.loadUsers();
 
-    broadcastEvents.on('delete', this.deleteModal);
+    broadcastEvents.on('delete-user', this.deleteModal);
   },
 
   methods: {
