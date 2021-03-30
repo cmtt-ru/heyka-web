@@ -1,5 +1,8 @@
 <template>
-  <div class="manage-page">
+  <div
+    :key="workspaceId"
+    class="manage-page"
+  >
     <div
       v-if="groups.length===0"
       class="empty"
@@ -141,11 +144,18 @@ export default {
 
   },
 
-  async mounted() {
+  async activated() {
     this.groups = await this.$API.group.getGroups(this.workspaceId);
 
     broadcastEvents.on('delete-group', this.deleteModal);
+    broadcastEvents.on('edit-group', this.editModal);
     broadcastEvents.on('open-group-members', this.openMembers);
+  },
+
+  deactivated() {
+    broadcastEvents.removeAllListeners('delete-group');
+    broadcastEvents.removeAllListeners('edit-group');
+    broadcastEvents.removeAllListeners('open-group-members');
   },
 
   methods: {
@@ -171,7 +181,6 @@ export default {
     },
 
     deleteModal(id) {
-      console.log(id, this.groups);
       const name = this.groups.find(group => group.id === id).name;
 
       Modal.show({
@@ -183,6 +192,24 @@ export default {
         onClose: async (status) => {
           if (status === 'confirm') {
             await this.$API.group.remove(id);
+            this.groups = await this.$API.group.getGroups(this.workspaceId);
+          }
+        },
+      });
+    },
+
+    editModal(id) {
+      const name = this.groups.find(group => group.id === id).name;
+
+      Modal.show({
+        name: 'EditInfo',
+        data: {
+          header: this.$t('modal.editGroup.header'),
+          name,
+        },
+        onClose: async (status, data) => {
+          if (status === 'confirm') {
+            await this.$API.group.edit(id, data);
             this.groups = await this.$API.group.getGroups(this.workspaceId);
           }
         },

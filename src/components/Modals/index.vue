@@ -180,7 +180,7 @@ export default {
   display flex
   justify-content center
   align-items center
-  z-index 999
+  z-index 100
   opacity 1
 
 .modal__backdrop

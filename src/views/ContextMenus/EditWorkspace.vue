@@ -6,6 +6,7 @@
       <ui-button
         :type="11"
         icon="drawing"
+        data-popover-close
         @click="editHandler"
       >
         Edit info
@@ -14,6 +15,8 @@
         :type="11"
         icon="trash"
         class="delete-button"
+        data-popover-close
+        @click="deleteHandler"
       >
         Delete workspace
       </ui-button>
@@ -25,10 +28,22 @@
 import Popover from '@components/Popover';
 import UiButton from '@components/UiButton';
 
+import broadcastEvents from '@sdk/classes/broadcastEvents';
+
 export default {
   components: {
     Popover,
     UiButton,
+  },
+
+  props: {
+    /**
+     * User id
+     */
+    id: {
+      type: String,
+      required: true,
+    },
   },
 
   computed: {
@@ -42,10 +57,17 @@ export default {
 
   },
 
+  mounted() {
+    console.log(this.id);
+  },
+
   methods: {
-
     editHandler() {
+      broadcastEvents.dispatch('edit-workspace', this.id);
+    },
 
+    deleteHandler() {
+      broadcastEvents.dispatch('delete-workspace', this.id);
     },
   },
 };

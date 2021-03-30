@@ -20,6 +20,7 @@
             {{ selectedWorkspace.name }}
           </p>
           <ui-button
+            :key="selectedWorkspace.id"
             v-popover.click="{name: 'EditWorkspace', data: {id: selectedWorkspace.id}}"
             class="user__more"
             :type="7"
@@ -73,6 +74,9 @@
 import Workspaces from '@/components/Manage/Workspaces';
 import UiHeader from '@/components/UiHeader';
 import UiButton from '@components/UiButton';
+
+import broadcastEvents from '@sdk/classes/broadcastEvents';
+import Modal from '@sdk/classes/Modal';
 
 export default {
   components: {
@@ -129,6 +133,9 @@ export default {
     await this.authorize();
     await this.loadWorkspaces();
     await this.loadUsers();
+
+    broadcastEvents.on('delete-workspace', this.deleteModal);
+    broadcastEvents.on('edit-workspace', this.editModal);
   },
 
   methods: {
@@ -203,6 +210,63 @@ export default {
           params: { workspaceId: this.workspaceId },
         });
       }
+    },
+
+    deleteModal(id) {
+      const name = this.workspaces.find(workspaces => workspaces.id === id).name;
+
+      Modal.show({
+        name: 'ConfirmDelete',
+        data: {
+          header: this.$t('modal.deleteWorkspace.header'),
+          body: this.$t('modal.deleteWorkspace.body'),
+          confirmString: name,
+        },
+        onClose: async (status) => {
+          if (status === 'confirm') {
+            console.log(status);
+            await this.$API.workspace.deleteWorkspace(this.selectedWorkspace.id);
+            const serverUpdatetime = 100;
+
+            setTimeout(() => {
+              this.loadWorkspaces();
+              this.$router.replace({
+                name: 'manage',
+                params: { workspaceId: this.workspaces[0].id },
+              });
+            }, serverUpdatetime);
+          }
+        },
+      });
+    },
+
+    editModal(id) {
+      const workspace = this.workspaces.find(workspaces => workspaces.id === id);
+
+      console.log(workspace);
+
+      Modal.show({
+        name: 'EditInfo',
+        data: {
+          header: this.$t('modal.editWorkspace.header'),
+          name: workspace.name,
+          avatar: {
+            avatarFileId: workspace.avatarFileId,
+            avatarSet: workspace.avatarSet,
+          },
+        },
+        onClose: async (status, data) => {
+          if (status === 'confirm') {
+            console.log(status, data);
+            await this.$API.workspace.editWorkspace(this.selectedWorkspace.id, data);
+            const serverUpdatetime = 100;
+
+            setTimeout(() => {
+              this.loadWorkspaces();
+            }, serverUpdatetime);
+          }
+        },
+      });
     },
   },
 };

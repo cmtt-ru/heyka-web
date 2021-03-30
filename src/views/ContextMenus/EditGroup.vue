@@ -71,7 +71,7 @@ export default {
     },
 
     editHandler() {
-
+      broadcastEvents.dispatch('edit-group', this.id);
     },
 
     deleteHandler() {

@@ -26,6 +26,7 @@ export default {
     ConfirmDelete: () => import(/* webpackChunkName: "modals" */ './Templates/ConfirmDelete'),
     NewGroupName: () => import(/* webpackChunkName: "modals" */ './Templates/NewGroupName'),
     NewGroupUsers: () => import(/* webpackChunkName: "modals" */ './Templates/NewGroupUsers'),
+    EditInfo: () => import(/* webpackChunkName: "modals" */ './Templates/EditInfo'),
   },
   props: {
     /**

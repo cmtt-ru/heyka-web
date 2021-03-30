@@ -122,30 +122,17 @@ export default {
     },
   },
 
-  async mounted() {
-    await this.loadWorkspaces();
+  async activated() {
     await this.loadUsers();
 
     broadcastEvents.on('delete-user', this.deleteModal);
   },
 
+  deactivated() {
+    broadcastEvents.removeAllListeners('delete-user');
+  },
+
   methods: {
-
-    /**
-     * Load workspace list to which you have access
-     * @returns {Promise<void>}
-     */
-    async loadWorkspaces() {
-      this.workspaces = await this.$API.admin.getWorkspaces();
-
-      const selected = this.workspaces.find(w => w.id === this.workspaceId);
-
-      if (selected) {
-        this.selectedWorkspace = selected;
-      } else {
-        this.selectedWorkspace = this.workspaces[0];
-      }
-    },
 
     /**
      * Load users for selected workspace
@@ -172,11 +159,10 @@ export default {
           header: this.$t('modal.deleteUser.header'),
           body: this.$tc('modal.deleteUser.body', name),
         },
-        onClose: (state) => {
-          if (state === true) {
-            console.log('true');
-          } else {
-            console.log('false');
+        onClose: (status) => {
+          if (status === 'confirm') {
+            // await this.$API.admin.getUsers(this.workspaceId);
+            // await this.loadUsers();
           }
         },
       });
