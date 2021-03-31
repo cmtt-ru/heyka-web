@@ -92,7 +92,7 @@ export default {
   data() {
     return {
       searchText: '',
-      canAllInvite: true,
+      canAllInviteLocal: true,
       workspaceUsers: [],
       filteredWorkspaceUsers: [],
       selectedWorkspace: {},
@@ -120,16 +120,31 @@ export default {
           order: 'desc',
         } ]));
     },
+
+    canAllInvite: {
+      get() {
+        return this.canAllInviteLocal;
+      },
+      set(val) {
+        this.canAllInviteLocal = val;
+        this.$API.workspace.setWorkspaceSettings(this.workspaceId, { canUsersInvite: val });
+      },
+    },
   },
 
   async activated() {
     await this.loadUsers();
+    const settings = await this.$API.workspace.getWorkspaceSettings(this.workspaceId);
+
+    this.canAllInviteLocal = settings.canUsersInvite;
 
     broadcastEvents.on('delete-user', this.deleteModal);
+    broadcastEvents.on('update-permissions', this.updatePermissionsHandler);
   },
 
   deactivated() {
     broadcastEvents.removeAllListeners('delete-user');
+    broadcastEvents.removeAllListeners('update-permissions');
   },
 
   methods: {
@@ -159,13 +174,18 @@ export default {
           header: this.$t('modal.deleteUser.header'),
           body: this.$tc('modal.deleteUser.body', name),
         },
-        onClose: (status) => {
+        onClose: async (status) => {
           if (status === 'confirm') {
-            // await this.$API.admin.getUsers(this.workspaceId);
-            // await this.loadUsers();
+            await this.$API.admin.deleteUser(this.workspaceId, id);
+            await this.loadUsers();
           }
         },
       });
+    },
+
+    async updatePermissionsHandler(params) {
+      await this.$API.admin.updatePermissions(this.workspaceId, params);
+      await this.loadUsers();
     },
 
   },

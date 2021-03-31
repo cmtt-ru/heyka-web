@@ -4,13 +4,24 @@
   >
     <div class="buttons">
       <ui-button
+        v-if="isAdmin"
+        :type="11"
+        icon="admin-off"
+        data-popover-close
+        @click="updatePermissions('user')"
+      >
+        Take away admin rights
+      </ui-button>
+      <ui-button
+        v-else
         :type="11"
         icon="admin"
         data-popover-close
-        @click="makeAdminHandler"
+        @click="updatePermissions('admin')"
       >
         Make an admin
       </ui-button>
+
       <ui-button
         :type="11"
         icon="trash"
@@ -43,6 +54,14 @@ export default {
       type: String,
       required: true,
     },
+
+    /**
+     * True if user is admin in current workspace
+     */
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   computed: {
@@ -58,8 +77,11 @@ export default {
 
   methods: {
 
-    makeAdminHandler() {
-
+    updatePermissions(newRole) {
+      broadcastEvents.dispatch('update-permissions', {
+        userId: this.id,
+        role: newRole,
+      });
     },
 
     deleteHandler() {
