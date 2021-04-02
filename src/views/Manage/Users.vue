@@ -14,7 +14,7 @@
         />
       </ui-button>
       <p class="sub-header__text">
-        Members
+        {{ $t('manage.members') }}
       </p>
       <ui-switch
         v-model="canAllInvite"
@@ -27,7 +27,7 @@
       v-model="searchText"
       icon="search"
       class="search-input"
-      placeholder="Search"
+      :placeholder="$t('techTexts.search')"
       @keydown.native.esc="searchText=''"
     />
 
@@ -60,8 +60,8 @@
     </list>
 
     <div class="footer">
-      You can invite users via
-      <a @click="openWorkspaceHandler">Heyka app</a>
+      {{ $t('manage.inviteUsersText') }}
+      <a @click="openWorkspaceHandler">{{ $t('manage.inviteUsersLink') }}</a>
     </div>
   </div>
 </template>
@@ -194,6 +194,14 @@ export default {
 
 <style lang="stylus" scoped>
 @import 'content.styl'
+
+.sub-header__text
+  @media $mobile
+    flex-basis 50%
+
+.sub-header__switch
+  @media $mobile
+    margin-top 16px
 
 .users-placeholder
   padding 0 17px

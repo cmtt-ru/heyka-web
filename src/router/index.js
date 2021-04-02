@@ -164,6 +164,10 @@ const routes = [
    * Manage workspaces
    */
   {
+    path: '/manage',
+    component: Manage,
+  },
+  {
     path: '/manage/:workspaceId',
     component: Manage,
     meta: {

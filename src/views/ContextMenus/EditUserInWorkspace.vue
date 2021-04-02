@@ -10,7 +10,7 @@
         data-popover-close
         @click="updatePermissions('user')"
       >
-        Take away admin rights
+        {{ $t('popover.manageUser.noAdmin') }}
       </ui-button>
       <ui-button
         v-else
@@ -19,7 +19,7 @@
         data-popover-close
         @click="updatePermissions('admin')"
       >
-        Make an admin
+        {{ $t('popover.manageUser.admin') }}
       </ui-button>
 
       <ui-button
@@ -29,7 +29,7 @@
         data-popover-close
         @click="deleteHandler"
       >
-        Delete
+        {{ $t('techTexts.delete') }}
       </ui-button>
     </div>
   </popover>

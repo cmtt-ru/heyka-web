@@ -16,7 +16,10 @@
 
       <div class="layout__col layout__col--sidebar">
         <div class="sub-header">
-          <p class="sub-header__text">
+          <p
+            v-textfade
+            class="sub-header__text"
+          >
             {{ selectedWorkspace.name }}
           </p>
           <ui-button
@@ -38,7 +41,7 @@
             :height="24"
             class="manage-workspace-link__icon"
           />
-          <div>Members</div>
+          <div>{{ $t('manage.members') }}</div>
         </router-link>
         <router-link
           class="manage-workspace-link"
@@ -50,7 +53,7 @@
             :height="24"
             class="manage-workspace-link__icon"
           />
-          <div>Groups</div>
+          <div>{{ $t('manage.groups') }}</div>
         </router-link>
       </div>
 
@@ -134,8 +137,19 @@ export default {
     await this.loadWorkspaces();
     await this.loadUsers();
 
+    if (this.$route.meta.depth > 1) {
+      this.showWorkspacesMobile = false;
+    } else {
+      this.showWorkspacesMobile = true;
+    }
+
     broadcastEvents.on('delete-workspace', this.deleteModal);
     broadcastEvents.on('edit-workspace', this.editModal);
+  },
+
+  beforeDestroy() {
+    broadcastEvents.removeAllListeners('delete-workspace');
+    broadcastEvents.removeAllListeners('edit-workspace');
   },
 
   methods: {
@@ -158,6 +172,7 @@ export default {
      * @returns {Promise<void>}
      */
     async loadWorkspaces() {
+      this.$store.dispatch('workspaces/updateList');
       this.workspaces = await this.$API.admin.getWorkspaces();
 
       const selected = this.workspaces.find(w => w.id === this.workspaceId);
@@ -189,7 +204,7 @@ export default {
     async workspaceSelectHandler(workspace) {
       this.selectedWorkspace = workspace;
 
-      await this.$router.replace({
+      await this.$router.push({
         name: 'manage',
         params: { workspaceId: workspace.id },
       });
@@ -224,17 +239,12 @@ export default {
         },
         onClose: async (status) => {
           if (status === 'confirm') {
-            console.log(status);
             await this.$API.workspace.deleteWorkspace(this.selectedWorkspace.id);
-            const serverUpdatetime = 100;
-
-            setTimeout(() => {
-              this.loadWorkspaces();
-              this.$router.replace({
-                name: 'manage',
-                params: { workspaceId: this.workspaces[0].id },
-              });
-            }, serverUpdatetime);
+            this.loadWorkspaces();
+            this.$router.replace({
+              name: 'manage',
+              params: { workspaceId: this.workspaces[0].id },
+            });
           }
         },
       });
@@ -242,8 +252,6 @@ export default {
 
     editModal(id) {
       const workspace = this.workspaces.find(workspaces => workspaces.id === id);
-
-      console.log(workspace);
 
       Modal.show({
         name: 'EditInfo',
@@ -257,13 +265,8 @@ export default {
         },
         onClose: async (status, data) => {
           if (status === 'confirm') {
-            console.log(status, data);
             await this.$API.workspace.editWorkspace(this.selectedWorkspace.id, data);
-            const serverUpdatetime = 100;
-
-            setTimeout(() => {
-              this.loadWorkspaces();
-            }, serverUpdatetime);
+            this.loadWorkspaces();
           }
         },
       });
@@ -292,6 +295,12 @@ export default {
         flex 0 0 136px
         padding-top 32px
 
+        @media $tablet
+          flex 0 0 120px
+
+        @media $mobile
+          flex 0 0 88px
+
         &--hidden
           @media $tablet
             display none
@@ -317,7 +326,6 @@ export default {
     flex-direction row
     justify-content space-between
     align-items center
-    flex-wrap wrap
     margin-bottom 24px
 
     &__text
@@ -325,8 +333,11 @@ export default {
       font-size 22px
       line-height 36px
       margin-right 16px
-      flex-shrink 0
+      flex-shrink 1
       flex-grow 2
+
+    & .ui-button
+      flex-shrink 0
 
 .manage-workspace-link
   display flex
@@ -358,6 +369,12 @@ export default {
   box-sizing border-box
   padding 32px 40px
   background-color var(--new-bg-04)
+
+  @media $tablet
+    padding 26px 32px
+
+  @media $mobile
+    padding 18px 16px
 
 @media $tablet
 

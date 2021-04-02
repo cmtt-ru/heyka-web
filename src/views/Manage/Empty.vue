@@ -1,5 +1,23 @@
 <template>
   <div class="manage-page">
+    <div
+      class="sub-header"
+    >
+      <p
+        v-textfade
+        class="sub-header__text"
+      >
+        {{ selectedWorkspace.name }}
+      </p>
+      <ui-button
+        :key="selectedWorkspace.id"
+        v-popover.click="{name: 'EditWorkspace', data: {id: selectedWorkspace.id}}"
+        class="user__more"
+        :type="7"
+        size="medium"
+        icon="more"
+      />
+    </div>
     <router-link
       class="manage-workspace-link"
       :to="{name: 'manage-users'}"
@@ -11,7 +29,7 @@
           :height="24"
           class="manage-workspace-link__icon"
         />
-        <div>Members</div>
+        <div>{{ $t('manage.members') }}</div>
       </div>
       <svg-icon
         name="arrow-down"
@@ -31,7 +49,7 @@
           :height="24"
           class="manage-workspace-link__icon"
         />
-        <div>Groups</div>
+        <div>{{ $t('manage.groups') }}</div>
       </div>
       <svg-icon
         name="arrow-down"
@@ -44,8 +62,29 @@
 </template>
 
 <script>
+import UiButton from '@components/UiButton';
+import { mapGetters } from 'vuex';
 
 export default {
+
+  components: {
+    UiButton,
+  },
+
+  computed: {
+    ...mapGetters({
+      getWorkspaceById: 'workspaces/getWorkspaceById',
+    }),
+
+    /**
+     * Workspace id from route
+     * @returns {string}
+     */
+    selectedWorkspace() {
+      return this.getWorkspaceById(this.$route.params.workspaceId) || {};
+    },
+
+  },
 
   async activated() {
     if (document.body.clientWidth > getComputedStyle(document.documentElement).getPropertyValue('--tablet-width')) {
@@ -57,6 +96,25 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+.sub-header
+  display flex
+  flex-direction row
+  justify-content space-between
+  align-items center
+  max-width 100%
+  margin-bottom 24px
+
+  &__text
+    font-weight bold
+    font-size 22px
+    line-height 36px
+    margin-right 16px
+    flex-shrink 1
+    flex-grow 2
+
+  & .ui-button
+    flex-shrink 0
+
 .manage-workspace-link
   display flex
   flex-direction row
@@ -72,6 +130,12 @@ export default {
   text-decoration none
   color var(--text-0)
   position relative
+
+  @media $tablet
+    padding 6px 0 6px
+
+  @media $mobile
+    padding 6px 0 6px 4px
 
   &:after
     content ''

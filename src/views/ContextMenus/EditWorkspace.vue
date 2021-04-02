@@ -9,7 +9,7 @@
         data-popover-close
         @click="editHandler"
       >
-        Edit info
+        {{ $t('popover.manageWorkspace.edit') }}
       </ui-button>
       <ui-button
         :type="11"
@@ -18,7 +18,7 @@
         data-popover-close
         @click="deleteHandler"
       >
-        Delete workspace
+        {{ $t('popover.manageWorkspace.delete') }}
       </ui-button>
     </div>
   </popover>

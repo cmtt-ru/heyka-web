@@ -12,7 +12,7 @@
           name="back"
           width="20"
           height="20"
-          @click.native="$emit('close')"
+          @click.native="$emit('reject')"
         />
         <div v-textfade>
           {{ data.header }}
@@ -224,6 +224,11 @@ export default {
     align-items center
     overflow hidden
 
+    @media $mobile
+      height 52px
+      padding 12px 60px 12px 20px
+      margin-bottom 11px
+
     & .icon
       flex-shrink 0
       color var(--new-UI-01)
@@ -237,10 +242,16 @@ export default {
 /deep/ .pseudo-popup__body
   padding 0 32px
 
+  @media $mobile
+     padding 0 20px
+
 .user-search__wrapper
   padding 0 32px 12px
   width 100%
   box-sizing border-box
+
+  @media $mobile
+     padding 0 20px 12px
 
 /deep/ .input
   padding-left 54px
@@ -311,4 +322,7 @@ export default {
     font-weight 500
     font-size 18px
     line-height 16px
+
+    @media $mobile
+      font-size 16px
 </style>

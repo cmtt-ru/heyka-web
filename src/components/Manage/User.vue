@@ -44,6 +44,7 @@
 
     <ui-button
       v-else
+      :key="user.role + user.id"
       v-popover.click="{name: 'EditUserInWorkspace', data: {id: user.id, isAdmin: user.role==='admin'}}"
       class="user__more"
       :type="7"
@@ -131,6 +132,7 @@ export default {
 
     &__info
       flex-grow 2
+      overflow hidden
 
     &__name
       font-size 18px
@@ -140,6 +142,10 @@ export default {
       flex-direction row
       justify-content flex-start
       align-items center
+
+      @media $mobile
+        font-size 16px
+        line-height 26px
 
       &__admin
         color var(--new-UI-01)
@@ -151,6 +157,10 @@ export default {
       line-height 26px
       color var(--new-UI-04)
 
+      @media $mobile
+        font-size 14px
+        line-height 22px
+
       &.disabled
         opacity 0.5
 
@@ -159,6 +169,10 @@ export default {
       font-size 16px
       line-height 26px
       flex-shrink 0
+
+      @media $mobile
+        font-size 14px
+        line-height 26px
 
     &__more
       flex-shrink 0

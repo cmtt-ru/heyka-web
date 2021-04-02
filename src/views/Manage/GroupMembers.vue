@@ -23,7 +23,7 @@
       v-model="searchText"
       icon="search"
       class="search-input"
-      placeholder="Search"
+      :placeholder="$t('techTexts.search')"
       @keydown.native.esc="searchText=''"
     />
 
@@ -34,7 +34,7 @@
       size="large"
       @click="addMembersHandler"
     >
-      Add members
+      {{ $t('manage.addMembers') }}
     </ui-button>
 
     <placeholder
@@ -130,13 +130,17 @@ export default {
     },
   },
 
-  async mounted() {
+  async activated() {
     const groups = await this.$API.group.getGroups(this.workspaceId);
 
     this.group = groups.find(group => group.id === this.groupId);
     this.groupUsers = await this.$API.group.getMembers(this.groupId);
 
     broadcastEvents.on('delete-group-user', this.deleteUser);
+  },
+
+  deactivated() {
+    broadcastEvents.removeAllListeners('delete-group-user');
   },
 
   methods: {

@@ -9,7 +9,7 @@
         data-popover-close
         @click="membersHandler"
       >
-        Members
+        {{ $t('manage.members') }}
       </ui-button>
       <ui-button
         :type="11"
@@ -17,7 +17,7 @@
         data-popover-close
         @click="editHandler"
       >
-        Edit
+        {{ $t('techTexts.edit') }}
       </ui-button>
       <ui-button
         :type="11"
@@ -26,7 +26,7 @@
         data-popover-close
         @click="deleteHandler"
       >
-        Delete
+        {{ $t('techTexts.delete') }}
       </ui-button>
     </div>
   </popover>

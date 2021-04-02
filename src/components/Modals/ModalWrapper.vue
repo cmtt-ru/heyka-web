@@ -12,7 +12,7 @@
       :type="7"
       icon="close"
       class="modal-wrapper-outer__close"
-      @click="$emit('reject')"
+      @click="$emit('close')"
     />
   </div>
 </template>

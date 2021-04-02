@@ -7,13 +7,30 @@
       v-if="groups.length===0"
       class="empty"
     >
+      <div class="sub-header sub-header--empty">
+        <ui-button
+          :type="9"
+          size="small"
+          @click="$emit('go-back')"
+        >
+          <svg-icon
+            class="sub-header__back"
+            name="back"
+            :height="24"
+            :width="24"
+          />
+        </ui-button>
+        <p class="sub-header__text">
+          {{ $t('manage.groups') }}
+        </p>
+      </div>
       <div
         class="empty__name"
       >
-        У вас пока нет групп
+        {{ $t('manage.noGroupsHeader') }}
       </div>
       <div class="empty__desc">
-        Вы можете объединять людей в группы, это очень удобно, попробуйте!
+        {{ $t('manage.noGroupsDesc') }}
       </div>
       <ui-button
         :type="1"
@@ -21,7 +38,7 @@
         size="large"
         @click="createGroupHandler()"
       >
-        Create group
+        {{ $t('manage.noGroupButton') }}
       </ui-button>
     </div>
 
@@ -40,14 +57,14 @@
           />
         </ui-button>
         <p class="sub-header__text">
-          Groups
+          {{ $t('manage.groups') }}
         </p>
       </div>
       <ui-input
         v-model="searchText"
         icon="search"
         class="search-input"
-        placeholder="Search"
+        :placeholder="$t('techTexts.search')"
         @keydown.native.esc="searchText=''"
       />
       <ui-button
@@ -57,7 +74,7 @@
         size="large"
         @click="createGroupHandler"
       >
-        New group
+        {{ $t('manage.addGroup') }}
       </ui-button>
 
       <list
@@ -91,7 +108,7 @@
               v-textfade
               class="group__email"
             >
-              {{ group.membersCount }} members
+              {{ $tc('manage.membersAmount', group.membersCount) }}
             </div>
           </div>
 
@@ -234,6 +251,15 @@ export default {
   min-height 100%
   display grid
 
+.sub-header--empty
+  position absolute
+  top 0
+  left 0
+  display none
+
+  @media $tablet
+    display flex
+
 .empty
   display flex
   width 100%
@@ -244,6 +270,7 @@ export default {
   flex-direction column
   align-items center
   justify-content center
+  position relative
 
   &__name
     font-weight bold

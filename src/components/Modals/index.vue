@@ -65,17 +65,6 @@ export default {
       return this.modals.length;
     },
 
-    /**
-     * Last modal window from store
-     * @returns {array}
-    */
-    lastModal() {
-      if (this.modalsAmount) {
-        return this.modals[this.modalsAmount - 1];
-      }
-
-      return null;
-    },
   },
 
   watch: {
@@ -91,6 +80,10 @@ export default {
           this.activate();
         });
       }
+    },
+
+    $route() {
+      this.modalsAmount && this.close();
     },
   },
 
@@ -162,7 +155,7 @@ export default {
     },
 
     close() {
-      this.$emit('reject');
+      this.$emit('close');
     },
 
   },
