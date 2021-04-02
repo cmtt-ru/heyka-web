@@ -51,6 +51,7 @@
 import UtilityPage from '@/components/Layouts/UtilityPage';
 import UiButton from '@components/UiButton';
 import Loader from '@components/Loader';
+import verify from '@api/auth/verify';
 
 export default {
   components: {
@@ -88,7 +89,7 @@ export default {
 
   async mounted() {
     try {
-      await this.$API.auth.verify(this.jwt);
+      await verify(this.jwt);
 
       const linkData = await this.$API.auth.link();
 
