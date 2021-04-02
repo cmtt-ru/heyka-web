@@ -1,6 +1,6 @@
 <template>
   <div class="layout">
-    <ui-header />
+    <ui-header full-width />
 
     <div class="layout__wrapper">
       <div
