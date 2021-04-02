@@ -240,7 +240,7 @@ export default {
         onClose: async (status) => {
           if (status === 'confirm') {
             await this.$API.workspace.deleteWorkspace(this.selectedWorkspace.id);
-            this.loadWorkspaces();
+            await this.loadWorkspaces();
             this.$router.replace({
               name: 'manage',
               params: { workspaceId: this.workspaces[0].id },
