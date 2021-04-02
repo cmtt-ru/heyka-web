@@ -39,6 +39,30 @@ export default {
   },
 
   /**
+   * Add new modal window
+   *
+   * @param {AppState} state – module app state
+   * @param {object} modal – new modal window
+   * @constructor
+   */
+  ADD_MODAL(state, modal) {
+    if (state.modals.length && state.modals[state.modals.length - 1].name === modal.name) {
+      return;
+    }
+    state.modals.push(modal);
+  },
+
+  /**
+   * Remove last modal window
+   *
+   * @param {AppState} state – module app state
+   * @constructor
+   */
+  REMOVE_MODAL(state) {
+    state.modals.pop();
+  },
+
+  /**
    * Set device list
    *
    * @param {AppState} state – module app state
@@ -122,5 +146,16 @@ export default {
     Object.keys(statusObject).forEach(status => {
       Vue.set(state.connectionStatus, status, statusObject[status]);
     });
+  },
+
+  /**
+   * Set last mini chat message timestamp
+   *
+   * @param {AppState} state – module app state
+   * @param {number} timestamp – last message timestamp
+   * @constructor
+   */
+  SET_MINI_CHAT_READ_TIMESTAMP(state, timestamp) {
+    state.miniChatLastReadTimestamp = timestamp;
   },
 };

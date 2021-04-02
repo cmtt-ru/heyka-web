@@ -29,13 +29,11 @@ import { heykaStore } from '@/store/localStore';
  * @property {string} realSelectedDevices.microphone – selected microphone
  * @property {string} realSelectedDevices.camera – selected camera
  *
- * @property {object} socket – current socket parameters
- * @property {string} socket.id – id
- * @property {number} socket.connectedAt – last time when socket was connected
- *
  * @property {number} microphoneVolume – current microphone volume in decibels
  * @property {array} notifications – in-app notifications
  * @property {string} search – workspace search
+ *
+ * @property {number} miniChatLastMessageTimestamp - last mini chat message timestamp
  */
 
 /**
@@ -67,6 +65,7 @@ const state = () => {
     },
     microphoneVolume: -100,
     notifications: [],
+    modals: [],
     connectionStatus: {
       visible: true,
       internet: true,
@@ -74,6 +73,7 @@ const state = () => {
       socket: false,
       janus: false,
     },
+    miniChatLastReadTimestamp: 0,
   };
 };
 
