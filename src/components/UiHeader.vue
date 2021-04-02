@@ -1,6 +1,9 @@
 <template>
   <header>
-    <div class="wrapper">
+    <div
+      class="wrapper"
+      :class="{'wrapper--full-width': fullWidth}"
+    >
       <svg-icon
         class="logo"
         name="logo-full"
@@ -46,7 +49,20 @@ import { mapGetters } from 'vuex';
 import Avatar from '@components/Avatar';
 
 export default {
-  components: { Avatar },
+  components: {
+    Avatar,
+  },
+
+  props: {
+    /**
+     * Whether the logo and user avatar should be aligned to left & right edges
+     */
+    fullWidth: {
+      type: Boolean,
+      default: false,
+    },
+  },
+
   computed: {
     ...mapGetters({
       myId: 'me/getMyId',
@@ -74,6 +90,12 @@ export default {
       max-width 960px
       margin 0 16px
       flex-grow 1
+
+      &--full-width
+        max-width none
+
+        @media $desktop
+          margin 0 40px
 
     .slot
       flex-grow 1

@@ -7,21 +7,38 @@
       :class="{'workspaces__item--selected': selectedWorkspace.id === workspace.id}"
       @click="selectWorkspaceHandler(workspace)"
     >
-      <img
-        class="logo"
-        width="36"
-        height="36"
-        alt="Vue logo"
-        :src="avatarUrl(workspace, 36)"
-      >
+      <avatar
+        class="workspaces__item__img"
+        :image="avatarUrl(workspace, 56)"
+        :size="56"
+        :border-radius="12"
+      />
+      <!-- <img
+        class="workspaces__item__img"
+        width="56"
+        height="56"
+        :src="avatarUrl(workspace, 56)"
+      > -->
     </div>
+    <router-link
+      to="/ws/create"
+      class="workspaces__item workspaces__item--add"
+    >
+      <svg-icon
+        name="add"
+        width="24"
+        height="24"
+      />
+    </router-link>
   </div>
 </template>
 
 <script>
 import { getUserAvatarUrl } from '@libs/image';
+import Avatar from '@components/Avatar';
 
 export default {
+  components: { Avatar },
   props: {
     /**
      * Array of workspace
@@ -71,18 +88,36 @@ export default {
     align-items center
 
     &__item
-      width 46px
-      height 46px
-      border 1px solid rgba(255,255,255,0.4)
-      padding 4px
+      width 56px
+      height 56px
       box-sizing border-box
-      border-radius 4px
+      border-radius 12px
       cursor pointer
-      margin-bottom 8px
+      margin-bottom 16px
+      position relative
+
+      &--add
+        background-color #E8F1FE
+        color var(--new-UI-01)
+        display flex
+        justify-content center
+        align-items center
+
+        &:hover
+          background-color rgba(21, 117, 241, 0.2)
 
       &--selected
         cursor default
-        border-color #2e8014
-        background rgba(255,255,255,1)
+
+        &:after
+          content ''
+          position absolute
+          bottom -6px
+          right -6px
+          left -6px
+          top -6px
+          border-radius 18px
+          border 4px solid var(--new-UI-01)
+          z-index 2
 
 </style>

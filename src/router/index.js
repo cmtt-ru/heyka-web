@@ -28,6 +28,10 @@ const GuestExpanded = () => import(/* webpackChunkName: "main" */ '@sdk/views/Ca
 const GuestFinish = () => import(/* webpackChunkName: "main" */ '../views/Guest/Finish');
 
 const Manage = () => import(/* webpackChunkName: "main" */ '../views/Manage');
+const ManageEmpty = () => import(/* webpackChunkName: "main" */ '../views/Manage/Empty');
+const WorkspaceUsers = () => import(/* webpackChunkName: "main" */ '../views/Manage/Users');
+const WorkspaceGroups = () => import(/* webpackChunkName: "main" */ '../views/Manage/Groups');
+const WorkspaceGroupMembers = () => import(/* webpackChunkName: "main" */ '../views/Manage/GroupMembers');
 const WorkspaceEdit = () => import(/* webpackChunkName: "main" */ '../views/WorkspaceEdit');
 
 const Error403 = () => import(/* webpackChunkName: "main" */ '../views/Errors/Error403');
@@ -162,20 +166,51 @@ const routes = [
   {
     path: '/manage',
     component: Manage,
+  },
+  {
+    path: '/manage/:workspaceId',
+    component: Manage,
     meta: {
       requiresAuth: true,
     },
     children: [
       {
-        path: ':workspaceId',
+        path: '',
         name: 'manage',
-        component: Manage,
+        component: ManageEmpty,
+        meta: {
+          depth: 1,
+        },
       },
       {
-        path: ':workspaceId/:code',
-        component: Manage,
+        path: 'users',
+        name: 'manage-users',
+        component: WorkspaceUsers,
+        meta: {
+          depth: 2,
+        },
+      },
+      {
+        path: 'groups',
+        name: 'manage-groups',
+        component: WorkspaceGroups,
+        meta: {
+          depth: 2,
+        },
+      },
+      {
+        path: ':groupId/members',
+        name: 'manage-groups-members',
+        component: WorkspaceGroupMembers,
+        meta: {
+          depth: 3,
+        },
       },
     ],
+  },
+  {
+    path: '/manage/:workspaceId/:code',
+    component: Manage,
   },
 
   /**
