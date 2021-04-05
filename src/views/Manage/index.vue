@@ -137,6 +137,10 @@ export default {
     await this.loadWorkspaces();
     await this.loadUsers();
 
+    if (!this.workspaces.find(workspaces => workspaces.id === this.workspaceId)) {
+      this.openFirstWorkspace();
+    }
+
     if (this.$route.meta.depth > 1) {
       this.showWorkspacesMobile = false;
     } else {
@@ -241,10 +245,7 @@ export default {
           if (status === 'confirm') {
             await this.$API.workspace.deleteWorkspace(this.selectedWorkspace.id);
             await this.loadWorkspaces();
-            this.$router.replace({
-              name: 'manage',
-              params: { workspaceId: this.workspaces[0].id },
-            });
+            this.openFirstWorkspace();
           }
         },
       });
@@ -269,6 +270,16 @@ export default {
             this.loadWorkspaces();
           }
         },
+      });
+    },
+
+    openFirstWorkspace() {
+      if (!this.workspaces.length) {
+        return;
+      }
+      this.$router.replace({
+        name: 'manage',
+        params: { workspaceId: this.workspaces[0].id },
       });
     },
   },
