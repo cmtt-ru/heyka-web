@@ -374,12 +374,15 @@ export default {
   &.router-link-exact-active
     background-color var(--new-UI-06)
 
+  $animation-duration = 350ms
+
 .manage-page
   width 100%
   position absolute
   box-sizing border-box
   padding 32px 40px
   background-color var(--new-bg-04)
+  animation none
 
   @media $tablet
     padding 26px 32px
@@ -388,10 +391,6 @@ export default {
     padding 18px 16px
 
 @media $tablet
-
-/* Page transitions */
-
-  $animation-duration = 350ms
 
   .next-leave-to
     animation leaveToLeft $animation-duration both cubic-bezier(0.165, 0.84, 0.44, 1)
@@ -447,4 +446,5 @@ export default {
       transform: translateX(0);
     }
   }
+
 </style>
