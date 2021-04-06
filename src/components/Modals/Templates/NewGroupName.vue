@@ -80,6 +80,7 @@ export default {
         name: 'NewGroupUsers',
         data: {
           header: this.$tc('modal.addGroup.header2', this.name),
+          joinedUsers: this.data.joinedUsers || [],
         },
         onClose: (status, data) => {
           if (status === 'confirm') {
