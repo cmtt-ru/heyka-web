@@ -41,7 +41,7 @@
           :type="11"
           data-popover-close
         >
-          Downloads
+          Downloads page
         </ui-button>
       </router-link>
     </div>
@@ -51,11 +51,8 @@
 <script>
 import Popover from '@components/Popover';
 import UiButton from '@components/UiButton';
-import { authFileStore } from '@/store/localStore';
 
-// eslint-disable-next-line no-magic-numbers
-const PORTS = [9615, 48757, 48852, 49057, 49086];
-const pingTime = 2000;
+import broadcastEvents from '@sdk/classes/broadcastEvents';
 
 export default {
   components: {
@@ -92,25 +89,8 @@ export default {
   },
 
   methods: {
-    async startPinging() {
-      if (authFileStore.get('accessToken')) {
-        const res = await this.$API.auth.link();
-
-        console.log(res);
-        this.pingInterval = setInterval(() => {
-          for (const port of PORTS) {
-            this.pingLocalWebServer(res.code, port);
-          }
-        }, pingTime);
-      }
-    },
-    async pingLocalWebServer(authLink, port) {
-      try {
-        await fetch(`http://127.0.0.1:${port}/${authLink}`, { mode: 'no-cors' });
-
-        clearInterval(this.pingInterval);
-      } catch (err) {
-      }
+    startPinging() {
+      broadcastEvents.dispatch('ping-local-server');
     },
   },
 };

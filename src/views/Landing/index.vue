@@ -296,11 +296,6 @@
         v-popover.click="{name: 'Language'}"
         class="menu__item"
       >
-        <svg-icon
-          name="globe"
-          width="16"
-          height="16"
-        />
         {{ languages[language] }}
         <svg-icon
           class="arrow"
@@ -327,9 +322,16 @@ import { UiInput, UiForm } from '@components/Form';
 import UiButton from '@components/UiButton';
 import { WEB_URL } from '@sdk/Constants';
 
+import { authFileStore } from '@/store/localStore';
+import broadcastEvents from '@sdk/classes/broadcastEvents';
+
 let observer;
 
 const STICKED_CLASS = 'ui-sticked';
+
+// eslint-disable-next-line no-magic-numbers
+const PORTS = [9615, 48757, 48852, 49057, 49086];
+const pingTime = 2000;
 
 export default {
   components: {
@@ -388,6 +390,8 @@ export default {
 
     window.addEventListener('scroll', this.onScroll);
 
+    broadcastEvents.on('ping-local-server', this.startPinging);
+
     observer = new IntersectionObserver(entries => {
       for (const entry of entries) {
         this.elementCheck(entry);
@@ -401,6 +405,11 @@ export default {
       el.previousSibling.classList.add('app-text--observable');
       observer.observe(el);
     }
+  },
+
+  beforeDestroy() {
+    document.getElementsByTagName('html')[0].classList.remove('dark-html');
+    broadcastEvents.removeAllListeners('ping-local-server');
   },
 
   methods: {
@@ -427,6 +436,26 @@ export default {
     onScroll() {
       window.removeEventListener('scroll', this.onScroll);
       document.getElementById('more-arrow').classList.add('more-arrow--hidden');
+    },
+
+    async startPinging() {
+      if (authFileStore.get('accessToken')) {
+        const res = await this.$API.auth.link();
+
+        this.pingInterval = setInterval(() => {
+          for (const port of PORTS) {
+            this.pingLocalWebServer(res.code, port);
+          }
+        }, pingTime);
+      }
+    },
+    async pingLocalWebServer(authLink, port) {
+      try {
+        await fetch(`http://127.0.0.1:${port}/${authLink}`, { mode: 'no-cors' });
+
+        clearInterval(this.pingInterval);
+      } catch (err) {
+      }
     },
   },
 };
@@ -456,11 +485,14 @@ export default {
     flex-direction row
     align-items center
     justify-content space-between
+    z-index 1
 
   .controls
     display flex
     flex-direction row
     align-items center
+    line-height 28px
+    font-weight 500
 
     &__downloads
       margin-right 28px
@@ -522,10 +554,11 @@ export default {
     font-weight 900
     font-size 48px
     line-height 54px
-    padding-bottom 24px
+    padding-bottom 25px
 
   &__content
     height 220px
+    color #C2C2C2
 
 .app-image
   display inline-block
@@ -597,6 +630,7 @@ export default {
     border-radius 12px
     font-size 24px
     font-weight normal
+    padding 1px 20px 0
 
     &--short
       display none
@@ -608,15 +642,15 @@ export default {
   border-radius 14px
 
 /deep/ .input
-  padding-right 162px
+  padding-right 194px
   padding-left 20px
   height 60px
   min-height 60px
   box-sizing border-box
-  font-weight 500
   background-color rgba(255, 255, 255, 0.1)
   border-radius 14px
   font-size 24px
+  padding-top 1px
 
 /deep/ .ui-error
   border 1px solid transparent
@@ -724,19 +758,19 @@ export default {
     .bottom-grad
       height 100px
 
-@media screen and (max-width: 1024px), screen and (max-height: 650px)
+@media screen and (max-width: 1024px), screen and (max-height: 720px)
   .page
 
     &__header
       margin-bottom calc(50vh - 240px)
 
     &__inner
-       width 640px
+       width calc(100vw - 80px)
 
   .app-image
-    width 320px
-    height 320px
-    padding-bottom calc(50vh - 160px)
+    width 360px
+    height 360px
+    padding-bottom calc(50vh - 180px)
 
     &__quarter
       padding 16px
@@ -749,22 +783,22 @@ export default {
 
   .app-text
     top calc(50vh - 160px)
-    width 294px
-    font-size 20px
-    line-height 28px
-    margin-right 26px
+    width 350px
+    font-size 23px
+    line-height 33px
+    margin-right calc(100vw - 790px)
 
     &__header
-      font-size 32px
+      font-size 38px
       line-height 52px
 
   .bottom-info
-    height calc(50vh - 70px)
+    height calc(50vh - 110px)
     width 50%
 
     &__inner
       width 294px
-      margin 20px 30px 0 auto
+      margin 49px auto 0 40px
 
   .email-form
 
@@ -777,6 +811,7 @@ export default {
         height 32px
         border-radius 6px
         font-size 16px
+        padding 1px 12px 0
 
         &--short
           display flex
@@ -788,7 +823,7 @@ export default {
     border-radius 10px
 
   /deep/ .input
-    padding-right 52px
+    padding-right 76px
     padding-left 12px
     height 40px
     min-height 40px
@@ -796,7 +831,7 @@ export default {
     font-size 16px
 
   .extra-info
-    margin-top 24px
+    margin-top 32px
 
   .top-grad
     width 50%
@@ -806,6 +841,27 @@ export default {
     width 50%
     height 100px
 
+@media screen and (max-width: 800px), screen and (max-height: 700px)
+
+  .app-image
+    width 320px
+    height 320px
+    padding-bottom calc(50vh - 160px)
+
+  .app-text
+    width 294px
+    font-size 20px
+    line-height 28px
+    margin-right calc(100vw - 694px)
+
+    &__header
+      font-size 32px
+      line-height 52px
+
+  .bottom-info
+    height calc(50vh - 70px)
+    width 50%
+
 @media screen and (max-width: 720px)
 
   .mobile-element
@@ -813,6 +869,11 @@ export default {
 
   .desktop-element
     display none !important
+
+  .page .controls__signIn
+    font-size 14px
+    height 32px
+    display flex
 
   .page__inner
     max-width 520px
@@ -843,7 +904,7 @@ export default {
     position initial
     font-size 16px
     line-height  22px
-    margin 0 auto 32px
+    margin 0 auto 16px
     width auto
 
     &--fading
@@ -852,6 +913,7 @@ export default {
     &__header
       font-size 24px
       line-height 32px
+      padding-bottom 8px
 
     &__content
       height auto
@@ -930,6 +992,7 @@ export default {
 
 <style lang="stylus">
 .dark-html
+    background-color #000000
     --app-bg: #333333 !important;
     --text-tech-0: #DE4B39 !important;
     --text-tech-1: #27AE60 !important;
@@ -978,10 +1041,10 @@ export default {
     --new-UI-03: rgba(255, 255, 255, 0.7) !important;
     --new-UI-04: #6B6E73 !important;
     --new-UI-05: rgba(255, 255, 255, 0.3) !important;
-    --new-UI-06: rgba(255, 255, 255, 0.05) !important;
-    --new-UI-07: rgba(0, 0, 0, 0.1) !important;
+    --new-UI-06: #191919 !important;
+    --new-UI-07: #1F1F1F !important;
     --new-UI-08: rgba(255, 255, 255, 0.15) !important;
-    --new-UI-09: #000000 !important;
+    --new-UI-09: #1F1F1F !important;
     --new-bg-01: #272A30 !important;
     --new-bg-02: rgba(0, 0, 0, 0.65) !important;
     --new-bg-03: #3D4046 !important;
