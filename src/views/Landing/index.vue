@@ -115,10 +115,10 @@
 
       <div class="app-text">
         <div class="app-text__header">
-          Скорость
+          {{ texts.info[0].header }}
         </div>
         <div class="app-text__content">
-          Мгновенное подключение к комнатам обсуждения — пока до 32 участников одновременно
+          {{ texts.info[0].desc }}
         </div>
       </div>
       <img
@@ -133,10 +133,10 @@
         class="app-text app-text--fading"
       >
         <div class="app-text__header">
-          Лаконичность
+          {{ texts.info[1].header }}
         </div>
         <div class="app-text__content">
-          Компактный, как рация, и чистый дизайн. Без раздражающих звонков, перекрывающих экран, и неприятных звуков
+          {{ texts.info[1].desc }}
         </div>
       </div>
       <img
@@ -150,10 +150,10 @@
         class="app-text app-text--fading"
       >
         <div class="app-text__header">
-          Прозрачность
+          {{ texts.info[2].header }}
         </div>
         <div class="app-text__content">
-          Все данные, отправляемые на сервер, в реальном времени отражаются в приложении, мы не собираем персональных данных
+          {{ texts.info[2].desc }}
         </div>
       </div>
       <img
@@ -164,10 +164,10 @@
 
       <div class="app-text app-text--fading">
         <div class="app-text__header">
-          Все платформы
+          {{ texts.info[3].header }}
         </div>
         <div class="app-text__content">
-          Heyka работает на Web, iOS, Android, Windows, Mac и Linux
+          {{ texts.info[3].desc }}
         </div>
       </div>
       <div
