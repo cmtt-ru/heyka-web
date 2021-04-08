@@ -41,7 +41,7 @@
           :type="11"
           data-popover-close
         >
-          Downloads page
+          Downloads
         </ui-button>
       </router-link>
     </div>

@@ -57,16 +57,14 @@
               height="16"
             />
           </div>
-          <router-link :to="{ name: 'auth'}">
-            <ui-button
-              class="controls__signIn"
-              :type="3"
-              size="large"
-              @click="showSignIn=true"
-            >
-              {{ texts.signIn }}
-            </ui-button>
-          </router-link>
+          <ui-button
+            class="controls__signIn"
+            :type="3"
+            size="large"
+            @click="signIn"
+          >
+            {{ texts.signIn }}
+          </ui-button>
         </div>
 
         <ui-button
@@ -80,7 +78,11 @@
 
       <div class="bottom-info mobile-element">
         <div class="bottom-info__inner">
-          <ui-form class="email-form">
+          <ui-form
+            v-if="!emailSent"
+            class="email-form"
+            @submit="sendEmail"
+          >
             <ui-input
               v-model="email"
               class="email-form__input"
@@ -104,6 +106,12 @@
               </span>
             </ui-button>
           </ui-form>
+          <div
+            v-else
+            class="email-result"
+          >
+            {{ texts.emailSent }}
+          </div>
           <div class="extra-info">
             <span class="extra-info--strong">{{ $tc('landing.peopleAmount',regAmount ) }} </span>
             <span>{{ texts.waitingListText }}</span>
@@ -234,7 +242,11 @@
 
     <div class="bottom-info">
       <div class="bottom-info__inner">
-        <ui-form class="email-form">
+        <ui-form
+          v-if="!emailSent"
+          class="email-form"
+          @submit="sendEmail"
+        >
           <ui-input
             v-model="email"
             class="email-form__input"
@@ -258,6 +270,12 @@
             </span>
           </ui-button>
         </ui-form>
+        <div
+          v-else
+          class="email-result"
+        >
+          {{ texts.emailSent }}
+        </div>
         <div class="extra-info">
           <span class="extra-info--strong">{{ $tc('landing.peopleAmount',regAmount ) }} </span>
           <span>{{ texts.waitingListText }}</span>
@@ -324,6 +342,7 @@ import { WEB_URL } from '@sdk/Constants';
 
 import { authFileStore } from '@/store/localStore';
 import broadcastEvents from '@sdk/classes/broadcastEvents';
+import Modal from '@sdk/classes/Modal';
 
 let observer;
 
@@ -343,8 +362,9 @@ export default {
     return {
       version: '1.1.12',
       WEB_URL,
-      regAmount: 483,
+      regAmount: 0,
       email: '',
+      emailSent: false,
       menuOpened: false,
       showSignIn: false,
       languages: {
@@ -385,12 +405,16 @@ export default {
     },
   },
 
-  mounted() {
-    document.getElementsByTagName('html')[0].classList.add('dark-html');
+  async mounted() {
+    this.$themes.manualSetTheme('dark');
 
     window.addEventListener('scroll', this.onScroll);
 
+    this.regAmount = await this.$API.app.subscribeCount();
+
     broadcastEvents.on('ping-local-server', this.startPinging);
+    // window.addEventListener('message', this.closeSignInModal, false);
+    window.addEventListener('storage', this.closeSignInModal, false);
 
     observer = new IntersectionObserver(entries => {
       for (const entry of entries) {
@@ -408,8 +432,9 @@ export default {
   },
 
   beforeDestroy() {
-    document.getElementsByTagName('html')[0].classList.remove('dark-html');
+    this.$themes.manualSetTheme('light');
     broadcastEvents.removeAllListeners('ping-local-server');
+    window.removeEventListener('close-auth', this.closeSignInModal);
   },
 
   methods: {
@@ -438,6 +463,12 @@ export default {
       document.getElementById('more-arrow').classList.add('more-arrow--hidden');
     },
 
+    async sendEmail() {
+      await this.$API.app.subscribe(this.email);
+      this.emailSent = true;
+      this.regAmount = await this.$API.app.subscribeCount();
+    },
+
     async startPinging() {
       if (authFileStore.get('accessToken')) {
         const res = await this.$API.auth.link();
@@ -456,6 +487,23 @@ export default {
         clearInterval(this.pingInterval);
       } catch (err) {
       }
+    },
+
+    signIn() {
+      Modal.show({
+        name: 'SignIn',
+        onClose: () => {
+        },
+      });
+    },
+
+    closeSignInModal(data) {
+      if (data.key !== 'closeAuth' && data.newValue !== 'true') {
+        return;
+      }
+
+      this.$store.dispatch('app/removeModal');
+      window.localStorage.setItem('closeAuth', 'false');
     },
   },
 };
@@ -638,6 +686,15 @@ export default {
       & .icon
         transform rotate(-90deg)
 
+.email-result
+  height 60px
+  color var(--new-signal-02)
+  display flex
+  flex-direction row
+  align-items center
+  font-size 32px
+  line-height 46px
+
 /deep/ .input-wrapper
   border-radius 14px
 
@@ -651,6 +708,13 @@ export default {
   border-radius 14px
   font-size 24px
   padding-top 1px
+  background-color #191919
+
+  &:hover
+    background-color #1F1F1F
+
+  &:focus
+    background-color #1F1F1F
 
 /deep/ .ui-error
   border 1px solid transparent
@@ -818,6 +882,11 @@ export default {
 
         &--long
           display none
+
+  .email-result
+    height 40px
+    font-size 16px
+    line-height 22px
 
   /deep/ .input-wrapper
     border-radius 10px
@@ -988,79 +1057,4 @@ export default {
           transition-delay 0.3s
         }
 
-</style>
-
-<style lang="stylus">
-.dark-html
-    background-color #000000
-    --app-bg: #333333 !important;
-    --text-tech-0: #DE4B39 !important;
-    --text-tech-1: #27AE60 !important;
-    --text-tech-2: #2886ff !important;
-    --text-tech-3: #FFFFFF !important;
-    --color-0: #DE4B39 !important;
-    --color-1: #27AE60 !important;
-    --color-2: #2886ff !important;
-    --color-3: #FDCB4B !important;
-    --color-4: #B1B3B5 !important;
-    --color-5: #000000 !important;
-    --stroke-0: #F6D4CF !important;
-    --stroke-1: #C9EAD7 !important;
-    --stroke-2: #C4DCFB !important;
-    --stroke-3: #D7D8D9 !important;
-    --button-bg-0: #FDF6F5 !important;
-    --button-bg-1: #F4FBF7 !important;
-    --button-bg-2: #F3F8FE !important;
-    --button-bg-3: #000000 !important;
-    --button-bg-4: #707070 !important;
-    --button-bg-5: transparent !important;
-    --button-bg-6: #555555 !important;
-    --button-bg-7: transparent !important;
-    --icon-bg: #E8F2FE !important;
-    --input: #222222 !important;
-    --item-bg-hover: #333333 !important;
-    --item-bg-active: #FFFFFF !important;
-    --item-bg-multi-pick: #222222 !important;
-    --shadow-10: rgba(0,0,0,0.1) !important;
-    --shadow-15: rgba(255,255,255,0.15) !important;
-    --shadow-20: rgba(255,255,255,0.2) !important;
-    --shadow-50: rgba(255,255,255,0.5) !important;
-    --scroll-bar: 255, 255, 255 !important;
-    --new-signal-01: #FFC876 !important;
-    --new-signal-02: #62C971 !important;
-    --new-signal-02-1: #2B6233 !important;
-    --new-signal-03: #FF6157 !important;
-    --new-signal-03-1: #FF6157 !important;
-    --new-signal-03-2: #FF6157 !important;
-    --new-signal-03-3: rgba(255, 97, 87, 0.1) !important;
-    --new-icon-0: #525B67 !important;
-    --new-UI-01: #3D92FF !important;
-    --new-UI-01-1: #4798FF !important;
-    --new-UI-01-2: #509DFF !important;
-    --new-UI-02: #DFE0E3 !important;
-    --new-UI-03: rgba(255, 255, 255, 0.7) !important;
-    --new-UI-04: #6B6E73 !important;
-    --new-UI-05: rgba(255, 255, 255, 0.3) !important;
-    --new-UI-06: #191919 !important;
-    --new-UI-07: #1F1F1F !important;
-    --new-UI-08: rgba(255, 255, 255, 0.15) !important;
-    --new-UI-09: #1F1F1F !important;
-    --new-bg-01: #272A30 !important;
-    --new-bg-02: rgba(0, 0, 0, 0.65) !important;
-    --new-bg-03: #3D4046 !important;
-    --new-bg-04: #1F2227 !important;
-    --new-bg-05: #141414 !important;
-    --new-stroke-01: rgba(255, 255, 255, 0.1) !important;
-    --new-system-01: #FFC12F !important;
-    --new-system-01-1: #FFE097 !important;
-    --new-system-01-2: #DFA023 !important;
-    --new-system-02: #FF6157 !important;
-    --new-system-02-1: #FFB0AB !important;
-    --new-system-02-2: #E24640 !important;
-    --new-overlay-01: #333333 !important;
-    --new-overlay-02: #404040 !important;
-    --new-overlay-03: #262626 !important;
-    --new-shadow-01: 0px 2px 6px rgba(0, 0, 0, 0.12) !important;
-    --new-shadow-02: 0px 1px 1px rgba(0, 0, 0, 0.06), 0px 2px 6px rgba(0, 0, 0, 0.12) !important;
-    --new-shadow-03: 0px 0px 20px rgba(0, 0, 0, 0.08), 0px 10px 30px rgba(0, 0, 0, 0.12) !important;
 </style>
