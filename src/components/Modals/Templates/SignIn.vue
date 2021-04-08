@@ -9,18 +9,12 @@
 
 <script>
 
-// import { WEB_URL } from '@sdk/Constants';
+import { WEB_URL } from '@sdk/Constants';
 export default {
-
-  data() {
-    return {
-      WEB_URL: 'http://localhost:8080',
-    };
-  },
 
   computed: {
     signInLink() {
-      return `${this.WEB_URL}/auth?darkTheme=true`;
+      return `${WEB_URL}/auth?darkTheme=true`;
     },
   },
 
