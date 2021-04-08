@@ -1,5 +1,8 @@
 <template>
-  <div class="user">
+  <div
+    v-popover.click.mouse="{name: popoverName, data: {id: user.id, isAdmin: user.role==='admin'}}"
+    class="user"
+  >
     <avatar
       class="user__avatar"
       :user-id="user.id"
@@ -44,11 +47,13 @@
 
     <ui-button
       v-else
+      :key="user.role + user.id"
       v-popover.click="{name: 'EditUserInWorkspace', data: {id: user.id, isAdmin: user.role==='admin'}}"
       class="user__more"
       :type="7"
       size="medium"
       icon="more"
+      @mouseup.stop.native
     />
   </div>
 </template>
@@ -87,6 +92,16 @@ export default {
 
   },
 
+  computed: {
+    popoverName() {
+      if (!this.deleteButton) {
+        return 'EditUserInWorkspace';
+      }
+
+      return null;
+    },
+  },
+
   methods: {
 
     /**
@@ -122,6 +137,10 @@ export default {
     box-sizing border-box
     cursor default
     position relative
+    cursor pointer
+
+    &:hover
+      background-color var(--new-UI-06)
 
     &__avatar
       border-radius 100%
