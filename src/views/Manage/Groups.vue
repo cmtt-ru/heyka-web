@@ -4,7 +4,7 @@
     class="manage-page"
   >
     <div
-      v-if="groups.length===0"
+      v-if="groups && groups.length===0"
       class="empty"
     >
       <div class="sub-header sub-header--empty">
@@ -42,7 +42,7 @@
       </ui-button>
     </div>
 
-    <div v-if="groups.length>0">
+    <div v-else>
       <div class="sub-header">
         <ui-button
           :type="9"
@@ -77,8 +77,17 @@
         {{ $t('manage.addGroup') }}
       </ui-button>
 
+      <placeholder
+        v-if="!groups"
+        class="groups-placeholder"
+        avatar
+        two-lines
+        right-button
+        :height="80"
+      />
+
       <list
-        v-if="groups.length"
+        v-if="groups"
         v-model="filteredGroups"
         :items="groups"
         filter-key="name"
@@ -89,6 +98,7 @@
           :key="group.id"
           :similarity="group.similarity"
           class="group"
+          @click.native="openMembers(group.id)"
         >
           <div class="group__avatar">
             <svg-icon
@@ -118,6 +128,7 @@
             :type="7"
             size="medium"
             icon="more"
+            @click.stop.native
           />
         </list-item>
       </list>
@@ -126,6 +137,7 @@
 </template>
 
 <script>
+import Placeholder from '@components/Placeholder';
 import UiButton from '@components/UiButton';
 import { UiInput } from '@components/Form';
 import { List, ListItem } from '@components/List';
@@ -136,6 +148,7 @@ import Modal from '@sdk/classes/Modal';
 export default {
 
   components: {
+    Placeholder,
     UiButton,
     List,
     ListItem,
@@ -145,7 +158,7 @@ export default {
   data() {
     return {
       searchText: '',
-      groups: [],
+      groups: null,
       filteredGroups: [],
     };
   },
@@ -294,6 +307,9 @@ export default {
     line-height 24px
     padding 12px 38px
 
+.groups-placeholder
+  padding 0 17px
+
  .group
     display flex
     flex-direction row
@@ -304,6 +320,10 @@ export default {
     width 100%
     box-sizing border-box
     position relative
+    cursor pointer
+
+    &:hover
+      background-color var(--new-UI-06)
 
     &__avatar
       display flex

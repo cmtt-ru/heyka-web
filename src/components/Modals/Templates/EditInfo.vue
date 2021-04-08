@@ -17,7 +17,7 @@
       />
       <div class="avatar__text-wrapper">
         <div class="avatar__text">
-          We recommended an image of at least 512x512 for the avatar
+          {{ $t('modal.common.recommendAvatarSize') }}
         </div>
         <div class="avatar__link-wrapper">
           <div
