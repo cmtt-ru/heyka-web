@@ -31,4 +31,4 @@ jobs:
           env: ${{ env.ENV }}
         env:
           WERF_STAGES_STORAGE: "ghcr.io/cmtt-ru/${{ github.event.repository.name }}/stages-${{ github.event.repository.name }}"
-          WERF_REPO: "ghcr.io/cmtt-ru/${{ github.event.repository.name }}"
+          WERF_IMAGES_REPO: "ghcr.io/cmtt-ru/${{ github.event.repository.name }}"
