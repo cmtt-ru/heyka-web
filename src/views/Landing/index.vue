@@ -512,6 +512,12 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+@font-face
+  font-family 'Inter Black'
+  font-style  normal
+  font-weight bold
+  font-display swap
+  src url("./assets/Inter-Black.woff2?v=3.12") format("woff2")
 
 .page
   background-color #000000
@@ -601,6 +607,7 @@ export default {
     opacity 1
 
   &__header
+    font-family 'Inter Black'
     font-weight 900
     font-size 48px
     line-height 54px
