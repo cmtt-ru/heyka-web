@@ -306,10 +306,12 @@
       id="menu"
       class="menu mobile-element"
     >
-      <a
+      <div
         class="menu__item"
-        :href="WEB_URL+'/auth'"
-      >{{ texts.signIn }}</a>
+        @click="signIn"
+      >
+        {{ texts.signIn }}
+      </div>
       <div
         v-popover.click="{name: 'Language'}"
         class="menu__item"
