@@ -919,6 +919,17 @@ export default {
     width 50%
     height 100px
 
+@media  screen and (max-height: 720px)
+
+  .page__inner
+    max-width 800px
+
+  .app-text
+    margin-right 90px
+
+  .bottom-info__inner
+    margin 49px 110px 0 auto
+
 @media screen and (max-width: 800px), screen and (max-height: 700px)
 
   .app-image
@@ -939,6 +950,17 @@ export default {
   .bottom-info
     height calc(50vh - 70px)
     width 50%
+
+@media  screen and (max-height: 700px)
+
+  .page__inner
+    max-width 770px
+
+  .app-text
+    margin-right 155px
+
+  .bottom-info__inner
+    margin 49px 95px 0 auto
 
 @media screen and (max-width: 720px)
 
