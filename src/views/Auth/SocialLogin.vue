@@ -5,6 +5,7 @@
 <script>
 import Cookies from 'js-cookie';
 import { API_URL, COOKIE_URL } from '@sdk/Constants';
+import signinByLink from '@api/auth/signinByLink';
 
 export default {
   computed: {
@@ -38,7 +39,7 @@ export default {
 
     /** User goes to link social network to his account */
     if (this.action === 'link') {
-      const res = await this.$API.auth.signinByLink(this.authCode);
+      const res = await signinByLink(this.authCode);
 
       if (res.data && res.data.accessToken) {
         Cookies.set('heyka-access-token', res.data.accessToken, { domain: COOKIE_URL });

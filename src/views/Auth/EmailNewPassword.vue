@@ -54,6 +54,8 @@
 import UtilityPage from '@/components/Layouts/UtilityPage';
 import UiButton from '@components/UiButton';
 import { UiInput, UiForm } from '@components/Form';
+import checkWebToken from '@api/auth/checkWebToken';
+import resetPass from '@api/auth/resetPass';
 
 export default {
   components: {
@@ -99,7 +101,7 @@ export default {
   },
 
   async mounted() {
-    const res = await this.$API.auth.checkWebToken(this.jwt);
+    const res = await checkWebToken(this.jwt);
 
     if (res.result === false) {
       this.$router.push({ name: 'auth' });
@@ -113,7 +115,7 @@ export default {
 
     async submitHandler() {
       try {
-        const res = await this.$API.auth.resetPass({
+        const res = await resetPass({
           token: this.jwt,
           password: this.password,
         });
