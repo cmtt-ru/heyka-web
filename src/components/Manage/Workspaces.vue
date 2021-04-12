@@ -13,15 +13,10 @@
         :size="56"
         :border-radius="12"
       />
-      <!-- <img
-        class="workspaces__item__img"
-        width="56"
-        height="56"
-        :src="avatarUrl(workspace, 56)"
-      > -->
     </div>
     <router-link
       to="/ws/create"
+      target="_blank"
       class="workspaces__item workspaces__item--add"
     >
       <svg-icon
