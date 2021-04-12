@@ -22,7 +22,6 @@
       >
         <avatar
           :user-id="myId"
-          :image="userAvatar(myId, 32)"
           :size="32"
         />
 
@@ -83,7 +82,7 @@ export default {
     left 0
     width 100%
     height 60px
-    background #fff
+    background-color var(--app-bg)
     z-index 10
 
     .wrapper

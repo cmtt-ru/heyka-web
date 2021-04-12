@@ -209,7 +209,7 @@ export default {
       width 50%
       margin 24px auto 0 auto
 
-      /deep/ .input-wrapper
+      .input-wrapper
         background rgba(0,0,0,0.85)
 
         &:hover
@@ -219,10 +219,10 @@ export default {
           background rgba(0,0,0,1)
           border-color rgba(255,255,255,0.5)
 
-      /deep/ input
-        color #fff
-        outline none
-        text-align center
+        input
+          color #fff
+          outline none
+          text-align center
 
   .safari-issue
     background rgba(255,0,0,0.28)

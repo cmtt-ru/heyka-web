@@ -185,7 +185,12 @@ export default {
 .modal-container
   z-index 1000
   position relative
-  display contents
+  display flex
+  width 100vw
+  height 100vh
+  align-items center
+  justify-content center
+  pointer-events none
 
 $ANIM = 330ms
 

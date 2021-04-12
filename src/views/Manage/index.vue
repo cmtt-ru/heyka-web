@@ -137,6 +137,10 @@ export default {
     await this.loadWorkspaces();
     await this.loadUsers();
 
+    if (!this.workspaces.find(workspaces => workspaces.id === this.workspaceId)) {
+      this.openFirstWorkspace();
+    }
+
     if (this.$route.meta.depth > 1) {
       this.showWorkspacesMobile = false;
     } else {
@@ -241,10 +245,7 @@ export default {
           if (status === 'confirm') {
             await this.$API.workspace.deleteWorkspace(this.selectedWorkspace.id);
             await this.loadWorkspaces();
-            this.$router.replace({
-              name: 'manage',
-              params: { workspaceId: this.workspaces[0].id },
-            });
+            this.openFirstWorkspace();
           }
         },
       });
@@ -269,6 +270,16 @@ export default {
             this.loadWorkspaces();
           }
         },
+      });
+    },
+
+    openFirstWorkspace() {
+      if (!this.workspaces.length) {
+        return;
+      }
+      this.$router.replace({
+        name: 'manage',
+        params: { workspaceId: this.workspaces[0].id },
       });
     },
   },
@@ -363,12 +374,15 @@ export default {
   &.router-link-exact-active
     background-color var(--new-UI-06)
 
+  $animation-duration = 350ms
+
 .manage-page
   width 100%
   position absolute
   box-sizing border-box
   padding 32px 40px
   background-color var(--new-bg-04)
+  animation none
 
   @media $tablet
     padding 26px 32px
@@ -377,10 +391,6 @@ export default {
     padding 18px 16px
 
 @media $tablet
-
-/* Page transitions */
-
-  $animation-duration = 350ms
 
   .next-leave-to
     animation leaveToLeft $animation-duration both cubic-bezier(0.165, 0.84, 0.44, 1)
@@ -436,4 +446,5 @@ export default {
       transform: translateX(0);
     }
   }
+
 </style>
