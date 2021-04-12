@@ -22,7 +22,6 @@
       >
         <avatar
           :user-id="myId"
-          :image="userAvatar(myId, 32)"
           :size="32"
         />
 
