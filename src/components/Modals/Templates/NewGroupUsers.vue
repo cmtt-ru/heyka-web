@@ -179,7 +179,8 @@ export default {
       const workspaceData = await this.$API.admin.getUsers(this.workspaceId);
 
       if (workspaceData) {
-        this.workspaceUsers = workspaceData.users;
+        this.workspaceUsers = workspaceData.users
+          .filter(el => !this.data.joinedUsers.find(user => user.id === el.id));
       }
     },
 
