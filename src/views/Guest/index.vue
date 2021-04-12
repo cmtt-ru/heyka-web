@@ -13,6 +13,7 @@ import Janus from '@components/Janus';
 import mediaDevices from '@sdk/classes/mediaDevices';
 import { mapState, mapGetters } from 'vuex';
 import janusVideoroomWrapper from '@sdk/classes/janusVideoroomWrapper';
+import join from '@api/channel/join';
 
 export default {
   components: {
@@ -56,7 +57,7 @@ export default {
      */
     async authorize() {
       try {
-        await this.$API.channel.join(this.inviteToken, {
+        await join(this.inviteToken, {
           name: 'Guest',
         });
         await this.$store.dispatch('initial');
