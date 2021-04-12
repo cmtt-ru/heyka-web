@@ -1,6 +1,9 @@
 <template>
   <header>
-    <div class="wrapper">
+    <div
+      class="wrapper"
+      :class="{'wrapper--full-width': fullWidth}"
+    >
       <svg-icon
         class="logo"
         name="logo-full"
@@ -13,13 +16,13 @@
       </div>
 
       <div
-        v-if="me.id"
+        v-if="myId"
         v-popover.click="{name: 'UserMenu'}"
         class="user"
       >
         <avatar
-          :user-id="me.id"
-          :image="userAvatar(me.id, 32)"
+          :user-id="myId"
+          :image="userAvatar(myId, 32)"
           :size="32"
         />
 
@@ -47,10 +50,23 @@ import { mapGetters } from 'vuex';
 import Avatar from '@components/Avatar';
 
 export default {
-  components: { Avatar },
+  components: {
+    Avatar,
+  },
+
+  props: {
+    /**
+     * Whether the logo and user avatar should be aligned to left & right edges
+     */
+    fullWidth: {
+      type: Boolean,
+      default: false,
+    },
+  },
+
   computed: {
     ...mapGetters({
-      me: 'myInfo',
+      myId: 'me/getMyId',
       userAvatar: 'users/getUserAvatarUrl',
     }),
   },
@@ -67,7 +83,7 @@ export default {
     left 0
     width 100%
     height 60px
-    background #fff
+    background-color var(--app-bg)
     z-index 10
 
     .wrapper
@@ -75,6 +91,12 @@ export default {
       max-width 960px
       margin 0 16px
       flex-grow 1
+
+      &--full-width
+        max-width none
+
+        @media $desktop
+          margin 0 40px
 
     .slot
       flex-grow 1
