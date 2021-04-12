@@ -48,7 +48,7 @@
     <ui-button
       v-else
       :key="user.role + user.id"
-      v-popover.click="{name: 'EditUserInWorkspace', data: {id: user.id, isAdmin: user.role==='admin'}}"
+      v-popover.click="{name: popoverName, data: {id: user.id, isAdmin: user.role==='admin'}}"
       class="user__more"
       :type="7"
       size="medium"
