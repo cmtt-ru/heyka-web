@@ -362,7 +362,7 @@ export default {
   },
   data() {
     return {
-      version: '1.1.12',
+      version: '1.2.1',
       WEB_URL,
       regAmount: 0,
       email: '',
