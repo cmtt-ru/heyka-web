@@ -9,6 +9,7 @@
         class="header"
       >
         <svg-icon
+          v-if="data.backIcon"
           name="back"
           width="20"
           height="20"

@@ -162,7 +162,7 @@ export default {
     },
 
     openWorkspaceHandler() {
-      this.$store.dispatch('launchDeepLink', `workspace/${this.workspaceId}/invite`);
+      this.$store.dispatch('launchDeepLink', `workspace/${this.workspaceId}`);
     },
 
     deleteModal(id) {
@@ -194,21 +194,14 @@ export default {
 
 <style lang="stylus" scoped>
 @import 'content.styl'
-.sub-header
-  margin-top -16px
-
-  & .ui-button
-    margin-top 16px
 
 .sub-header__text
-  margin-top 16px
-
   @media $mobile
     flex-basis 50%
 
 .sub-header__switch
-  max-width 430px
-  margin-top 16px
+  @media $mobile
+    margin-top 16px
 
 .users-placeholder
   padding 0 17px

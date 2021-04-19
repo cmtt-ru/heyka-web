@@ -14,9 +14,9 @@
           {{ $t('modal.common.name') }}
         </div>
         <ui-input
-
           v-model="name"
           required
+          clearable
           :regex="confirmRegex"
           :regex-error="data.errorString"
           enter-submit

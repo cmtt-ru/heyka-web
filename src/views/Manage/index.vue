@@ -320,7 +320,6 @@ export default {
         flex 0 0 366px
         padding 32px 40px
         box-sizing border-box
-        border-left 1px solid rgba(0,0,0,0.1)
         background-color var(--new-bg-01)
 
         @media $tablet
@@ -328,7 +327,6 @@ export default {
 
       &--content
         flex 1 1 auto
-        border-left 1px solid rgba(0,0,0,0.1)
         overflow-y auto
         position relative
 
