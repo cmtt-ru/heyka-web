@@ -199,7 +199,7 @@ const routes = [
         },
       },
       {
-        path: ':groupId/members',
+        path: 'groups/:groupId/members',
         name: 'manage-groups-members',
         component: WorkspaceGroupMembers,
         meta: {

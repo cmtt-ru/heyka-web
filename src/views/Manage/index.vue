@@ -330,6 +330,9 @@ export default {
         overflow-y auto
         position relative
 
+        @media $tablet
+          background-color var(--new-bg-01)
+
   .sub-header
     display flex
     flex-direction row
@@ -366,10 +369,10 @@ export default {
     color var(--new-UI-01)
     padding-right 12px
 
-  &:hover:not(.router-link-exact-active)
+  &:hover:not(.router-link-active)
     background-color var(--new-UI-06)
 
-  &.router-link-exact-active
+  &.router-link-active
     background-color var(--new-UI-06)
 
   $animation-duration = 350ms
