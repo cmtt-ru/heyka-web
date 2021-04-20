@@ -9,6 +9,7 @@
         class="header"
       >
         <svg-icon
+          v-if="data.backIcon"
           name="back"
           width="20"
           height="20"
@@ -102,6 +103,7 @@
         :disabled="!selectedUsers.length"
         size="large"
         wide
+        class="footer-button"
         @click="$emit('confirm', selectedUsers)"
       >
         {{ $tc("modal.addGroup.addUsers", selectedUsers.length) }}
@@ -236,7 +238,7 @@ export default {
       margin-right 16px
       cursor pointer
 
-/deep/ .pseudo-popup__footer, /deep/ .pseudo-popup__header
+/deep/ .pseudo-popup__header
   background-color transparent
   flex-direction column
 
@@ -246,8 +248,16 @@ export default {
   @media $mobile
      padding 0 20px
 
+/deep/ .pseudo-popup__footer
+  background-color transparent
+  flex-direction column
+  padding 16px 32px 32px
+
+  @media $mobile
+     padding 16px 20px
+
 .user-search__wrapper
-  padding 0 32px 12px
+  padding 0 32px 17px
   width 100%
   box-sizing border-box
 

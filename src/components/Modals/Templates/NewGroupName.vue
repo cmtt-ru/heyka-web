@@ -17,6 +17,7 @@
           required
           :minlength="2"
           enter-submit
+          clearable
         />
       </div>
 
@@ -81,6 +82,7 @@ export default {
         data: {
           header: this.$tc('modal.addGroup.header2', this.name),
           joinedUsers: this.data.joinedUsers || [],
+          backIcon: true,
         },
         onClose: (status, data) => {
           if (status === 'confirm') {
