@@ -144,7 +144,7 @@ const routes = [
         component: AuthEmailNewPassword,
       },
       {
-        path: 'email/change',
+        path: 'email/change/:code',
         name: 'auth-email-change',
         component: AuthEmailChange,
       },

@@ -1,11 +1,11 @@
 <template>
   <utility-page>
-    <h1>Смена почты</h1>
+    <h1>{{ texts.title }}</h1>
     <p v-if="!success">
-      На новую почту придёт письмо с подтверждением.
+      {{ texts.subtitle }}
     </p>
     <p v-else>
-      Проверьте входящие почты example@mail.com
+      {{ $tc('auth.newEmail.successSubtitle', email) }}
     </p>
 
     <ui-form
@@ -18,8 +18,11 @@
         class="reset-form__input"
         placeholder="example@mail.com"
         type="email"
+        :backend-error="error"
         email
+        enter-submit
         required
+        @change.native="error=''"
       />
       <ui-button
         :type="1"
@@ -27,7 +30,7 @@
         class="reset-form__submit"
         submit
       >
-        Сменить
+        {{ texts.change }}
       </ui-button>
     </ui-form>
 
@@ -39,13 +42,6 @@
     >
       {{ texts.openApp }}
     </ui-button>
-
-    <p
-      v-if="error"
-      class="l-mt-16"
-    >
-      {{ error }}
-    </p>
   </utility-page>
 </template>
 
@@ -78,15 +74,15 @@ export default {
      * @returns {object}
      */
     texts() {
-      return this.$t('auth.newPassword');
+      return this.$t('auth.newEmail');
     },
 
     /**
      * JWT token
-     * @returns {string}
+     * @returns {string | (string | null)[]}
      */
     jwt() {
-      return this.$route.query.token;
+      return this.$route.params.code;
     },
 
     /**
@@ -99,9 +95,13 @@ export default {
   },
 
   async mounted() {
-    const res = await checkWebToken(this.jwt);
+    try {
+      const res = await checkWebToken(this.jwt);
 
-    if (res.result === false) {
+      if (res.result === false) {
+        // this.$router.push({ name: 'auth' });
+      }
+    } catch (err) {
       // this.$router.push({ name: 'auth' });
     }
   },
@@ -118,11 +118,12 @@ export default {
         this.success = true;
       } catch (err) {
         if (err.response.data.message) {
-          await this.$store.dispatch('app/addNotification', {
-            data: {
-              text: err.response.data.message,
-            },
-          });
+          this.error = err.response.data.message;
+          // await this.$store.dispatch('app/addNotification', {
+          //   data: {
+          //     text: err.response.data.message,
+          //   },
+          // });
         }
       }
     },
