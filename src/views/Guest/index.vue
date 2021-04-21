@@ -142,10 +142,10 @@ export default {
 <style lang="stylus" scoped>
   .layout__wrapper
     overflow auto
-    background var(--app-bg)
+    background var(--new-black)
     width 100vw
     min-height 100vh
-    color var(--text-0)
+    color var(--new-UI-02)
 
   .bottom
     position fixed

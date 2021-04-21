@@ -131,7 +131,7 @@ export default {
   line-height 32px
   font-weight 500
   text-decoration none
-  color var(--text-0)
+  color var(--new-UI-02)
   position relative
 
   @media $tablet

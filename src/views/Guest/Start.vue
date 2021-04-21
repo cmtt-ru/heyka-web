@@ -167,7 +167,8 @@ export default {
     margin 48px auto
     padding 36px 24px
     text-align center
-    background var(--button-bg-5)
+    background #191919
+    color var(--new-white)
     border-radius 12px
     box-sizing border-box
 
@@ -188,7 +189,7 @@ export default {
         width 100%
         height 100%
         z-index 1
-        background var(--app-bg)
+        background var(--new-black)
         align-items center
         justify-content center
         animation svgClear 500ms ease-in-out
@@ -210,17 +211,17 @@ export default {
       margin 24px auto 0 auto
 
       .input-wrapper
-        background rgba(0,0,0,0.85)
+        background-color var(--new-black)
 
         &:hover
-          background rgba(0,0,0,1)
+          background var(--new-black)
 
         &:focus-within
-          background rgba(0,0,0,1)
+          background var(--new-black)
           border-color rgba(255,255,255,0.5)
 
         input
-          color #fff
+          color var(--new-white)
           outline none
           text-align center
 

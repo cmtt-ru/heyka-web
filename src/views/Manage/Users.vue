@@ -43,8 +43,8 @@
     <list
       v-if="workspaceUsers.length"
       v-model="filteredWorkspaceUsers"
-      :items="sortedUsers"
-      filter-key="name"
+      :items="usersForSearch"
+      filter-key="searchBy"
       :filter-by="searchText"
     >
       <list-item
@@ -119,6 +119,19 @@ export default {
           type: 'date',
           order: 'desc',
         } ]));
+    },
+
+    /**
+     * Concatenate usernames and emails of users for better search
+     * @returns {object}
+     */
+    usersForSearch() {
+      return this.sortedUsers.map(user => {
+        return {
+          ...user,
+          searchBy: user.name + user.email,
+        };
+      });
     },
 
     canAllInvite: {
