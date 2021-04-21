@@ -60,7 +60,8 @@ export default {
       margin 48px auto
       padding 36px 24px
       text-align center
-      background var(--button-bg-5)
+      background #191919
+      color var(--new-white)
       border-radius 12px
       box-sizing border-box
 

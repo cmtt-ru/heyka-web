@@ -11,7 +11,7 @@
       :active="mediaState.microphone"
       :size="size"
       :icon-color="true"
-      fill-color="var(--text-0)"
+      fill-color="var(--new-UI-02)"
       @click.native="switchProp('microphone')"
     />
 
@@ -80,31 +80,31 @@ const ICON_MAP = {
   speakers: {
     true: {
       icon: 'headphones',
-      stroke: 'var(--text-0)',
+      stroke: 'var(--new-UI-02)',
     },
     false: {
       icon: 'headphones-off',
-      stroke: 'var(--text-1)',
+      stroke: 'var(--new-UI-02)',
     },
   },
   camera: {
     true: {
       icon: 'video',
-      stroke: 'var(--text-0)',
+      stroke: 'var(--new-UI-02)',
     },
     false: {
       icon: 'video-off',
-      stroke: 'var(--text-1)',
+      stroke: 'var(--new-UI-02)',
     },
   },
   screen: {
     true: {
       icon: 'screencast',
-      stroke: 'var(--text-0)',
+      stroke: 'var(--new-UI-02)',
     },
     false: {
       icon: 'screencast-off',
-      stroke: 'var(--text-1)',
+      stroke: 'var(--new-UI-02)',
     },
   },
 };
