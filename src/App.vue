@@ -62,6 +62,6 @@ export default {
 
 <style lang="stylus">
 .app-wrapper
-  background-color var(--app-bg)
-  color var(--text-0)
+  background-color var(--new-bg-04)
+  color var(--new-UI-02)
 </style>

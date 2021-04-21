@@ -82,7 +82,7 @@ export default {
     left 0
     width 100%
     height 60px
-    background-color var(--app-bg)
+    background-color var(--new-bg-04)
     z-index 10
 
     .wrapper
