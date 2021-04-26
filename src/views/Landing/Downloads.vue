@@ -1,41 +1,102 @@
 <template>
-  <div class="wrapper">
-    <div class="content">
-      <img
-        width="200"
-        height="200"
-        alt="Vue logo"
-        :src="logo"
-      >
-      <p class="title">
-        Heyka {{ version }}
-      </p>
+  <utility-page>
+    <h1 class="title">
+      Heyka {{ VERSION }}
+    </h1>
 
-      <div class="download">
-        <a
-          class="link"
-          target="_blank"
-          :href="macLink"
-          @click="startPinging"
-        >macOS</a>
-        <a
-          class="link"
-          target="_blank"
-          :href="winLink"
-          @click="startPinging"
-        >Windows</a>
-        <a
-          class="link"
-          target="_blank"
-          :href="linuxLink"
-          @click="startPinging"
-        >Linux</a>
-      </div>
-    </div>
-  </div>
+    <p class="subtitle">
+      {{ $t('landing.downloads') }}:
+    </p>
+
+    <a
+      class="l-mb-12"
+      target="_blank"
+      :href="winLink"
+      @click="startPinging"
+    >
+      <ui-button
+        :type="17"
+        wide
+
+        icon="windows"
+        size="large"
+      >
+        Windows
+      </ui-button>
+    </a>
+
+    <a
+      class="l-mb-12"
+      target="_blank"
+      :href="macLink"
+      @click="startPinging"
+    >
+      <ui-button
+        :type="17"
+        wide
+        icon="apple"
+        size="large"
+      >
+        macOS
+      </ui-button>
+    </a>
+
+    <a
+      class="l-mb-12"
+      target="_blank"
+      :href="linuxLink"
+      @click="startPinging"
+    >
+      <ui-button
+        :type="17"
+        wide
+        icon="ubuntu"
+        size="large"
+      >
+        Linux
+      </ui-button>
+    </a>
+
+    <!-- <h2 class="subtitle">
+        And mobile:
+      </h2>
+
+      <a
+        class="l-mb-12"
+        target="_blank"
+        href=""
+      >
+        <ui-button
+          :type="17"
+          wide
+          icon="apple"
+          size="large"
+        >
+          iOS
+        </ui-button>
+      </a>
+
+      <a
+        class="l-mb-12"
+        target="_blank"
+        href=""
+      >
+        <ui-button
+          :type="17"
+          wide
+          icon="android"
+          size="large"
+        >
+          Android
+        </ui-button>
+      </a> -->
+  </utility-page>
 </template>
 
 <script>
+import UtilityPage from '@/components/Layouts/UtilityPage';
+import UiButton from '@components/UiButton';
+
 import { authFileStore } from '@/store/localStore';
 import logo from '@assets/logo.png';
 
@@ -44,26 +105,27 @@ const PORTS = [9615, 48757, 48852, 49057, 49086];
 const pingTime = 2000;
 
 export default {
-  name: 'Home',
   components: {
-
+    UtilityPage,
+    UiButton,
   },
+
   data() {
     return {
-      version: '1.2.1',
+      VERSION,
       pingInterval: null,
       logo,
     };
   },
   computed: {
     macLink() {
-      return `https://storage.yandexcloud.net/heyka-beta-bin/download/Heyka-${this.version}.dmg`;
+      return `https://storage.yandexcloud.net/heyka-beta-bin/download/Heyka-${VERSION}.dmg`;
     },
     winLink() {
-      return `https://storage.yandexcloud.net/heyka-beta-bin/download/Heyka%20Setup%20${this.version}.exe`;
+      return `https://storage.yandexcloud.net/heyka-beta-bin/download/Heyka%20Setup%20${VERSION}.exe`;
     },
     linuxLink() {
-      return `https://storage.yandexcloud.net/heyka-beta-bin/download/heyka_${this.version}_amd64.deb`;
+      return `https://storage.yandexcloud.net/heyka-beta-bin/download/heyka_${VERSION}_amd64.deb`;
     },
   },
 
@@ -93,32 +155,25 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.wrapper
-  display flex
-  height 100vh
-  justify-content center
-  background #F1FAFF
 
-.content
-  max-width 700px
-  text-align center
-  line-height 1
-  margin-top 70px
+.subtitle
+  margin-bottom 12px
 
-  .title
-    font-size 48px
-    font-weight 500
-    margin-top 24px
-    color #151515
+.ui-button
+  width 300px
+  height 48px
+  line-height 48px
+  font-size 18px
+  background-color var(--new-UI-06)
+  position relative
+  display block
+  margin-bottom 12px
 
-.download
-  margin-top 64px
+  & /deep/ .icon
+    width 24px
+    height 24px
+    position absolute
+    left 12px
+    top 12px
 
-  a
-    margin 0 6px
-    color #777
-    text-decoration none
-    border-bottom 1px solid #ccc
-    cursor pointer
-    display inline
 </style>
