@@ -49,7 +49,7 @@ const routes = [
    */
   {
     path: '/',
-    name: 'Landing',
+    name: 'landing',
     component: Landing,
   },
 
