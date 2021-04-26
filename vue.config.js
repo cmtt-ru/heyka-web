@@ -1,5 +1,10 @@
 const path = require('path');
-const webpackPlugins = [];
+const webpack = require('webpack');
+const webpackPlugins = [
+  new webpack.DefinePlugin({
+    VERSION: JSON.stringify(require('./package.json').version),
+  }),
+];
 const fs = require('fs');
 
 /**
