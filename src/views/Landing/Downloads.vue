@@ -164,7 +164,6 @@ export default {
   height 48px
   line-height 48px
   font-size 18px
-  background-color var(--new-UI-06)
   position relative
   display block
   margin-bottom 12px
