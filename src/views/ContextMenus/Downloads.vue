@@ -62,7 +62,6 @@ export default {
 
   data() {
     return {
-      version: '1.2.1',
       pingInterval: null,
     };
   },
@@ -77,13 +76,13 @@ export default {
     },
 
     macLink() {
-      return `https://storage.yandexcloud.net/heyka-beta-bin/download/Heyka-${this.version}.dmg`;
+      return `https://storage.yandexcloud.net/heyka-beta-bin/download/Heyka-${VERSION}.dmg`;
     },
     winLink() {
-      return `https://storage.yandexcloud.net/heyka-beta-bin/download/Heyka%20Setup%20${this.version}.exe`;
+      return `https://storage.yandexcloud.net/heyka-beta-bin/download/Heyka%20Setup%20${VERSION}.exe`;
     },
     linuxLink() {
-      return `https://storage.yandexcloud.net/heyka-beta-bin/download/heyka_${this.version}_amd64.deb`;
+      return `https://storage.yandexcloud.net/heyka-beta-bin/download/heyka_${VERSION}_amd64.deb`;
     },
 
   },
