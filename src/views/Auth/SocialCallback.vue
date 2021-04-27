@@ -119,7 +119,18 @@ export default {
 
       case 'web-login':
         if (this.status) {
-          this.$router.replace({ name: 'landing' }).catch(() => {});
+          try {
+            await this.$API.auth.signinByLink(this.authCode);
+            const user = await this.$API.user.getAuthenticatedUser();
+
+            if (user.lang) {
+              await this.$store.dispatch('app/setLanguage', user.lang);
+            }
+          } catch (err) {
+            console.log('ERROR:', err);
+          }
+
+          this.$router.replace({ name: 'landing' }).catch(() => {}); //! bad! should show tech page
         }
         break;
 
