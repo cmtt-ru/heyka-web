@@ -374,7 +374,7 @@ export default {
   &.router-link-active
     background-color var(--new-UI-06)
 
-  $animation-duration = 350ms
+$animation-duration = 350ms
 
 .manage-page
   width 100%
