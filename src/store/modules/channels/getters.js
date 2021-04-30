@@ -42,9 +42,9 @@ export default {
    * @returns {object}
    */
   getHandUpStatusByUserId: (state, getters) => userId => {
-    const huiData = getters['getConversationData'](userId, 'hand-up')?.timestamp;
+    const huiData = getters['getConversationData'](userId, 'hand-up')?.state;
 
-    return huiData || 0;
+    return huiData || false;
   },
 
   /**
@@ -69,6 +69,19 @@ export default {
    */
   getMiniChatMessages: (state, getters) => {
     const data = getters['getConversationEvents']('mini-chat');
+
+    return data || [];
+  },
+
+  /**
+   * Get hand up statuses history
+   *
+   * @param {ChannelState} state – channels module state
+   * @param {object} getters – vuex getters
+   * @returns {object}
+   */
+  getHandUpHistory: (state, getters) => {
+    const data = getters['getConversationEvents']('hand-up');
 
     return data || [];
   },
