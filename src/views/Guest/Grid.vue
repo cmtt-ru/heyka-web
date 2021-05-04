@@ -413,7 +413,7 @@ export default {
   .channel-name
     font-size 14px
     line-height 18px
-    color var(--text-1)
+    color var(--new-UI-02)
 
   .cell-grid
     height calc(100vh - 232px)
@@ -501,7 +501,7 @@ export default {
     &__username
       bottom 4px
       margin 0 auto
-      background-color var(--app-bg)
+      background-color var(--new-black)
       padding 8px
       border-radius 4px
       flex-shrink 0
@@ -516,7 +516,7 @@ export default {
       position relative
 
       &__you
-        color var(--text-1)
+        color var(--new-UI-02)
         margin-left 8px
 
       &__mic-off
