@@ -145,13 +145,12 @@ export default {
           this.subtitle = this.$t('auth.socialCallback.linkSubtitle', [ this.serviceName ]);
         }
 
-        Cookies.remove('heyka-access-token', { domain: COOKIE_URL });
-        Cookies.remove('heyka-auth-action', { domain: COOKIE_URL });
-
         this.deepLink = deepLink;
         break;
       }
     }
+    Cookies.remove('heyka-access-token', { domain: COOKIE_URL });
+    Cookies.remove('heyka-auth-action', { domain: COOKIE_URL });
 
     if (this.deepLink) {
       this.$store.dispatch('launchDeepLink', this.deepLink);
