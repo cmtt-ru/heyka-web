@@ -99,7 +99,7 @@ export default {
       const res = await checkWebToken(this.jwt);
 
       if (res.result === false) {
-        // this.$router.push({ name: 'auth' });
+        this.$router.push({ name: 'auth' });
       }
     } catch (err) {
       // this.$router.push({ name: 'auth' });
