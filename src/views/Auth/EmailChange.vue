@@ -102,7 +102,7 @@ export default {
         this.$router.push({ name: 'auth' });
       }
     } catch (err) {
-      // this.$router.push({ name: 'auth' });
+      this.$router.push({ name: 'auth' });
     }
   },
 
