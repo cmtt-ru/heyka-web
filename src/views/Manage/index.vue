@@ -295,7 +295,6 @@ export default {
     background-color var(--new-bg-04)
 
     &__wrapper
-      border-top 1px solid rgba(0,0,0,0.1)
       box-sizing border-box
       display flex
       flex 1 1 auto
@@ -375,7 +374,7 @@ export default {
   &.router-link-active
     background-color var(--new-UI-06)
 
-  $animation-duration = 350ms
+$animation-duration = 350ms
 
 .manage-page
   width 100%
