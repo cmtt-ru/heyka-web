@@ -6,6 +6,7 @@ const Landing = () => import(/* webpackChunkName: "main" */ '../views/Landing');
 const Downloads = () => import(/* webpackChunkName: "main" */ '../views/Landing/Downloads.vue');
 const PrivacyPolicy = () => import(/* webpackChunkName: "main" */ '../views/Static/PrivacyPolicy.vue');
 const TermsConditions = () => import(/* webpackChunkName: "main" */ '../views/Static/TermsConditions.vue');
+const GDPR = () => import(/* webpackChunkName: "main" */ '../views/Static/GDPR.vue');
 
 const AuthFormLayout = () => import(/* webpackChunkName: "main" */ '../views/Auth/FormLayout');
 const AuthOtherLayout = () => import(/* webpackChunkName: "main" */ '../views/Auth/OtherLayout');
@@ -68,6 +69,11 @@ const routes = [
     path: '/terms-conditions',
     name: 'terms-conditions',
     component: TermsConditions,
+  },
+  {
+    path: '/gdpr',
+    name: 'gdpr',
+    component: GDPR,
   },
 
   /**
