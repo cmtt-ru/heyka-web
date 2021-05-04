@@ -295,7 +295,6 @@ export default {
     background-color var(--new-bg-04)
 
     &__wrapper
-      border-top 1px solid rgba(0,0,0,0.1)
       box-sizing border-box
       display flex
       flex 1 1 auto
@@ -320,7 +319,6 @@ export default {
         flex 0 0 366px
         padding 32px 40px
         box-sizing border-box
-        border-left 1px solid rgba(0,0,0,0.1)
         background-color var(--new-bg-01)
 
         @media $tablet
@@ -328,9 +326,11 @@ export default {
 
       &--content
         flex 1 1 auto
-        border-left 1px solid rgba(0,0,0,0.1)
         overflow-y auto
         position relative
+
+        @media $tablet
+          background-color var(--new-bg-01)
 
   .sub-header
     display flex
@@ -361,20 +361,20 @@ export default {
   line-height 32px
   font-weight 500
   text-decoration none
-  color var(--text-0)
+  color var(--new-UI-02)
   margin 2px 0 8px
 
   &__icon
     color var(--new-UI-01)
     padding-right 12px
 
-  &:hover:not(.router-link-exact-active)
+  &:hover:not(.router-link-active)
     background-color var(--new-UI-06)
 
-  &.router-link-exact-active
+  &.router-link-active
     background-color var(--new-UI-06)
 
-  $animation-duration = 350ms
+$animation-duration = 350ms
 
 .manage-page
   width 100%

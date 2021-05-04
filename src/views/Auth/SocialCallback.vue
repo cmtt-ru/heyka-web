@@ -119,7 +119,18 @@ export default {
 
       case 'web-login':
         if (this.status) {
-          this.$router.replace({ name: 'landing' }).catch(() => {});
+          try {
+            await this.$API.auth.signinByLink(this.authCode);
+            const user = await this.$API.user.getAuthenticatedUser();
+
+            if (user.lang) {
+              await this.$store.dispatch('app/setLanguage', user.lang);
+            }
+          } catch (err) {
+            console.log('ERROR:', err);
+          }
+
+          this.$router.replace({ name: 'landing' }).catch(() => {}); //! bad! should show tech page
         }
         break;
 
@@ -134,13 +145,12 @@ export default {
           this.subtitle = this.$t('auth.socialCallback.linkSubtitle', [ this.serviceName ]);
         }
 
-        Cookies.remove('heyka-access-token', { domain: COOKIE_URL });
-        Cookies.remove('heyka-auth-action', { domain: COOKIE_URL });
-
         this.deepLink = deepLink;
         break;
       }
     }
+    Cookies.remove('heyka-access-token', { domain: COOKIE_URL });
+    Cookies.remove('heyka-auth-action', { domain: COOKIE_URL });
 
     if (this.deepLink) {
       this.$store.dispatch('launchDeepLink', this.deepLink);
