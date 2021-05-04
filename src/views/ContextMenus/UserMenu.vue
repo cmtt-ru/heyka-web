@@ -1,6 +1,6 @@
 <template>
   <popover
-    :min-width="148"
+    :min-width="89"
   >
     <div class="buttons">
       <ui-button
