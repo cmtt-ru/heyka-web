@@ -53,6 +53,7 @@ export default {
     position absolute
     top 20px
     right 20px
+    color var(--new-UI-03)
 
     @media $mobile
       top 13px

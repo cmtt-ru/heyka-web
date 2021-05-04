@@ -96,6 +96,9 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+.manage-page
+  background-color var(--new-bg-01)
+
 .sub-header
   display flex
   flex-direction row
