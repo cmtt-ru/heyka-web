@@ -18,6 +18,14 @@
         The current version of Safari has known audio issues. Try to use other browser.
       </p>
 
+      <p
+        v-if="mediaPermissionsBlocked"
+        class="safari-issue"
+      >
+        It seems your browser is blocked from accessing your camera and microphone.
+        To continue, please allow access by clicking the camera icon in the URL bar.
+      </p>
+
       <div class="webcam l-mt-24">
         <video
           ref="video"
@@ -27,7 +35,7 @@
         />
         <div class="webcam__loader">
           <svg-icon
-            name="video"
+            :name="mediaPermissionsBlocked ? 'video-off' : 'video'"
             size="small"
           />
         </div>
@@ -85,6 +93,7 @@ export default {
     return {
       userName,
       visible: false,
+      mediaPermissionsBlocked: false,
     };
   },
 
@@ -129,7 +138,7 @@ export default {
       }
       await this.startCameraPreview();
     } catch (e) {
-      console.error('requestMediaPermissions', e);
+      this.mediaPermissionsBlocked = true;
     }
   },
 
