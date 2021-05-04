@@ -43,8 +43,8 @@
     <list
       v-if="workspaceUsers.length"
       v-model="filteredWorkspaceUsers"
-      :items="sortedUsers"
-      filter-key="name"
+      :items="usersForSearch"
+      filter-key="searchBy"
       :filter-by="searchText"
     >
       <list-item
@@ -121,6 +121,19 @@ export default {
         } ]));
     },
 
+    /**
+     * Concatenate usernames and emails of users for better search
+     * @returns {object}
+     */
+    usersForSearch() {
+      return this.sortedUsers.map(user => {
+        return {
+          ...user,
+          searchBy: user.name + user.email,
+        };
+      });
+    },
+
     canAllInvite: {
       get() {
         return this.canAllInviteLocal;
@@ -162,7 +175,7 @@ export default {
     },
 
     openWorkspaceHandler() {
-      this.$store.dispatch('launchDeepLink', `workspace/${this.workspaceId}/invite`);
+      this.$store.dispatch('launchDeepLink', `workspace/${this.workspaceId}`);
     },
 
     deleteModal(id) {
@@ -194,21 +207,14 @@ export default {
 
 <style lang="stylus" scoped>
 @import 'content.styl'
-.sub-header
-  margin-top -16px
-
-  & .ui-button
-    margin-top 16px
 
 .sub-header__text
-  margin-top 16px
-
   @media $mobile
     flex-basis 50%
 
 .sub-header__switch
-  max-width 430px
-  margin-top 16px
+  @media $mobile
+    margin-top 16px
 
 .users-placeholder
   padding 0 17px
