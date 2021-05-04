@@ -16,6 +16,7 @@ const AuthEmailSignin = () => import(/* webpackChunkName: "main" */ '@components
 const AuthEmailReset = () => import(/* webpackChunkName: "main" */ '@components/Auth/EmailReset');
 const AuthEmailSignup = () => import(/* webpackChunkName: "main" */ '@components/Auth/EmailSignup');
 const AuthEmailNewPassword = () => import(/* webpackChunkName: "main" */ '../views/Auth/EmailNewPassword');
+const AuthEmailChange = () => import(/* webpackChunkName: "main" */ '../views/Auth/EmailChange');
 const AuthEmailSignupSuccess = () => import(/* webpackChunkName: "main" */ '../views/Auth/EmailSignupSuccess');
 const AuthEmailVerify = () => import(/* webpackChunkName: "main" */ '../views/Auth/EmailVerify');
 const AuthSocialLogin = () => import(/* webpackChunkName: "main" */ '../views/Auth/SocialLogin');
@@ -147,6 +148,11 @@ const routes = [
         path: 'password/reset',
         name: 'auth-email-password-reset',
         component: AuthEmailNewPassword,
+      },
+      {
+        path: 'email/change/:code',
+        name: 'auth-email-change',
+        component: AuthEmailChange,
       },
       {
         path: 'social/callback',
