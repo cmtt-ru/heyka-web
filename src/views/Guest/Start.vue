@@ -22,8 +22,8 @@
         v-if="mediaPermissionsBlocked"
         class="safari-issue"
       >
-        It seems your browser is blocked from accessing your camera and microphone.
-        To continue, please allow access by clicking the camera icon in the URL bar.
+        Your browser doesn't seem to have access to microphone and camera.
+        Give it access by clicking the camera icon in the address bar.
       </p>
 
       <div class="webcam l-mt-24">
