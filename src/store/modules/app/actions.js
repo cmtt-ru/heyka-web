@@ -181,7 +181,7 @@ export default {
     commit('SET_MICROPHONE_VOLUME', volume);
   },
 
-  raiseHandInChannel({ rootGetters }, state) {
+  handUpInChannel({ rootGetters }, state) {
     conversationBroadcast('hand-up',
       rootGetters['me/getMyId'], { state });
   },
