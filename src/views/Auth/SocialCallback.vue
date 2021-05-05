@@ -73,6 +73,14 @@ export default {
     },
 
     /**
+     * True if this account is new and we are registering new user
+     * @returns {boolean}
+     */
+    newUser() {
+      return !!this.$route.query.newUser;
+    },
+
+    /**
      * Backend status
      * @returns {string | (string | null)[]}
      */
@@ -130,7 +138,7 @@ export default {
             console.log('ERROR:', err);
           }
 
-          this.$router.replace({ name: 'landing' }).catch(() => {}); //! bad! should show tech page
+          // this.$router.replace({ name: 'landing' }).catch(() => {}); //! bad! should show tech page
         }
         break;
 
