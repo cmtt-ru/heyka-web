@@ -18,6 +18,14 @@
         The current version of Safari has known audio issues. Try to use other browser.
       </p>
 
+      <p
+        v-if="mediaPermissionsBlocked"
+        class="safari-issue"
+      >
+        Your browser doesn't seem to have access to microphone and camera.
+        Give it access by clicking the camera icon in the address bar.
+      </p>
+
       <div class="webcam l-mt-24">
         <video
           ref="video"
@@ -27,7 +35,7 @@
         />
         <div class="webcam__loader">
           <svg-icon
-            name="video"
+            :name="mediaPermissionsBlocked ? 'video-off' : 'video'"
             size="small"
           />
         </div>
@@ -85,6 +93,7 @@ export default {
     return {
       userName,
       visible: false,
+      mediaPermissionsBlocked: false,
     };
   },
 
@@ -129,7 +138,7 @@ export default {
       }
       await this.startCameraPreview();
     } catch (e) {
-      console.error('requestMediaPermissions', e);
+      this.mediaPermissionsBlocked = true;
     }
   },
 
@@ -167,7 +176,8 @@ export default {
     margin 48px auto
     padding 36px 24px
     text-align center
-    background var(--button-bg-5)
+    background #191919
+    color var(--new-white)
     border-radius 12px
     box-sizing border-box
 
@@ -188,7 +198,7 @@ export default {
         width 100%
         height 100%
         z-index 1
-        background var(--app-bg)
+        background var(--new-black)
         align-items center
         justify-content center
         animation svgClear 500ms ease-in-out
@@ -210,17 +220,17 @@ export default {
       margin 24px auto 0 auto
 
       .input-wrapper
-        background rgba(0,0,0,0.85)
+        background-color var(--new-black)
 
         &:hover
-          background rgba(0,0,0,1)
+          background var(--new-black)
 
         &:focus-within
-          background rgba(0,0,0,1)
+          background var(--new-black)
           border-color rgba(255,255,255,0.5)
 
         input
-          color #fff
+          color var(--new-white)
           outline none
           text-align center
 

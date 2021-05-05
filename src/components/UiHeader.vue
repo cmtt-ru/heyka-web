@@ -4,12 +4,14 @@
       class="wrapper"
       :class="{'wrapper--full-width': fullWidth}"
     >
-      <svg-icon
-        class="logo"
-        name="logo-full"
-        width="105"
-        height="32"
-      />
+      <router-link :to="{name: 'landing'}">
+        <svg-icon
+          class="logo"
+          name="logo-full"
+          width="105"
+          height="32"
+        />
+      </router-link>
 
       <div class="slot">
         <slot />
@@ -82,7 +84,9 @@ export default {
     left 0
     width 100%
     height 60px
-    background-color var(--app-bg)
+    background-color var(--new-bg-04)
+    box-sizing border-box
+    border-bottom 1px solid rgba(0,0,0,0.1)
     z-index 10
 
     .wrapper

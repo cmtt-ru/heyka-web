@@ -326,10 +326,10 @@ export default {
   .sharing
     width 100%
     height 100%
-    background-color var(--app-bg)
+    background-color var(--new-black)
 
   .video-preview
-    background-color var(--app-bg)
+    background-color var(--new-black)
     position absolute
     left 0
     top 0
@@ -364,7 +364,7 @@ export default {
     right 30px
 
   .control
-    background-color var(--app-bg)
+    background-color var(--new-black)
     border-radius 4px
     top calc(100% - 126px)
     left calc(50% - 92px)

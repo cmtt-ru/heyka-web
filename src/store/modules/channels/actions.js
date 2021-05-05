@@ -8,7 +8,7 @@ export default {
    * @param {string} data – data
    * @returns {void}
    */
-  processConversationData({ dispatch, commit, rootGetters }, { userId, action, data }) {
+  async processConversationData({ dispatch, commit, rootGetters }, { userId, action, data }) {
     const channelId = rootGetters['me/getSelectedChannelId'];
 
     if (!channelId) {
@@ -48,8 +48,11 @@ export default {
         break;
 
       case 'hand-up':
+        if (commitData.data.state) {
+          commitData.data.timestamp = Date.now();
+          commit('ADD_CONVERSATION_EVENT', commitData);
+        }
         commit('ADD_CONVERSATION_DATA', commitData);
-        commit('ADD_CONVERSATION_EVENT', commitData);
         break;
 
       case 'socket-reconnecting':

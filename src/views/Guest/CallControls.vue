@@ -226,7 +226,7 @@ export default {
 
   &__channel
     display flex
-    color var(--text-1)
+    color var(--new-UI-02)
     align-items center
     font-size 12px
     line-height 14px
