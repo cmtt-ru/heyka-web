@@ -110,12 +110,6 @@ export default {
     }
 
     switch (this.action) {
-      case 'signup':
-        if (this.status) {
-          this.subtitle = this.texts.signupSubtitle;
-        }
-        break;
-
       case 'login':
         if (this.status) {
           this.subtitle = this.$t('auth.socialCallback.loginSubtitle', [ this.serviceName ]);
@@ -126,7 +120,7 @@ export default {
         break;
 
       case 'web-login':
-        if (this.status) {
+        if (this.status || this.newUser) {
           try {
             await this.$API.auth.signinByLink(this.authCode);
             const user = await this.$API.user.getAuthenticatedUser();
@@ -138,7 +132,10 @@ export default {
             console.log('ERROR:', err);
           }
 
-          // this.$router.replace({ name: 'landing' }).catch(() => {}); //! bad! should show tech page
+          this.$router.replace({
+            name: 'auth-success',
+            query: { newUser: this.newUser },
+          }).catch(() => {});
         }
         break;
 

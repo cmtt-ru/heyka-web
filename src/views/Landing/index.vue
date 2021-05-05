@@ -499,12 +499,13 @@ export default {
     },
 
     closeSignInModal(data) {
-      if (data.key !== 'closeAuth' && data.newValue !== 'true') {
+      if (data.key !== 'authSuccess' && data.newValue !== 'true') {
         return;
       }
 
       this.$store.dispatch('app/removeModal');
       window.localStorage.setItem('closeAuth', 'false');
+      this.$router.push({ name: 'auth-success' }).catch(() => {});
     },
   },
 };

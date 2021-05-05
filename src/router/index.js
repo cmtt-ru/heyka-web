@@ -21,6 +21,7 @@ const AuthEmailSignupSuccess = () => import(/* webpackChunkName: "main" */ '../v
 const AuthEmailVerify = () => import(/* webpackChunkName: "main" */ '../views/Auth/EmailVerify');
 const AuthSocialLogin = () => import(/* webpackChunkName: "main" */ '../views/Auth/SocialLogin');
 const AuthSocialCallback = () => import(/* webpackChunkName: "main" */ '../views/Auth/SocialCallback');
+const AuthSuccess = () => import(/* webpackChunkName: "main" */ '../views/Auth/Success');
 const AuthSlackCallback = () => import(/* webpackChunkName: "main" */ '../views/Auth/SlackCallback');
 
 const Guest = () => import(/* webpackChunkName: "main" */ '../views/Guest');
@@ -168,6 +169,11 @@ const routes = [
         path: 'social/:socialName/:action/:code',
         name: 'auth-social-link',
         component: AuthSocialLogin,
+      },
+      {
+        path: 'success',
+        name: 'auth-success',
+        component: AuthSuccess,
       },
     ],
   },
