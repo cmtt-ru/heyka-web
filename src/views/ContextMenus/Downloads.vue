@@ -11,7 +11,6 @@
           class="link"
           target="_blank"
           :href="macLink"
-          @click="startPinging"
         >macOS</a>
       </ui-button>
       <ui-button
@@ -22,7 +21,6 @@
           class="link"
           target="_blank"
           :href="winLink"
-          @click="startPinging"
         >Windows</a>
       </ui-button>
       <ui-button
@@ -33,7 +31,6 @@
           class="link"
           target="_blank"
           :href="linuxLink"
-          @click="startPinging"
         >Linux</a>
       </ui-button>
       <router-link :to="{ name: 'downloads'}">
@@ -51,8 +48,6 @@
 <script>
 import Popover from '@components/Popover';
 import UiButton from '@components/UiButton';
-
-import broadcastEvents from '@sdk/classes/broadcastEvents';
 
 export default {
   components: {
@@ -85,12 +80,6 @@ export default {
       return `https://storage.yandexcloud.net/heyka-beta-bin/download/heyka_${VERSION}_amd64.deb`;
     },
 
-  },
-
-  methods: {
-    startPinging() {
-      broadcastEvents.dispatch('ping-local-server');
-    },
   },
 };
 </script>
