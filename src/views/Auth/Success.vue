@@ -94,6 +94,8 @@ export default {
     } catch (err) {
       this.$router.replace({ name: 'landing' }).catch(() => {});
     }
+
+    this.$store.dispatch('workspaces/acceptWorkspaceInvite');
   },
 
   methods: {

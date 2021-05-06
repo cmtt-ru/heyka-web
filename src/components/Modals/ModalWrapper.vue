@@ -28,6 +28,7 @@ export default {
     NewGroupUsers: () => import(/* webpackChunkName: "modals" */ './Templates/NewGroupUsers'),
     EditInfo: () => import(/* webpackChunkName: "modals" */ './Templates/EditInfo'),
     SignIn: () => import(/* webpackChunkName: "modals" */ './Templates/SignIn'),
+    ConfirmJoin: () => import(/* webpackChunkName: "modals" */ './Templates/ConfirmJoin'),
   },
   props: {
     /**
