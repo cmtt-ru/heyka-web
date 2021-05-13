@@ -21,6 +21,7 @@ const AuthEmailSignupSuccess = () => import(/* webpackChunkName: "main" */ '../v
 const AuthEmailVerify = () => import(/* webpackChunkName: "main" */ '../views/Auth/EmailVerify');
 const AuthSocialLogin = () => import(/* webpackChunkName: "main" */ '../views/Auth/SocialLogin');
 const AuthSocialCallback = () => import(/* webpackChunkName: "main" */ '../views/Auth/SocialCallback');
+const AuthSuccess = () => import(/* webpackChunkName: "main" */ '../views/Auth/Success');
 const AuthSlackCallback = () => import(/* webpackChunkName: "main" */ '../views/Auth/SlackCallback');
 
 const Guest = () => import(/* webpackChunkName: "main" */ '../views/Guest');
@@ -28,6 +29,8 @@ const GuestStart = () => import(/* webpackChunkName: "main" */ '../views/Guest/S
 const GuestGrid = () => import(/* webpackChunkName: "main" */ '@sdk/views/Call/Grid');
 const GuestExpanded = () => import(/* webpackChunkName: "main" */ '@sdk/views/Call/Expanded');
 const GuestFinish = () => import(/* webpackChunkName: "main" */ '../views/Guest/Finish');
+
+const DeepLinkChannelInvite = () => import(/* webpackChunkName: "main" */ '../views/Deeplink');
 
 const Manage = () => import(/* webpackChunkName: "main" */ '../views/Manage');
 const ManageEmpty = () => import(/* webpackChunkName: "main" */ '../views/Manage/Empty');
@@ -169,7 +172,20 @@ const routes = [
         name: 'auth-social-link',
         component: AuthSocialLogin,
       },
+      {
+        path: 'success',
+        name: 'auth-success',
+        component: AuthSuccess,
+      },
     ],
+  },
+
+  /**
+   * deeplink handle
+   */
+  {
+    path: '/deeplink/channel-invite',
+    component: DeepLinkChannelInvite,
   },
 
   /**

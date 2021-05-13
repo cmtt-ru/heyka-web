@@ -1,40 +1,23 @@
 <template>
   <utility-page>
     <h1 class="title">
-      Heyka {{ VERSION }}
+      {{ $t('downloadPage.header') }}
     </h1>
 
     <p class="subtitle">
-      {{ $t('landing.downloads') }}:
+      {{ $t('downloadPage.version') }} {{ VERSION }}
     </p>
 
     <a
-      class="l-mb-12"
-      target="_blank"
-      :href="winLink"
-      @click="startPinging"
-    >
-      <ui-button
-        :type="17"
-        wide
-
-        icon="windows"
-        size="large"
-      >
-        Windows
-      </ui-button>
-    </a>
-
-    <a
-      class="l-mb-12"
+      class="l-mb-16"
       target="_blank"
       :href="macLink"
       @click="startPinging"
     >
       <ui-button
-        :type="17"
+        :type="IS_MAC ? 1 : 17"
         wide
-        icon="apple"
+        :icon="IS_MAC ? 'apple-white' : 'apple'"
         size="large"
       >
         macOS
@@ -42,20 +25,43 @@
     </a>
 
     <a
-      class="l-mb-12"
+      class="l-mb-16"
+      target="_blank"
+      :href="winLink"
+      @click="startPinging"
+    >
+      <ui-button
+        :type="IS_WIN ? 1 : 17"
+        wide
+        :icon="IS_WIN ? 'windows-white' : 'windows'"
+        size="large"
+      >
+        Windows
+      </ui-button>
+    </a>
+
+    <a
+      class="l-mb-16"
       target="_blank"
       :href="linuxLink"
       @click="startPinging"
     >
       <ui-button
-        :type="17"
+        :type="(!IS_WIN && !IS_MAC) ? 1 : 17"
         wide
-        icon="ubuntu"
+        :icon="(!IS_WIN && !IS_MAC) ? 'ubuntu-white' : 'ubuntu'"
         size="large"
       >
         Linux
       </ui-button>
     </a>
+
+    <p
+      v-if="pingingStarted"
+      class="subtitle"
+    >
+      {{ $t('downloadPage.dontClose') }}
+    </p>
 
     <!-- <h2 class="subtitle">
         And mobile:
@@ -98,7 +104,6 @@ import UtilityPage from '@/components/Layouts/UtilityPage';
 import UiButton from '@components/UiButton';
 
 import { authFileStore } from '@/store/localStore';
-import logo from '@assets/logo.png';
 
 // eslint-disable-next-line no-magic-numbers
 const PORTS = [9615, 48757, 48852, 49057, 49086];
@@ -113,8 +118,10 @@ export default {
   data() {
     return {
       VERSION,
+      IS_WIN,
+      IS_MAC,
       pingInterval: null,
-      logo,
+      pingingStarted: false,
     };
   },
   computed: {
@@ -134,7 +141,8 @@ export default {
       if (authFileStore.get('accessToken')) {
         const res = await this.$API.auth.link();
 
-        console.log(res);
+        this.pingingStarted = true;
+
         this.pingInterval = setInterval(() => {
           for (const port of PORTS) {
             this.pingLocalWebServer(res.code, port);
@@ -157,7 +165,7 @@ export default {
 <style lang="stylus" scoped>
 
 .subtitle
-  margin-bottom 12px
+  margin-bottom 24px
 
 .ui-button
   width 300px
@@ -166,7 +174,6 @@ export default {
   font-size 18px
   position relative
   display block
-  margin-bottom 12px
 
   & /deep/ .icon
     width 24px

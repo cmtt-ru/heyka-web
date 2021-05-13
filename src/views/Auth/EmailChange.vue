@@ -49,7 +49,6 @@
 import UtilityPage from '@/components/Layouts/UtilityPage';
 import UiButton from '@components/UiButton';
 import { UiInput, UiForm } from '@components/Form';
-import checkWebToken from '@api/auth/checkWebToken';
 
 export default {
   components: {
@@ -78,10 +77,10 @@ export default {
     },
 
     /**
-     * JWT token
+     * Auth code
      * @returns {string | (string | null)[]}
      */
-    jwt() {
+    code() {
       return this.$route.params.code;
     },
 
@@ -96,11 +95,7 @@ export default {
 
   async mounted() {
     try {
-      const res = await checkWebToken(this.jwt);
-
-      if (res.result === false) {
-        this.$router.push({ name: 'auth' });
-      }
+      await this.$API.auth.signinByLink(this.code);
     } catch (err) {
       this.$router.push({ name: 'auth' });
     }

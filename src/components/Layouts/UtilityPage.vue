@@ -3,9 +3,7 @@
     <ui-header />
 
     <div class="utility-page-layout__wrapper">
-      <div>
-        <slot />
-      </div>
+      <slot />
     </div>
   </div>
 </template>
@@ -29,6 +27,7 @@ export default {
 
     &__wrapper
       display flex
+      flex-direction column
       align-items center
       justify-content center
       height 100%
