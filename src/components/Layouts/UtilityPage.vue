@@ -3,7 +3,9 @@
     <ui-header />
 
     <div class="utility-page-layout__wrapper">
-      <slot />
+      <div>
+        <slot />
+      </div>
     </div>
   </div>
 </template>
@@ -27,7 +29,6 @@ export default {
 
     &__wrapper
       display flex
-      flex-direction column
       align-items center
       justify-content center
       height 100%
@@ -38,7 +39,7 @@ export default {
         padding 0 28px
 
       h1
-        margin-bottom 12px
+        margin-bottom 24px
 
         @media $desktop
           font-size 32px
@@ -52,6 +53,6 @@ export default {
         font-size 16px
         line-height 26px
         max-width 384px
-        margin 0 auto
+        margin -12px auto 24px
         margin-bottom 24px
 </style>
