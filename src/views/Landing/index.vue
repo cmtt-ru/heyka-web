@@ -23,21 +23,6 @@
 
         <div class="controls desktop-element">
           <div
-            v-popover.click="{name: 'Downloads', options: {modifiers:[{name: 'offset',
-                                                                       options: {
-                                                                         offset: [0, 14],
-                                                                       },}]}}"
-            class="controls__downloads"
-          >
-            {{ texts.downloads }}
-            <svg-icon
-              class="arrow"
-              name="arrow-down"
-              width="16"
-              height="16"
-            />
-          </div>
-          <div
             v-popover.click="{name: 'Language', options: {modifiers:[{name: 'offset',
                                                                       options: {
                                                                         offset: [0, 14],
@@ -66,14 +51,6 @@
             {{ texts.signIn }}
           </ui-button>
         </div>
-
-        <ui-button
-          class="controls__signIn mobile-element"
-          :type="3"
-          size="large"
-        >
-          {{ texts.getApp }}
-        </ui-button>
       </div>
 
       <div class="bottom-info mobile-element">
