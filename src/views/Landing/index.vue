@@ -435,7 +435,7 @@ export default {
       }
 
       this.$store.dispatch('app/removeModal');
-      window.localStorage.setItem('closeAuth', 'false');
+      window.localStorage.setItem('authSuccess', 'false');
       this.$router.push({ name: 'auth-success' }).catch(() => {});
     },
   },

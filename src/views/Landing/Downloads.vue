@@ -8,53 +8,55 @@
       {{ $t('downloadPage.version') }} {{ VERSION }}
     </p>
 
-    <a
-      class="l-mb-16"
-      target="_blank"
-      :href="macLink"
-      @click="startPinging"
-    >
-      <ui-button
-        :type="IS_MAC ? 1 : 17"
-        wide
-        :icon="IS_MAC ? 'apple-white' : 'apple'"
-        size="large"
+    <div class="buttons">
+      <a
+        class="l-mb-16"
+        target="_blank"
+        :href="macLink"
+        @click="startPinging"
       >
-        macOS
-      </ui-button>
-    </a>
+        <ui-button
+          :type="IS_MAC ? 1 : 17"
+          wide
+          :icon="IS_MAC ? 'apple-white' : 'apple'"
+          size="large"
+        >
+          macOS
+        </ui-button>
+      </a>
 
-    <a
-      class="l-mb-16"
-      target="_blank"
-      :href="winLink"
-      @click="startPinging"
-    >
-      <ui-button
-        :type="IS_WIN ? 1 : 17"
-        wide
-        :icon="IS_WIN ? 'windows-white' : 'windows'"
-        size="large"
+      <a
+        class="l-mb-16"
+        target="_blank"
+        :href="winLink"
+        @click="startPinging"
       >
-        Windows
-      </ui-button>
-    </a>
+        <ui-button
+          :type="IS_WIN ? 1 : 17"
+          wide
+          :icon="IS_WIN ? 'windows-white' : 'windows'"
+          size="large"
+        >
+          Windows
+        </ui-button>
+      </a>
 
-    <a
-      class="l-mb-16"
-      target="_blank"
-      :href="linuxLink"
-      @click="startPinging"
-    >
-      <ui-button
-        :type="(!IS_WIN && !IS_MAC) ? 1 : 17"
-        wide
-        :icon="(!IS_WIN && !IS_MAC) ? 'ubuntu-white' : 'ubuntu'"
-        size="large"
+      <a
+        class="l-mb-16"
+        target="_blank"
+        :href="linuxLink"
+        @click="startPinging"
       >
-        Linux
-      </ui-button>
-    </a>
+        <ui-button
+          :type="(!IS_WIN && !IS_MAC) ? 1 : 17"
+          wide
+          :icon="(!IS_WIN && !IS_MAC) ? 'ubuntu-white' : 'ubuntu'"
+          size="large"
+        >
+          Linux
+        </ui-button>
+      </a>
+    </div>
 
     <p
       v-if="pingingStarted"
@@ -166,6 +168,12 @@ export default {
 
 .subtitle
   margin-bottom 24px
+
+.buttons
+  display flex
+  flex-direction column
+  justify-content center
+  align-items center
 
 .ui-button
   width 300px
