@@ -44,7 +44,6 @@ export default {
       onClose: async (status, data) => {
         authFileStore.set('inviteCode', null);
         if (status === 'confirm') {
-          console.log('confirm', data);
           await API.workspace.joinByCode(inviteCode);
         }
       },
