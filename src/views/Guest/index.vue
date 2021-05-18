@@ -65,7 +65,7 @@ export default {
         await this.$store.dispatch('initial');
         console.log('auth success');
       } catch (e) {
-        this.$router.replace({ name: 'error-404' });
+        this.$router.replace({ name: 'error-403' });
       }
     },
 
