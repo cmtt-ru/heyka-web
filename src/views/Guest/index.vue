@@ -4,7 +4,9 @@
     :style="$themes.getColors('popover')"
   >
     <janus />
-    <router-view @join="joinHandler" />
+    <router-view
+      @join="joinHandler"
+    />
   </div>
 </template>
 
@@ -43,7 +45,6 @@ export default {
 
   async created() {
     await this.authorize();
-    this.$router.replace({ name: 'guest-start' }).catch(() => {});
   },
 
   beforeDestroy() {
@@ -60,10 +61,11 @@ export default {
         await join(this.inviteToken, {
           name: 'Guest',
         });
+        await this.$router.replace({ name: 'guest-start' }).catch(() => {});
         await this.$store.dispatch('initial');
         console.log('auth success');
       } catch (e) {
-        this.$router.replace({ name: 'landing' }).catch(() => {});
+        this.$router.replace({ name: 'error-403' });
       }
     },
 

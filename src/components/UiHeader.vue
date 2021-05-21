@@ -18,7 +18,7 @@
       </div>
 
       <div
-        v-if="myId"
+        v-if="myId && userById(myId).isEmailVerified"
         v-popover.click="{name: 'UserMenu'}"
         class="user"
       >
@@ -68,6 +68,7 @@ export default {
   computed: {
     ...mapGetters({
       myId: 'me/getMyId',
+      userById: 'users/getUserById',
       userAvatar: 'users/getUserAvatarUrl',
     }),
   },

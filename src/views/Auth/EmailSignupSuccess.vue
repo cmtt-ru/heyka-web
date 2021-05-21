@@ -22,6 +22,10 @@ export default {
       return this.$t('auth.signupSuccess');
     },
   },
+
+  mounted() {
+    this.$store.dispatch('workspaces/acceptWorkspaceInvite');
+  },
 };
 </script>
 
