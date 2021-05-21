@@ -30,6 +30,8 @@ const GuestGrid = () => import(/* webpackChunkName: "main" */ '@sdk/views/Call/G
 const GuestExpanded = () => import(/* webpackChunkName: "main" */ '@sdk/views/Call/Expanded');
 const GuestFinish = () => import(/* webpackChunkName: "main" */ '../views/Guest/Finish');
 
+const DeepLinkChannelInvite = () => import(/* webpackChunkName: "main" */ '../views/Deeplink');
+
 const Manage = () => import(/* webpackChunkName: "main" */ '../views/Manage');
 const ManageEmpty = () => import(/* webpackChunkName: "main" */ '../views/Manage/Empty');
 const WorkspaceUsers = () => import(/* webpackChunkName: "main" */ '../views/Manage/Users');
@@ -176,6 +178,14 @@ const routes = [
         component: AuthSuccess,
       },
     ],
+  },
+
+  /**
+   * deeplink handle
+   */
+  {
+    path: '/deeplink/channel-invite',
+    component: DeepLinkChannelInvite,
   },
 
   /**
