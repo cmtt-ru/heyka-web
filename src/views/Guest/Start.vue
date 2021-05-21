@@ -127,12 +127,6 @@ export default {
     try {
       const immediate = await mediaCapturer.requestMediaPermissions();
 
-      // if (immediate && this.userName) {
-      //   await this.joinHandler();
-      // } else {
-      //   await this.startCameraPreview();
-      // }
-
       if (immediate) {
 
       }
@@ -142,8 +136,8 @@ export default {
     }
   },
 
-  beforeDestroy() {
-    mediaCapturer.destroyStream(cameraStream);
+  async beforeDestroy() {
+    await mediaCapturer.destroyStream(cameraStream);
   },
 
   methods: {
