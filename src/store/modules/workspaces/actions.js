@@ -1,5 +1,8 @@
 import API from '@api/index';
 import { mapKeys } from '@libs/arrays';
+import Modal from '@sdk/classes/Modal';
+import { authFileStore } from '@/store/localStore';
+import i18n from '@sdk/translations/i18n';
 
 export default {
   /**
@@ -20,5 +23,30 @@ export default {
     }
 
     commit('SET_COLLECTION', mapKeys(workspaces, 'id'));
+  },
+
+  async acceptWorkspaceInvite() {
+    const inviteCode = authFileStore.get('inviteCode');
+
+    if (!inviteCode) {
+      return;
+    }
+
+    const workspaceInfo = await API.workspace.checkCode(inviteCode);
+
+    Modal.show({
+      name: 'ConfirmJoin',
+      data: {
+        header: i18n.t('modal.workspaceInvite.header'),
+        body: i18n.t('modal.workspaceInvite.body', [workspaceInfo.user.name, workspaceInfo.workspace.name]),
+        avatar: workspaceInfo.workspace,
+      },
+      onClose: async (status, data) => {
+        authFileStore.set('inviteCode', null);
+        if (status === 'confirm') {
+          await API.workspace.joinByCode(inviteCode);
+        }
+      },
+    });
   },
 };
