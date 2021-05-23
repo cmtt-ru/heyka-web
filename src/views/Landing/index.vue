@@ -23,21 +23,6 @@
 
         <div class="controls desktop-element">
           <div
-            v-popover.click="{name: 'Downloads', options: {modifiers:[{name: 'offset',
-                                                                       options: {
-                                                                         offset: [0, 14],
-                                                                       },}]}}"
-            class="controls__downloads"
-          >
-            {{ texts.downloads }}
-            <svg-icon
-              class="arrow"
-              name="arrow-down"
-              width="16"
-              height="16"
-            />
-          </div>
-          <div
             v-popover.click="{name: 'Language', options: {modifiers:[{name: 'offset',
                                                                       options: {
                                                                         offset: [0, 14],
@@ -66,14 +51,6 @@
             {{ texts.signIn }}
           </ui-button>
         </div>
-
-        <ui-button
-          class="controls__signIn mobile-element"
-          :type="3"
-          size="large"
-        >
-          {{ texts.getApp }}
-        </ui-button>
       </div>
 
       <div class="bottom-info mobile-element">
@@ -131,13 +108,12 @@
       </div>
       <img
         id="img1"
-        src="./assets/img1.png"
+        src="./assets/img0.png"
         alt=""
         class="app-image"
       >
 
       <div
-
         class="app-text app-text--fading"
       >
         <div class="app-text__header">
@@ -148,13 +124,12 @@
         </div>
       </div>
       <img
-        src="./assets/img2.png"
+        src="./assets/img1.png"
         alt=""
         class="app-image app-image--fading"
       >
 
       <div
-
         class="app-text app-text--fading"
       >
         <div class="app-text__header">
@@ -165,12 +140,14 @@
         </div>
       </div>
       <img
-        src="./assets/img3.png"
+        src="./assets/img2.png"
         alt=""
         class="app-image app-image--fading"
       >
 
-      <div class="app-text app-text--fading">
+      <div
+        class="app-text app-text--fading"
+      >
         <div class="app-text__header">
           {{ texts.info[3].header }}
         </div>
@@ -178,66 +155,27 @@
           {{ texts.info[3].desc }}
         </div>
       </div>
-      <div
+      <img
+        src="./assets/img3.png"
+        alt=""
         class="app-image app-image--fading"
       >
-        <a
-          class="app-image__quarter"
-          target="_blank"
-          :href="macLink"
-        >
-          <svg-icon
-            name="apple-white"
-            width="60"
-            height="60"
-          />
-          <div class="app-image__quarter__label">
-            macOS | iOS
-          </div>
-        </a>
-        <a
-          class="app-image__quarter"
-          target="_blank"
-          href="#"
-        >
-          <svg-icon
-            name="android"
-            width="60"
-            height="60"
-          />
-          <div class="app-image__quarter__label">
-            Android
-          </div>
-        </a>
-        <a
-          class="app-image__quarter"
-          target="_blank"
-          :href="winLink"
-        >
-          <svg-icon
-            name="windows"
-            width="60"
-            height="60"
-          />
-          <div class="app-image__quarter__label">
-            Windows
-          </div>
-        </a>
-        <a
-          class="app-image__quarter"
-          target="_blank"
-          :href="linuxLink"
-        >
-          <svg-icon
-            name="ubuntu"
-            width="60"
-            height="60"
-          />
-          <div class="app-image__quarter__label">
-            Linux
-          </div>
-        </a>
+
+      <div
+        class="app-text app-text--fading"
+      >
+        <div class="app-text__header">
+          {{ texts.info[4].header }}
+        </div>
+        <div class="app-text__content">
+          {{ texts.info[4].desc }}
+        </div>
       </div>
+      <img
+        src="./assets/img4.png"
+        alt=""
+        class="app-image app-image--fading"
+      >
     </div>
 
     <div class="bottom-info">
@@ -342,17 +280,11 @@ import { UiInput, UiForm } from '@components/Form';
 import UiButton from '@components/UiButton';
 import { WEB_URL } from '@sdk/Constants';
 
-import { authFileStore } from '@/store/localStore';
-import broadcastEvents from '@sdk/classes/broadcastEvents';
 import Modal from '@sdk/classes/Modal';
 
 let observer;
 
 const STICKED_CLASS = 'ui-sticked';
-
-// eslint-disable-next-line no-magic-numbers
-const PORTS = [9615, 48757, 48852, 49057, 49086];
-const pingTime = 2000;
 
 export default {
   components: {
@@ -413,8 +345,6 @@ export default {
 
     this.regAmount = await this.$API.app.subscribeCount();
 
-    broadcastEvents.on('ping-local-server', this.startPinging);
-    // window.addEventListener('message', this.closeSignInModal, false);
     window.addEventListener('storage', this.closeSignInModal, false);
 
     observer = new IntersectionObserver(entries => {
@@ -434,7 +364,6 @@ export default {
 
   beforeDestroy() {
     this.$themes.manualSetTheme('light');
-    broadcastEvents.removeAllListeners('ping-local-server');
     window.removeEventListener('close-auth', this.closeSignInModal);
   },
 
@@ -470,41 +399,21 @@ export default {
       this.regAmount = await this.$API.app.subscribeCount();
     },
 
-    async startPinging() {
-      if (authFileStore.get('accessToken')) {
-        const res = await this.$API.auth.link();
-
-        this.pingInterval = setInterval(() => {
-          for (const port of PORTS) {
-            this.pingLocalWebServer(res.code, port);
-          }
-        }, pingTime);
-      }
-    },
-    async pingLocalWebServer(authLink, port) {
-      try {
-        await fetch(`http://127.0.0.1:${port}/${authLink}`, { mode: 'no-cors' });
-
-        clearInterval(this.pingInterval);
-      } catch (err) {
-      }
-    },
-
     signIn() {
       Modal.show({
         name: 'SignIn',
-        onClose: () => {
-        },
+        onClose: () => {},
       });
     },
 
     closeSignInModal(data) {
-      if (data.key !== 'closeAuth' && data.newValue !== 'true') {
+      if (data.key !== 'authSuccess' && data.newValue !== 'true') {
         return;
       }
 
       this.$store.dispatch('app/removeModal');
-      window.localStorage.setItem('closeAuth', 'false');
+      window.localStorage.setItem('authSuccess', 'false');
+      this.$router.push({ name: 'auth-success' }).catch(() => {});
     },
   },
 };
