@@ -4,26 +4,24 @@
       v-show="visible"
       class="guest-start"
     >
-      <h1>You’re about to join a video meeting</h1>
+      <h1>{{ $t('call.webGrid.joinHeader') }}</h1>
       <p class="l-mt-24">
-        For others to see and hear you, your browser will request access to your cam and mic.
-        You can still turn them back off at any time.
+        {{ $t('call.webGrid.joinDesc') }}
       </p>
 
       <p
         v-if="isSafari"
         class="safari-issue"
       >
-        <span>Issues with Safari</span>
-        The current version of Safari has known audio issues. Try to use other browser.
+        <span>{{ $t('call.webGrid.safariHeader') }}</span>
+        {{ $t('call.webGrid.safariDesc') }}
       </p>
 
       <p
         v-if="mediaPermissionsBlocked"
         class="safari-issue"
       >
-        Your browser doesn't seem to have access to microphone and camera.
-        Give it access by clicking the camera icon in the address bar.
+        {{ $t('call.webGrid.micAccess') }}
       </p>
 
       <div class="webcam l-mt-24">
@@ -44,7 +42,7 @@
       <ui-form @submit="joinHandler">
         <ui-input
           v-model="userName"
-          placeholder="Enter your name"
+          :placeholder="$t('call.webGrid.namePlaceholder')"
           class="user-name"
           required
           enter-submit
@@ -55,7 +53,7 @@
           class="l-mt-24"
           submit
         >
-          Join channel
+          {{ $t('call.webGrid.joinButton') }}
         </ui-button>
       </ui-form>
     </div>
