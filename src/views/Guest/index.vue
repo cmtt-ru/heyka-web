@@ -45,10 +45,14 @@ export default {
 
   async created() {
     await this.authorize();
+    document.body.classList.add('popover-fullscreen');
+    this.$themes.manualSetTheme('dark');
   },
 
   beforeDestroy() {
     mediaDevices.removeAllListeners('change');
+    document.body.classList.remove('popover-fullscreen');
+    this.$themes.manualSetTheme('light');
   },
 
   methods: {
