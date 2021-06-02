@@ -82,6 +82,32 @@ export default {
   },
 
   /**
+   * Remove channel
+   *
+   * @param {ChannelState} state – vuex state
+   * @param {string} channelId – channel id
+   * @constructor
+   */
+  REMOVE_CHANNEL(state, channelId) {
+    if (state.collection[channelId]) {
+      Vue.delete(state.collection, channelId);
+    }
+  },
+
+  /**
+     * Update channel
+     *
+     * @param {ChannelState} state – vuex state
+     * @param {object} channel – channel data
+     * @constructor
+     */
+  UPDATE_CHANNEL(state, channel) {
+    if (state.collection[channel.id]) {
+      state.collection[channel.id] = Object.assign(state.collection[channel.id], channel);
+    }
+  },
+
+  /**
    * Add conversation data
    *
    * @param {ChannelState} state – vuex state
