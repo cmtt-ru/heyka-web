@@ -68,8 +68,6 @@ import UiButton from '@components/UiButton';
 
 let cameraStream = null;
 
-const IS_SAFARI = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-
 export default {
   components: {
     UiForm,
@@ -111,7 +109,7 @@ export default {
     }),
 
     isSafari() {
-      return IS_SAFARI;
+      return window.IS_SAFARI && !window.IS_IOS;
     },
   },
 
@@ -123,11 +121,7 @@ export default {
     }, SHOW_TIMEOUT);
 
     try {
-      const immediate = await mediaCapturer.requestMediaPermissions();
-
-      if (immediate) {
-
-      }
+      await mediaCapturer.requestMediaPermissions();
       await this.startCameraPreview();
     } catch (e) {
       this.mediaPermissionsBlocked = true;
