@@ -3,30 +3,36 @@
     <!-- Create state -->
     <template v-if="!finish">
       <h1>{{ texts.title }}</h1>
-
-      <div class="workspace-create-form l-mt-24">
-        <ui-image
-          :image="avatar"
-          :size="76"
-          @input="setNewAvatar"
-        />
-
-        <ui-input
-          v-model="name"
-          class="l-ml-24"
-          :placeholder="texts.namePlaceHolder"
-        />
-      </div>
-
-      <ui-button
-        :type="1"
-        wide
-        class="l-mt-24"
-        size="xlarge"
-        @click="createHandler"
+      <ui-form
+        @submit="createHandler"
       >
-        {{ texts.createButton }}
-      </ui-button>
+        <div class="workspace-create-form l-mt-24">
+          <ui-image
+            :image="avatar"
+            :size="76"
+            @input="setNewAvatar"
+          />
+
+          <ui-input
+            v-model="name"
+            required
+            enter-submit
+            :minlength="3"
+            class="l-ml-24"
+            :placeholder="texts.namePlaceHolder"
+          />
+        </div>
+
+        <ui-button
+          :type="1"
+          wide
+          class="l-mt-24"
+          size="xlarge"
+          submit
+        >
+          {{ texts.createButton }}
+        </ui-button>
+      </ui-form>
     </template>
 
     <!-- Finish state -->
@@ -72,12 +78,13 @@
 <script>
 import UtilityPage from '@/components/Layouts/UtilityPage';
 import UiButton from '@components/UiButton';
-import { UiInput, UiImage } from '@components/Form';
+import { UiForm, UiInput, UiImage } from '@components/Form';
 
 export default {
   components: {
     UtilityPage,
     UiButton,
+    UiForm,
     UiInput,
     UiImage,
   },
