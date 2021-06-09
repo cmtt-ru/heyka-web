@@ -9,6 +9,7 @@ import SvgIcon from '@components/SvgIcon.vue';
 import API from '@api';
 import '@sdk/directives';
 import permissions from '@sdk/classes/permissions';
+import 'context-filter-polyfill';
 
 Vue.prototype.$API = API;
 Vue.component('SvgIcon', SvgIcon);
@@ -31,6 +32,6 @@ new Vue({
  * Dummy polyfill for `setSinkId` method for unsupported browsers e.g. Safari
  * @returns {void}
  */
-if (Audio.setSinkId === undefined) {
+if (Audio.prototype.setSinkId === undefined) {
   Audio.prototype.setSinkId = () => {};
 }

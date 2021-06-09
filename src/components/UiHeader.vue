@@ -4,12 +4,15 @@
       class="wrapper"
       :class="{'wrapper--full-width': fullWidth}"
     >
-      <router-link :to="{name: 'landing'}">
+      <router-link
+        class="logo-link"
+        :to="{name: 'landing'}"
+      >
         <svg-icon
           class="logo"
-          name="logo-full"
-          width="105"
-          height="32"
+          :name="logoName"
+          width="108"
+          height="48"
         />
       </router-link>
 
@@ -71,6 +74,14 @@ export default {
       userById: 'users/getUserById',
       userAvatar: 'users/getUserAvatarUrl',
     }),
+
+    logoName() {
+      if (this.$themes.getCurrentTheme() === 'light') {
+        return 'logo-full';
+      }
+
+      return 'logo-full-dark';
+    },
   },
 };
 </script>
@@ -101,6 +112,9 @@ export default {
 
         @media $desktop
           margin 0 40px
+
+    .logo-link
+      display flex
 
     .slot
       flex-grow 1

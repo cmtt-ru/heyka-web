@@ -8,7 +8,7 @@
         v-if="authCode"
         class="buttons"
       >
-        <router-link :to="{name: 'landing'}">
+        <router-link :to="{name: 'downloads'}">
           <ui-button
             :type="1"
             size="xlarge"

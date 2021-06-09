@@ -1,6 +1,7 @@
 import i18n from '@sdk/translations/i18n';
 import { v4 as uuidV4 } from 'uuid';
 import { heykaStore } from '@/store/localStore';
+import sounds from '@sdk/classes/sounds';
 import { conversationBroadcast } from '@api/socket/utils';
 
 /**
@@ -123,6 +124,9 @@ export default {
 
       heykaStore.set(`selected${deviceTypeCapitalized}Label`, device?.rawLabel || '');
     });
+
+    /** Set output device for app sounds */
+    sounds.setSinkId(state.realSelectedDevices.speaker);
   },
 
   /**
