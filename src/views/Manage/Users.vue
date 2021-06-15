@@ -213,6 +213,8 @@ export default {
     flex-basis 50%
 
 .sub-header__switch
+  width initial
+
   @media $mobile
     margin-top 16px
 
