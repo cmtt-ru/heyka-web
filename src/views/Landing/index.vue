@@ -15,9 +15,9 @@
             />
           </div>
           <svg-icon
-            name="logo-full"
-            width="105"
-            height="32"
+            :name="logoName"
+            width="108"
+            height="48"
           />
         </div>
 
@@ -325,6 +325,14 @@ export default {
       } else {
         return 'burger';
       }
+    },
+
+    logoName() {
+      if (this.$themes.getCurrentTheme() === 'light') {
+        return 'logo-full';
+      }
+
+      return 'logo-full-dark';
     },
 
     macLink() {
