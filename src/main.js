@@ -9,6 +9,7 @@ import SvgIcon from '@components/SvgIcon.vue';
 import API from '@api';
 import '@sdk/directives';
 import permissions from '@sdk/classes/permissions';
+import 'context-filter-polyfill';
 
 Vue.prototype.$API = API;
 Vue.component('SvgIcon', SvgIcon);
