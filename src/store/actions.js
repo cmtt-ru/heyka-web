@@ -218,6 +218,10 @@ export default {
     dispatch('me/setChannelId', null);
 
     dispatch('me/setDefaultMediaState');
+
+    if (!IS_ELECTRON) {
+      router.replace({ name: 'landing' });
+    }
   },
 
   /**
