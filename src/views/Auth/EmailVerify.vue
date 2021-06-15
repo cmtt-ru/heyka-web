@@ -13,7 +13,7 @@
         v-if="authCode"
         class="email-verify-buttons"
       >
-        <router-link :to="{name: 'landing'}">
+        <router-link :to="{name: 'downloads'}">
           <ui-button
             :type="1"
             size="xlarge"
