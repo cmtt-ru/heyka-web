@@ -18,6 +18,7 @@ import UtilityPage from '@/components/Layouts/UtilityPage';
 import UiButton from '@components/UiButton';
 import Cookies from 'js-cookie';
 import { COOKIE_URL } from '@sdk/Constants';
+import { GA_EVENTS, trackEvent } from '@libs/analytics';
 
 export default {
   components: {
@@ -114,6 +115,12 @@ export default {
         if (this.status) {
           this.subtitle = this.$t('auth.socialCallback.loginSubtitle', [ this.serviceName ]);
           this.deepLink = `login/${this.authCode}`;
+
+          if (this.newUser) {
+            trackEvent(GA_EVENTS.signup(this.serviceName), 'App');
+          } else {
+            trackEvent(GA_EVENTS.login(this.serviceName), 'App');
+          }
         } else {
           this.deepLink = `login/false/${this.error}`;
         }
@@ -124,6 +131,12 @@ export default {
           try {
             await this.$API.auth.signinByLink(this.authCode);
             const user = await this.$API.user.getAuthenticatedUser();
+
+            if (this.newUser) {
+              trackEvent(GA_EVENTS.signup(this.serviceName));
+            } else {
+              trackEvent(GA_EVENTS.login(this.serviceName));
+            }
 
             if (user.lang) {
               await this.$store.dispatch('app/setLanguage', user.lang);
@@ -148,6 +161,8 @@ export default {
 
         if (this.status) {
           this.subtitle = this.$t('auth.socialCallback.linkSubtitle', [ this.serviceName ]);
+
+          trackEvent(GA_EVENTS.socialLink(this.serviceName));
         }
 
         this.deepLink = deepLink;
