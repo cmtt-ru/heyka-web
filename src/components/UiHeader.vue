@@ -125,7 +125,7 @@ export default {
       align-items center
       cursor pointer
 
-      &.context-menu--opened
+      &.popover--opened
         svg
           color var(--new-UI-01)
 
