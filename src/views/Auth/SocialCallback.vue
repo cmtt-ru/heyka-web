@@ -19,6 +19,7 @@ import UiButton from '@components/UiButton';
 import Cookies from 'js-cookie';
 import { COOKIE_URL } from '@sdk/Constants';
 import { GA_EVENTS, trackEvent } from '@libs/analytics';
+import { authFileStore } from '@/store/localStore';
 
 export default {
   components: {
@@ -131,10 +132,15 @@ export default {
           try {
             await this.$API.auth.signinByLink(this.authCode);
             const user = await this.$API.user.getAuthenticatedUser();
+            const inviteCode = authFileStore.get('inviteCode');
 
             if (this.newUser) {
               trackEvent(GA_EVENTS.signup(this.serviceName));
             } else {
+              if (inviteCode) {
+                trackEvent(GA_EVENTS.inviteToWorkspace);
+              }
+
               trackEvent(GA_EVENTS.login(this.serviceName));
             }
 
