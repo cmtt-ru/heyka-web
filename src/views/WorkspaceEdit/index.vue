@@ -79,6 +79,7 @@
 import UtilityPage from '@/components/Layouts/UtilityPage';
 import UiButton from '@components/UiButton';
 import { UiForm, UiInput, UiImage } from '@components/Form';
+import { trackEvent, GA_EVENTS } from '@libs/analytics';
 
 export default {
   components: {
@@ -178,6 +179,8 @@ export default {
           avatarFileId: this.avatar,
           name: this.name,
         });
+
+        trackEvent(GA_EVENTS.workspaceCreate);
 
         this.newWorkspace = workspace;
 
