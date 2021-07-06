@@ -243,7 +243,7 @@ export default {
         },
         onClose: async (status) => {
           if (status === 'confirm') {
-            await this.$API.workspace.deleteWorkspace(this.selectedWorkspace.id);
+            await this.$API.workspace.deleteWorkspace(this.selectedWorkspace.id, this.selectedWorkspace.name);
             await this.loadWorkspaces();
             this.openFirstWorkspace();
           }
