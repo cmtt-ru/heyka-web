@@ -77,10 +77,10 @@ export default {
 
     title() {
       if (this.newUser) {
-        return 'Регистрация прошла успешно!';
+        return this.texts.regSuccess;
       }
 
-      return 'Авторизация прошла успешно!';
+      return this.texts.authSuccess;
     },
   },
 
