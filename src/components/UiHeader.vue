@@ -21,7 +21,7 @@
       </div>
 
       <div
-        v-if="myId && userById(myId).isEmailVerified"
+        v-if="myId && !userById(myId).temporaryUser"
         v-popover.click="{name: 'UserMenu'}"
         class="user"
       >
