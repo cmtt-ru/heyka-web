@@ -276,7 +276,9 @@ export default {
 
     openFirstWorkspace() {
       if (!this.workspaces.length) {
-        return;
+        this.$router.replace({
+          path: '/ws/create',
+        });
       }
       this.$router.replace({
         name: 'manage',

@@ -194,6 +194,9 @@ const routes = [
   {
     path: '/manage',
     component: Manage,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: '/manage/:workspaceId',
@@ -208,6 +211,7 @@ const routes = [
         component: ManageEmpty,
         meta: {
           depth: 1,
+          requiresAuth: true,
         },
       },
       {
@@ -216,6 +220,7 @@ const routes = [
         component: WorkspaceUsers,
         meta: {
           depth: 2,
+          requiresAuth: true,
         },
       },
       {
@@ -224,6 +229,7 @@ const routes = [
         component: WorkspaceGroups,
         meta: {
           depth: 2,
+          requiresAuth: true,
         },
       },
       {
@@ -232,6 +238,7 @@ const routes = [
         component: WorkspaceGroupMembers,
         meta: {
           depth: 3,
+          requiresAuth: true,
         },
       },
     ],
