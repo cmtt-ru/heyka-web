@@ -19,7 +19,7 @@
       <ui-switch
         v-model="canAllInvite"
         class="sub-header__switch"
-        text="Все участники могут приглашать новых пользователей"
+        :text="$t('manage.canInvite')"
       />
     </div>
 
