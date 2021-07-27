@@ -164,6 +164,7 @@ export default {
     async authorize() {
       if (this.authCode) {
         await this.$API.auth.signinByLink(this.authCode);
+        await this.$store.dispatch('tryToAuthorize');
         await this.$router.replace({
           name: 'manage',
           params: { workspaceId: this.workspaceId },
@@ -275,7 +276,9 @@ export default {
 
     openFirstWorkspace() {
       if (!this.workspaces.length) {
-        return;
+        this.$router.replace({
+          path: '/ws/create',
+        });
       }
       this.$router.replace({
         name: 'manage',
