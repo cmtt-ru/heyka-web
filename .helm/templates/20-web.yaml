@@ -6,7 +6,7 @@ metadata:
   labels:
     app: {{ .Chart.Name }}
 spec:
-  replicas: {{ pluck .Values.global.env .Values.app.replicas | first | default .Values.app.replicas._default }}
+  replicas: {{ pluck .Values.werf.env .Values.app.replicas | first | default .Values.app.replicas._default }}
   selector:
     matchLabels:
       app: {{ .Chart.Name }}
@@ -23,7 +23,7 @@ spec:
         - name: registrysecret
       containers:
         - name: nginx
-{{ tuple "web" . | include "werf_container_image" | indent 10 }}
+          image:  {{ .Values.werf.image.web }}
           lifecycle:
             preStop:
               exec:
@@ -31,10 +31,10 @@ spec:
           command: ["/usr/sbin/nginx", "-g", "daemon off;"]
           resources:
             requests:
-              memory: {{ pluck .Values.global.env .Values.app.requests.memory | first | default .Values.app.requests.memory._default | quote }}
-              cpu: {{ pluck .Values.global.env .Values.app.requests.cpu | first | default .Values.app.requests.cpu._default | quote }}
+              memory: {{ pluck .Values.werf.env .Values.app.requests.memory | first | default .Values.app.requests.memory._default | quote }}
+              cpu: {{ pluck .Values.werf.env .Values.app.requests.cpu | first | default .Values.app.requests.cpu._default | quote }}
             limits:
-              memory: {{ pluck .Values.global.env .Values.app.limits.memory | first | default .Values.app.limits.memory._default | quote }}
+              memory: {{ pluck .Values.werf.env .Values.app.limits.memory | first | default .Values.app.limits.memory._default | quote }}
           ports:
           - containerPort: 80
             name: static
@@ -67,7 +67,6 @@ spec:
         - name: nginx
           configMap:
             name: web-configmap
-
 ---
 apiVersion: v1
 kind: Service
