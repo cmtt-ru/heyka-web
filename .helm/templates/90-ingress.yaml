@@ -11,7 +11,7 @@ metadata:
     #nginx.ingress.kubernetes.io/auth-type: basic
 spec:
   rules:
-  - host: {{ pluck .Values.global.env .Values.app.url | first | default (printf "web-%s.%s" .Values.global.env .Values.app.domain_base) }}
+  - host: {{ pluck .Values.werf.env .Values.app.url | first | default (printf "web-%s.%s" .Values.werf.env .Values.app.domain_base) }}
     http:
       paths:
       - path: /
@@ -22,8 +22,8 @@ spec:
         backend:
           serviceName: {{ .Chart.Name }}
           servicePort: static
-{{- if (eq $.Values.global.env "stage") }}
-  - host: {{ pluck .Values.global.env .Values.app.domain_main | first | default .Values.app.domain_main._default }}
+{{- if (eq $.Values.werf.env "stage") }}
+  - host: {{ pluck .Values.werf.env .Values.app.domain_main | first | default .Values.app.domain_main._default }}
     http:
       paths:
       - path: /
@@ -37,9 +37,8 @@ spec:
 {{- end }}
   tls:
   - hosts:
-      - {{ pluck .Values.global.env .Values.app.url | first | default (printf "web-%s.%s" .Values.global.env .Values.app.domain_base) }}
-{{- if (eq $.Values.global.env "stage") }}
-      - {{ pluck .Values.global.env .Values.app.domain_main | first | default .Values.app.domain_main._default }}
+      - {{ pluck .Values.werf.env .Values.app.url | first | default (printf "web-%s.%s" .Values.werf.env .Values.app.domain_base) }}
+{{- if (eq $.Values.werf.env "stage") }}
+      - {{ pluck .Values.werf.env .Values.app.domain_main | first | default .Values.app.domain_main._default }}
 {{- end }}
     secretName: {{ printf "tls-%s" .Chart.Name | quote }}
-
