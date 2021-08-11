@@ -10,6 +10,7 @@ spec:
   selector:
     matchLabels:
       app: {{ .Chart.Name }}
+  revisionHistoryLimit: 3
   template:
     metadata:
       labels:
@@ -17,8 +18,23 @@ spec:
       annotations:
         checksum/nginx-config: {{ include (print $.Template.BasePath "/05-nginx-configmap.yaml") . | sha256sum }}
     spec:
-      nodeSelector:
-        node-role.kubernetes.io/node: ""
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app: {{ .Chart.Name }}
+              topologyKey: kubernetes.io/hostname
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: node-role.kubernetes.io/node
+                operator: In
+                values:
+                - ""
       imagePullSecrets:
         - name: registrysecret
       containers:
@@ -81,3 +97,15 @@ spec:
     name: static
   selector:
     app: {{ .Chart.Name }}
+---
+apiVersion: autoscaling.k8s.io/v1beta2
+kind: VerticalPodAutoscaler
+metadata:
+  name: {{ .Chart.Name }}
+spec:
+  targetRef:
+    apiVersion: "apps/v1"
+    kind: Deployment
+    name: {{ .Chart.Name }}
+  updatePolicy:
+    updateMode: "Off"
