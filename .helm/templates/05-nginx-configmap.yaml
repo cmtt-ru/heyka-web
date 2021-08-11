@@ -32,7 +32,7 @@ data:
         client_body_timeout 20;
         send_timeout 10;
 
-        resolver 192.168.0.10 valid=1m ipv6=off;
+        resolver 10.222.0.10 valid=1m ipv6=off;
 
         # MIME
         include mime.types;
