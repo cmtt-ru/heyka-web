@@ -1,5 +1,5 @@
 app:
-  domain_main: 
+  domain_main:
     _default: heyka.app
   domain_base: dev.k8s.heyka.io
   url: {}
@@ -8,15 +8,11 @@ app:
   requests:
     cpu:
       _default: "100m"
-      stage: "100m"
-      production: "1"
+      prod: "100m"
     memory:
       _default: "256Mi"
-      stage: "512Mi"
-      production: "2Gi"
+      prod: "512Mi"
   limits:
     memory:
       _default: "256Mi"
-      stage: "512Mi"
-      production: "2Gi"
-
+      prod: "512Mi"
