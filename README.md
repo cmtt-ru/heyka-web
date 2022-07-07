@@ -1,7 +1,7 @@
 # Heyka web
 
 This is a web-part of Heyka.
-It contains landing page, download page, authorisation & signup, admin panel for workspace creation & edit, web version of a call page, and a couple other pages.
+It contains landing page, download page, authorization & signup, admin panel for workspace creation & edit, web version of a call page, and a couple other pages.
 
 For complete list of Heyka features and full product explanation, refer to [Heyka's main repository](https://github.com/cmtt-ru/heyka)
 
