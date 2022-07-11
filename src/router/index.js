@@ -42,9 +42,6 @@ const WorkspaceEdit = () => import(/* webpackChunkName: "main" */ '../views/Work
 const Error403 = () => import(/* webpackChunkName: "main" */ '../views/Errors/Error403');
 const Error404 = () => import(/* webpackChunkName: "main" */ '../views/Errors/Error404');
 
-const JanusMonitoring = () => import(/* webpackChunkName: "janus" */ '../views/JanusMonitoring');
-const JanusDashboard = () => import(/* webpackChunkName: "janus" */ '../views/JanusDashboard');
-
 Vue.use(VueRouter);
 
 const routes = [
@@ -328,24 +325,6 @@ const routes = [
     path: '/404',
     name: 'error-404',
     component: Error404,
-  },
-
-  /**
-   * Janus monitoring
-   */
-  {
-    path: '/janus-monitoring*',
-    name: 'janus-monitoring',
-    component: JanusMonitoring,
-  },
-
-  /**
-   * Janus dashboard
-   */
-  {
-    path: '/janus-dashboard*',
-    name: 'janus-dashboard',
-    component: JanusDashboard,
   },
 
   /**
